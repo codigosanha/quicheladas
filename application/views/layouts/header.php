@@ -170,9 +170,13 @@
                  <p><small>Sistema de Restaurante Quicheladas</small></p>
                 <br>
                  <li class="user-footer">
-                <div class="pull-right">
-                  <a href="<?php echo base_url(); ?>auth/logout" class="btn btn-default btn-flat">Cerrar Sesion</a>
-                </div>
+                    <div class="pull-left">
+                                          <a href="<?php echo base_url();?>usuario/perfil" class="btn btn-default btn-flat">Perfil</a>
+
+                    </div>
+                    <div class="pull-right">
+                      <a href="<?php echo base_url(); ?>auth/logout" class="btn btn-default btn-flat">Cerrar Sesion</a>
+                    </div>
                     </li>
                                    
                                     <!-- /.row -->

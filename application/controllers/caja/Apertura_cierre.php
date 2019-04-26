@@ -57,31 +57,38 @@ class Apertura_cierre extends CI_Controller {
 	}
 
 	public function cerrarCaja(){
-		$caja_abierta = $this->Caja_model->getCajaAbierta();
-		$observacion = $this->input->post("observacion");
-		$fecha = date("Y-m-d H:i:s");
-		$data  = array( 
-			'fecha_cierre' => $fecha,
-			'estado' => 0,
-			'observacion' => $observacion
-		);
-
-		if ($this->Caja_model->update($caja_abierta->id,$data)) {
-			
-
-			$response  = array(
-				'status' => 1, 
-				'message' => "Por el usuario ".getUsuario($this->session->userdata("id"))->username." con fecha y hora : ".$fecha
-			);
-		}
-		else{
+		if ($this->Caja_model->check_pending_orders() > 0) {
 			$response  = array(
 				'status' => 0, 
-				'message' => "No se pudo cerrar la caja activa"
+				'message' => "Aún existen ordenes pendientes a cobrar"
 			);
-		}
+		}else{
+			$caja_abierta = $this->Caja_model->getCajaAbierta();
+			$observacion = $this->input->post("observacion");
+			$fecha = date("Y-m-d H:i:s");
+			$data  = array( 
+				'fecha_cierre' => $fecha,
+				'estado' => 0,
+				'observacion' => $observacion
+			);
 
+			if ($this->Caja_model->update($caja_abierta->id,$data)) {
+
+				$response  = array(
+					'status' => 1, 
+					'message' => "Por el usuario ".getUsuario($this->session->userdata("id"))->username." con fecha y hora : ".$fecha
+				);
+			}
+			else{
+
+				$response  = array(
+					'status' => 0, 
+					'message' => "No se pudo cerrar la caja activa"
+				);
+			}
+		}
 		echo json_encode($response);
+		
 	}
 
 	public function edit($id){

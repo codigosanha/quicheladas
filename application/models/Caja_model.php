@@ -62,4 +62,10 @@ class Caja_model extends CI_Model {
 		}
 
 	}
+
+	public function check_pending_orders(){
+		$this->db->where("estado",1);
+		$resultados = $this->db->get("pedidos");
+		return $resultados->num_rows();
+	}
 }
