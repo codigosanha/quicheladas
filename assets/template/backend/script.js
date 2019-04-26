@@ -5,6 +5,40 @@ $(document).ready(function () {
         allowClear: true
     });
 
+    $(document).on("keyup mouseup","#numero_inicial", function(){
+        numero_inicial = $(this).val();
+
+        $("#showNumeroInicial").val(zfill(numero_inicial,8));
+    });
+
+    $('#solicitar_nit').on('change',function(){
+        if($(this).is(':checked')){
+            $(this).val('1');
+        } else {
+            $(this).val('0');
+        }
+    });
+
+    function zfill(number, width) {
+        var numberOutput = Math.abs(number); /* Valor absoluto del número */
+        var length = number.toString().length; /* Largo del número */ 
+        var zero = "0"; /* String de cero */  
+        
+        if (width <= length) {
+            if (number < 0) {
+                 return ("-" + numberOutput.toString()); 
+            } else {
+                 return numberOutput.toString(); 
+            }
+        } else {
+            if (number < 0) {
+                return ("-" + (zero.repeat(width - length)) + numberOutput.toString()); 
+            } else {
+                return ((zero.repeat(width - length)) + numberOutput.toString()); 
+            }
+        }
+    }
+
     $(document).on("click", ".btn-pagos", function(){
         idCuenta = $(this).attr("data-href");
         num_documento = $(this).closest("tr").find("td:eq(1)").text();
