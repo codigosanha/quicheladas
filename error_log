@@ -1,0 +1,2 @@
+[27-Jun-2018 15:56:13 America/Guatemala] PHP Parse error:  syntax error, unexpected 'endforeach' (T_ENDFOREACH) in /home/quicvvgq/public_html/ventas/application/views/admin/reportes/inventario.php on line 46
+[03-Jan-2019 11:08:29 America/Guatemala] PHP Parse error:  syntax error, unexpected '?' in /home/quicvvgq/public_html/ventas/application/views/admin/login.php on line 48
