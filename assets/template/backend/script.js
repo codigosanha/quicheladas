@@ -670,6 +670,64 @@ $(document).ready(function () {
         }
     })
 
+    $(document).on("submit","#form-change-password-perfil",function(e){
+        e.preventDefault();
+        info = $(this).serialize();
+        newpassword = $("input[name=newpass]").val();
+        repeatpassword = $("input[name=confpass]").val();
+        if (newpassword != repeatpassword) {
+            swal("Error","Las contraseñas no coindicen", "error");
+        }else{
+            $.ajax({
+                url: base_url + "usuario/perfil/changepassword",
+                type: "POST",
+                data: info,
+                success: function(resp){
+                    swal({title: "Bien Hecho!", text: "La contraseña se ha actualizado", type: "success"},
+                       function(){ 
+                           location.reload();
+                       }
+                    );
+                }
+            });
+        }
+    })
+
+    $("#form-change-image").submit(function(e){
+        e.preventDefault();
+
+        var formData = new FormData($("#form-change-image")[0]);
+
+        $.ajax({
+            url: base_url + "usuario/perfil/changeImagen",
+            type:"POST",
+            data: formData,
+            cache:false,
+            contentType:false,
+            processData:false,
+            dataType:"json",
+            success:function(resp){
+                if (resp.status == 1) {
+                    swal({
+                         title: "Bien Hecho!",
+                         text: "Su imagen de Perfil fue actualizada",
+                         type: "success",
+                         timer: 3000
+                         },
+                         function () {
+                                location.reload(true);
+                                tr.hide();
+                        });
+                    /*swal("Registro Exitoso!", "Su imagen de Perfil fue actualizada", "success");
+                    window.location.href = base_url + "usuario/perfil";*/
+                }else{
+                    //alert(resp.error);
+                    swal("Error!", resp.error.replace(/(<([^>]+)>)/ig,""), "error");
+                }
+            }
+        });
+    });
+
     $(document).on("submit","#form-clave", function(e){
         e.preventDefault();
         data = $(this).serialize();
@@ -1853,6 +1911,19 @@ $(document).ready(function () {
             data:{id:valor_id},
             success:function(data){
                 $("#modal-venta .modal-body").html(data);
+            }
+        });
+    });
+
+    $(document).on("click",".btn-view-compra",function(){
+        valor_id = $(this).val();
+        $.ajax({
+            url: base_url + "movimientos/compras/view",
+            type:"POST",
+            dataType:"html",
+            data:{id:valor_id},
+            success:function(data){
+                $("#modal-compra .modal-body").html(data);
             }
         });
     });

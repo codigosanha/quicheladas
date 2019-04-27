@@ -41,11 +41,12 @@
                                     <th>#</th>
                                     <th>Nombre Cliente</th>
                                     <th>Cajero</th>
-                                    <th>Tipo Comprobante</th>
-                                    <th>Numero del Comprobante</th>
+                                    <th>Comprobante</th>
+                                    <th>Nro del Comprobante</th>
                                     
                                     <th>Fecha</th>
                                     <th>Total</th>
+                                    <th>Forma de Pago</th>
                                     <th>Estado</th>
                                     <th>Opciones</th>
                                 </tr>
@@ -62,6 +63,25 @@
                                             
                                             <td><?php echo $venta->fecha;?></td>
                                             <td><?php echo $venta->total;?></td>
+                                            <td>
+                                                <?php 
+
+                                                    switch ($venta->tipo_pago) {
+                                                        case '1':
+                                                            echo "Efectivo";
+                                                            break;
+                                                        case '2':
+                                                            echo "Tarjeta de Credito";
+                                                            break;
+                                                        case '3':
+                                                            echo "Pago Mixto";
+                                                            break;
+                                                        default:
+                                                            echo "Credito";
+                                                            break;
+                                                    }
+                                                ?>
+                                            </td>
                                             <td>
                                                 <?php if ($venta->estado == "1") {
                                                     echo '<span class="label label-success">Pagado</span>';

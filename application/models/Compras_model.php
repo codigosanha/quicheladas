@@ -18,6 +18,19 @@ class Compras_model extends CI_Model {
 		}
 	}
 
+	public function getComprasbyDate($fechainicio,$fechafin){
+		
+		$this->db->where("fecha >=",$fechainicio);
+		$this->db->where("fecha <=",$fechafin);
+		$resultados = $this->db->get("compras");
+		if ($resultados->num_rows() > 0) {
+			return $resultados->result();
+		}else
+		{
+			return false;
+		}
+	}
+
 	public function getCompra($id){
 		$this->db->select("c.*,p.nombre as proveedor,p.nit,p.direccion");
 		$this->db->from("compras c");

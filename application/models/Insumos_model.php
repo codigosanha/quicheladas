@@ -44,4 +44,6 @@ class Insumos_model extends CI_Model {
 		$this->db->where("producto_id", $producto_id);
 		return $this->db->delete("productos_insumos");
 	}
+
+	/*SELECT i.id, i.nombre, SUM(dv.cantidad) ,pi.cantidad FROM ventas v JOIN detalle_venta dv on dv.venta_id = v.id JOIN productos p ON dv.producto_id = p.id join productos_insumos pi on pi.producto_id = p.id JOIN insumos i on pi.insumo_id = i.id where v.fecha = "2019-04-27" GROUP by i.id*/
 }

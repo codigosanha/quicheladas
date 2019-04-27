@@ -31,10 +31,10 @@ class Perfil extends CI_Controller {
 		$id = $this->input->post("idUsuario");
 
 		$nombres = $this->input->post("nombres");
+		$apellidos = $this->input->post("apellidos");
+		$telefono = $this->input->post("telefono");
 
 		$email = $this->input->post("email");
-
-		$sexo = $this->input->post("sexo");
 
 
 
@@ -44,7 +44,8 @@ class Perfil extends CI_Controller {
 
 			"email" => $email,
 
-			"sexo" => $sexo,
+			"apellidos" => $apellidos,
+			"telefono" => $telefono,
 
 		);
 
@@ -78,12 +79,48 @@ class Perfil extends CI_Controller {
 
 		if ($this->Usuarios_model->update($id, $data)) {
 
-			$this->session->set_flashdata("success", "El cambio de contraseña fue éxitoso");
-
-			redirect(base_url()."usuario/perfil");
+			echo "usuario/perfil";
 
 		}
 
+	}
+
+		public function changeImagen(){
+		$id = $this->input->post("idUsuario");
+
+		$config['upload_path']   = './assets/images/usuarios/';
+        $config['allowed_types'] = 'gif|jpg|png';
+
+        $this->load->library('upload', $config);
+
+        if (!$this->upload->do_upload('file'))
+        {
+            $error = array(
+            	'error' => $this->upload->display_errors(),
+            	'status' => 0
+            );
+			echo json_encode($error);
+        }
+        else
+        {
+            $data = array(
+            	'upload_data' => $this->upload->data()
+            );
+
+            $datos = array(
+            	"imagen" => $data["upload_data"]["file_name"],
+            );
+
+            if ($this->Usuarios_model->update($id, $datos)) {
+
+            	$success = array(
+            		"status" =>1
+              	);
+				echo json_encode($success);
+			}
+
+
+        }
 	}
 
 }

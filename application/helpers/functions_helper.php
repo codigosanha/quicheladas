@@ -157,6 +157,21 @@ if(!function_exists('getUsuario'))
 	}
 }
 
+if(!function_exists('getProveedor'))
+{
+	function getProveedor($idProveedor)
+	{
+	    //asignamos a $ci el super objeto de codeigniter
+		//$ci será como $this
+		$ci =& get_instance();
+
+		$ci->db->where('id',$idProveedor);
+		$query = $ci->db->get('proveedores');
+		return $query->row();
+	 
+	}
+}
+
 if(!function_exists('getProducto'))
 {
 	function getProducto($idProducto)
