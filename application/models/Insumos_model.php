@@ -45,5 +45,11 @@ class Insumos_model extends CI_Model {
 		return $this->db->delete("productos_insumos");
 	}
 
-	/*SELECT i.id, i.nombre, SUM(dv.cantidad) ,pi.cantidad FROM ventas v JOIN detalle_venta dv on dv.venta_id = v.id JOIN productos p ON dv.producto_id = p.id join productos_insumos pi on pi.producto_id = p.id JOIN insumos i on pi.insumo_id = i.id where v.fecha = "2019-04-27" GROUP by i.id*/
+	/*SELECT i.id, i.nombre,SUM(pi.cantidad * dv.cantidad) FROM ventas v JOIN detalle_venta dv on dv.venta_id = v.id JOIN productos p ON dv.producto_id = p.id join productos_insumos pi on pi.producto_id = p.id JOIN insumos i on pi.insumo_id = i.id where v.fecha = "2019-04-27" GROUP by i.id*/
+
+	public function getInsumosByDate($date){
+		$sql = "SELECT i.id, i.nombre,SUM(pi.cantidad * dv.cantidad) as total FROM ventas v JOIN detalle_venta dv on dv.venta_id = v.id JOIN productos p ON dv.producto_id = p.id join productos_insumos pi on pi.producto_id = p.id JOIN insumos i on pi.insumo_id = i.id where v.fecha = '$date' GROUP by i.id";
+		$resultados = $this->db->query($sql);
+		return $resultados->result();
+	}
 }
