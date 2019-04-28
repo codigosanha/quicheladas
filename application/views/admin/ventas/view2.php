@@ -12,6 +12,10 @@
 		<?php echo $venta->serie ." - ".$venta->num_documento;?>
 	</div>
 	<div class="form-group">
+		<?php $infoMesasArea = getMesasFromPedido($venta->pedido_id);?>
+		<p><b>Area: </b><?php echo $infoMesasArea['area'];?></p>
+		
+		<p><b>Mesa(s): </b><?php echo substr($infoMesasArea['mesas'], 0,-1);?></p>
 		<p><b>Estado: </b><?php if ($venta->estado == "1") {
                                                     echo '<strong>Pagado</strong>';
                                                 }else if($venta->estado == "2"){
@@ -21,8 +25,8 @@
                                                 } ?>
                                             </p>
 		<p><b>Cliente: </b><?php echo $venta->nombre;?></p>
-		<p><b>No. Documento: </b><?php echo $venta->documento;?></p>
-		<p><b>Fecha: </b><?php echo $venta->fecha;?></p>
+		
+		<p><b>Fecha y Hora: </b><?php echo $venta->fecha." ".$venta->hora;?></p>
 	</div>
 
 	<div class="form-group">

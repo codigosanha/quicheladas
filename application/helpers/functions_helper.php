@@ -186,6 +186,33 @@ if(!function_exists('getProducto'))
 	 
 	}
 }
+
+if(!function_exists('getMesasFromPedido'))
+{
+	function getMesasFromPedido($idPedido)
+	{
+	    //asignamos a $ci el super objeto de codeigniter
+		//$ci será como $this
+		$ci =& get_instance();
+		$ci->db->select("m.numero,m.area_id");
+		$ci->db->from("pedidos_mesa pm");
+		$ci->db->join("mesas m", "pm.mesa_id = m.id");
+		$ci->db->where('pm.pedido_id',$idPedido);
+		$query = $ci->db->get();
+		$mesas = "";
+		foreach ($query->result() as $row) {
+			$mesas .= $row->numero.",";
+			$area = $row->area_id;
+		}
+
+		return array(
+			'mesas' => $mesas, 
+			'area' => getArea($area)->nombre
+		);
+	 
+	}
+}
+
 if(!function_exists('getNumeroVentas'))
 {
 	function getNumeroVentas($idCaja)

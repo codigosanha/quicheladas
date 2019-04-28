@@ -17,6 +17,7 @@ class Ventas extends CI_Controller {
 		if (empty($this->products)) {
 			$this->products = $this->Ventas_model->getProducts();
 		}
+		$this->load->helper("functions");
 		
 	}
 
@@ -167,7 +168,9 @@ class Ventas extends CI_Controller {
 			'monto_credito' => $monto_credito,
 			'monto_tarjeta' => $monto_tarjeta,
 			'tipo_pago' => $tipo_pago,
-			'tarjeta_id' => $tarjeta_id
+			'tarjeta_id' => $tarjeta_id,
+			'pedido_id' => $idPedido,
+			'hora' => date("H:i A")
 		);
 
 		if ($this->Ventas_model->save($data)) {

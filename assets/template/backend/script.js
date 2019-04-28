@@ -358,11 +358,7 @@ $(document).ready(function () {
                         dataType:'json',
                         success: function(resp){
                             if (resp.status == 1) {
-                                swal({title: "Cierre de Caja", text: resp.message, type: "success"},
-                                   function(){ 
-                                       location.reload();
-                                   }
-                                );
+                                showCorte(resp.caja_abierta);
                             }else{
                                 swal("Error",resp.message,"error");
                             }
@@ -372,6 +368,16 @@ $(document).ready(function () {
         });
         
     });
+
+    function showCorte(caja_abierta){
+        $.ajax({
+            url: base_url + "caja/apertura_cierre/viewCorte/" + caja_abierta,
+            type: "POST",
+            success: function(resp){
+                $("#modal-corte .modal-body").html(resp);
+            }
+        });
+    }
     $(document).on("click",".tab-area", function(e){
         idArea = $(this).attr("data-href");
         e.preventDefault();
@@ -857,7 +863,6 @@ $(document).ready(function () {
 
     $("#comprobante").on("change", function(){
         id = $(this).val();
-
         $.ajax({
             url: base_url + "movimientos/ordenes/infoComprobante",
             type: "POST", 
@@ -869,13 +874,9 @@ $(document).ready(function () {
                 $("#igv").val(resp.igv);
                 numero = Number(resp.cantidad) + 1;
                 $("#numero").val(pad(numero,6));
-
                 sumar();
-
             }
-
         });
-
     });
     $(".btn-procesar").on("click", function(){
         $("#tbpago tbody").html("");

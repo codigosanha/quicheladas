@@ -76,7 +76,7 @@ class Apertura_cierre extends CI_Controller {
 
 				$response  = array(
 					'status' => 1, 
-					'message' => "Por el usuario ".getUsuario($this->session->userdata("id"))->username." con fecha y hora : ".$fecha
+					'caja_abierta' => $caja_abierta->id
 				);
 			}
 			else{
@@ -120,11 +120,9 @@ class Apertura_cierre extends CI_Controller {
 		
 	}
 
-	public function view($id){
-		$data  = array(
-			'categoria' => $this->Categorias_model->getCategoria($id), 
-		);
-		$this->load->view("admin/categorias/view",$data);
+	public function viewCorte($id){
+		
+		$this->load->view("admin/caja/corte");
 	}
 
 	public function delete($id){
