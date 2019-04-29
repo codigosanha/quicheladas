@@ -269,6 +269,47 @@ if(!function_exists('getMontos'))
 	}
 }
 
+if(!function_exists('getTotalTarjeta'))
+{
+	function getTotalTarjeta($idCaja,$idTarjeta)
+	{
+	    //asignamos a $ci el super objeto de codeigniter
+		//$ci será como $this
+		$ci =& get_instance();
+		$ci->db->select('SUM(monto_tarjeta) as total');
+		$ci->db->from('ventas');
+		$ci->db->where('caja_id',$idCaja);
+		$ci->db->where('tarjeta_id',$idTarjeta);
+		$ci->db->group_by('caja_id');
+		$query = $ci->db->get();
+		if ($query->num_rows() > 0 ) {
+			return number_format($query->row()->total, 2, '.', '');
+		}
+		return '0.00';
+	 
+	}
+}
+
+if(!function_exists('getTotalDescuentos'))
+{
+	function getTotalDescuentos($idCaja)
+	{
+	    //asignamos a $ci el super objeto de codeigniter
+		//$ci será como $this
+		$ci =& get_instance();
+		$ci->db->select('SUM(descuento) as total');
+		$ci->db->from('ventas');
+		$ci->db->where('caja_id',$idCaja);
+		$ci->db->group_by('caja_id');
+		$query = $ci->db->get();
+		if ($query->num_rows() > 0 ) {
+			return number_format($query->row()->total, 2, '.', '');
+		}
+		return '0.00';
+	 
+	}
+}
+
 if(!function_exists('getGastos'))
 {
 	function getGastos($idCaja)

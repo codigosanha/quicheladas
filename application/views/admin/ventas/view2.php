@@ -12,10 +12,13 @@
 		<?php echo $venta->serie ." - ".$venta->num_documento;?>
 	</div>
 	<div class="form-group">
-		<?php $infoMesasArea = getMesasFromPedido($venta->pedido_id);?>
-		<p><b>Area: </b><?php echo $infoMesasArea['area'];?></p>
+		<?php if ($venta->pedido_id != 0): ?>
+			<?php $infoMesasArea = getMesasFromPedido($venta->pedido_id);?>
+			<p><b>Area: </b><?php echo $infoMesasArea['area'];?></p>
 		
-		<p><b>Mesa(s): </b><?php echo substr($infoMesasArea['mesas'], 0,-1);?></p>
+			<p><b>Mesa(s): </b><?php echo substr($infoMesasArea['mesas'], 0,-1);?></p>
+		<?php endif ?>
+		
 		<p><b>Estado: </b><?php if ($venta->estado == "1") {
                                                     echo '<strong>Pagado</strong>';
                                                 }else if($venta->estado == "2"){

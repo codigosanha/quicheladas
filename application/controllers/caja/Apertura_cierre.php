@@ -9,6 +9,7 @@ class Apertura_cierre extends CI_Controller {
 		$this->permisos = $this->backend_lib->control();
 		$this->load->model("Caja_model");
 		$this->load->model("Ventas_model");
+		$this->load->model("Tarjetas_model");
 		$this->load->helper("functions");
 	}
 
@@ -63,20 +64,22 @@ class Apertura_cierre extends CI_Controller {
 				'message' => "Aún existen ordenes pendientes a cobrar"
 			);
 		}else{
-			$caja_abierta = $this->Caja_model->getCajaAbierta();
-			$observacion = $this->input->post("observacion");
+			$idCaja = $this->input->post("idCaja");
+			$observacion = $this->input->post("observaciones");
+			$montoEfectivo = $this->input->post("monto_efectivo");
 			$fecha = date("Y-m-d H:i:s");
 			$data  = array( 
 				'fecha_cierre' => $fecha,
 				'estado' => 0,
-				'observacion' => $observacion
+				'observacion' => $observacion,
+				'monto_efectivo' => $montoEfectivo
 			);
 
-			if ($this->Caja_model->update($caja_abierta->id,$data)) {
+			if ($this->Caja_model->update($idCaja,$data)) {
 
 				$response  = array(
 					'status' => 1, 
-					'caja_abierta' => $caja_abierta->id
+					'caja_abierta' => $idCaja
 				);
 			}
 			else{
@@ -121,8 +124,11 @@ class Apertura_cierre extends CI_Controller {
 	}
 
 	public function viewCorte($id){
-		
-		$this->load->view("admin/caja/corte");
+		$data  = array(
+			'tarjetas' => $this->Tarjetas_model->getTarjetas(),
+			'caja' => $this->Caja_model->getCaja($id)
+		);
+		$this->load->view("admin/caja/corte",$data);
 	}
 
 	public function delete($id){

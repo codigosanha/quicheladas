@@ -36,9 +36,9 @@ class Caja_model extends CI_Model {
 	public function save($data){
 		return $this->db->insert("caja",$data);
 	}
-	public function getCategoria($id){
+	public function getCaja($id){
 		$this->db->where("id",$id);
-		$resultado = $this->db->get("categorias");
+		$resultado = $this->db->get("caja");
 		return $resultado->row();
 
 	}

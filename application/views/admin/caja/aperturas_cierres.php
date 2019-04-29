@@ -81,9 +81,14 @@
                                             <td><?php echo $caja->observacion;?></td>
                                             <td>
                                                 <div class="btn-group">
+                                                    <?php if ($caja->estado == 0): ?>
+                                                        <button type="button" class="btn btn-primary btn-view-corte-caja" data-toggle="modal" data-target="#modal-corte" value="<?php echo $caja->id;?>">
+                                                            <span class="fa fa-search"></span>
+                                                        </button>
+                                                    <?php endif ?>
                                                     <?php if ($this->session->userdata("rol")==1 || $this->session->userdata("id") == $caja->usuario_id): ?>
                                                         <?php if ($caja->estado == 1): ?>
-                                                            <button type="button" class="btn btn-danger btn-flat btn-cerrar-caja" value="<?php echo $caja->id;?>">
+                                                            <button type="button" class="btn btn-danger btn-flat btn-cerrar-caja" value="<?php echo $caja->id;?>" data-toggle="modal" data-target="#modal-cierre">
                                                                 <i class="fa fa-times"></i>
                                                                 Cerrar Caja
                                                             </button>
@@ -136,6 +141,38 @@
 </div>
 <!-- /.modal -->
 
+<div class="modal fade" id="modal-cierre">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Cierre de Caja </h4>
+      </div>
+      <form action="<?php echo base_url();?>caja/apertura_cierre/cerrarCaja" method="POST" id="form-cerrar-caja">
+      <div class="modal-body">
+        <input type="hidden" name="idCaja" id="idCaja">
+        <div class="form-group">
+            <label for="">Declarar Monto Efectivo</label>
+            <input type="text" name="monto_efectivo" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="">Observaciones de Cierre</label>
+            <textarea name="observaciones" id="observaciones" class="form-control" rows="5"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger btn-cerrar-modal-vd pull-left" data-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-sucess">Cerrar Caja</button>
+      </div>
+      </form>
+      
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
 <div class="modal fade" id="modal-corte">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -148,6 +185,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger btn-cerrar-modal-vd pull-left" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary btn-print"><span class="fa fa-print"> </span>Imprimir</button>
       </div>
       
     </div>

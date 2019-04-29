@@ -5,6 +5,19 @@ $(document).ready(function () {
         allowClear: true
     });
 
+    $(document).on("click", ".btn-view-corte-caja", function(){
+        idCaja = $(this).val();
+        $.ajax({
+            url: base_url + "caja/apertura_cierre/viewCorte/" + idCaja,
+            type: "POST",
+            success: function(resp){
+                
+                $("#modal-corte .modal-body").html(resp);
+            }
+        });
+
+    });
+
     $(document).on("keyup mouseup","#numero_inicial", function(){
         numero_inicial = $(this).val();
 
@@ -335,8 +348,10 @@ $(document).ready(function () {
         });
     });
     $(document).on("click",".btn-cerrar-caja", function(){
+        idCaja = $(this).val();
+        $("#idCaja").val(idCaja);
         
-        swal({
+        /*swal({
             title: "Esta seguro de cerrar la caja activa?",
             text: "Esta operacion es irreversible",
             type: "input",
@@ -346,7 +361,7 @@ $(document).ready(function () {
             buttonsStyling: false,
             confirmButtonText: "SI",
             cancelButtonText: "NO",
-            closeOnConfirm: false,
+            closeOnConfirm: true,
             inputPlaceholder: "Indique las observaciones"
         }, function (inputValue) {
             if (inputValue === false) return false;
@@ -365,19 +380,34 @@ $(document).ready(function () {
                             
                         }
                     });
-        });
+        });*/
         
     });
 
-    function showCorte(caja_abierta){
+    $("#form-cerrar-caja").submit(function(e){
+        var observaciones = $("#observaciones").val();
+        e.preventDefault();
+        var dataForm = $(this).serialize();
         $.ajax({
-            url: base_url + "caja/apertura_cierre/viewCorte/" + caja_abierta,
+            url: base_url + "caja/apertura_cierre/cerrarCaja",
             type: "POST",
+            data: dataForm,
+            dataType:'json',
             success: function(resp){
-                $("#modal-corte .modal-body").html(resp);
+                if (resp.status == 1) {
+                    $("table tbody").children("tr:first").find("td:eq(11)").text(observaciones);
+                    $("table tbody").children("tr:first").find("td:eq(12)").html('');
+                    $("#modal-cierre").modal("hide");
+                    showCorte(resp.caja_abierta);
+                }else{
+                    swal("Error",resp.message,"error");
+                }
+                
             }
         });
-    }
+    });
+
+    
     $(document).on("click",".tab-area", function(e){
         idArea = $(this).attr("data-href");
         e.preventDefault();
@@ -1983,7 +2013,21 @@ $(document).ready(function () {
 
 
     });
-})
+});
+
+function showCorte(caja_abierta){
+        
+        
+        $.ajax({
+            url: base_url + "caja/apertura_cierre/viewCorte/" + caja_abierta,
+            type: "POST",
+            success: function(resp){
+                $("#modal-corte").modal({backdrop: 'static', keyboard: false});
+                $('#modal-corte').css('position', 'absolute')
+                $("#modal-corte .modal-body").html(resp);
+            }
+        });
+    }
 
 function generarnumero(numero){
     if (numero>= 99999 && numero< 999999) {

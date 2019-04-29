@@ -90,7 +90,7 @@
         .navbar-nav>.notifications-menu>.dropdown-menu>li .menu>li>a, .navbar-nav>.messages-menu>.dropdown-menu>li .menu>li>a, .navbar-nav>.tasks-menu>.dropdown-menu>li .menu>li>a{
             white-space: normal;
         }
-        #modal-venta .modal-dialog{
+        #modal-venta .modal-dialog, #modal-corte .modal-dialog{
             width: 310px !important;
         }
         .contenido{
