@@ -23,4 +23,10 @@ class Subcategorias_model extends CI_Model {
 		$this->db->where("id",$id);
 		return $this->db->update("subcategorias",$data);
 	}
+
+	public function getIdSubcategoria($nombre){
+		$this->db->where("nombre",$nombre);
+		$resultado = $this->db->get("subcategorias");
+		return $resultado->row()->id;
+	}
 }
