@@ -34,10 +34,13 @@ class Usuarios_model extends CI_Model {
 		return $this->db->update("usuarios",$data);
 	}
 	public function login($username, $password){
-		$this->db->where("username", $username);
-		$this->db->where("password", $password);
-		$this->db->where("estado", 1);
-		$resultados = $this->db->get("usuarios");
+		$this->db->select("u.*, r.ruta");
+		$this->db->from("usuarios u");
+		$this->db->join("roles r","u.rol_id = r.id");
+		$this->db->where("u.username", $username);
+		$this->db->where("u.password", $password);
+		$this->db->where("u.estado", 1);
+		$resultados = $this->db->get();
 		if ($resultados->num_rows() > 0) {
 			return $resultados->row();
 		}

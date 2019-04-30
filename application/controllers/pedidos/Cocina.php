@@ -56,11 +56,32 @@ class Cocina extends CI_Controller {
 	
 		
 	}
+	public function ProcesarPreparacion($idPedido){
+		$data = array(
+			'preparado' => 1
+		);
+
+		if ($this->Cocina_model->updatePedido($idPedido,$data)) {
+			$this->session->set_flashdata("success","Se marco el pedido como preparando");
+			redirect(base_url()."pedidos/cocina");
+		}else{
+			$this->session->set_flashdata("error","No se pudo actualizar la informacion del pedido");
+			redirect(base_url()."pedidos/cocina");
+		}
+	}
 
 	public function finalizarPreparacion($idPedido){
 		$data = array(
-			'preparado'
+			'preparado' => 2
 		);
+
+		if ($this->Cocina_model->updatePedido($idPedido,$data)) {
+			$this->session->set_flashdata("success","Se marco el pedido como listo a entregar");
+			redirect(base_url()."pedidos/cocina");
+		}else{
+			$this->session->set_flashdata("error","No se pudo actualizar la informacion del pedido");
+			redirect(base_url()."pedidos/cocina");
+		}
 	}
 
 	public function update(){

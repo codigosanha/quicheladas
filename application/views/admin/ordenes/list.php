@@ -1,6 +1,6 @@
 
 <!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
+<div class="content-wrapper" id="listado-ordenes">
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
@@ -24,43 +24,15 @@
                 <hr>
                 <div class="row">
                     <div class="col-md-6">
-                        <table id="example1" class="table table-bordered table-hover">
+                        <table id="tbordenes" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>Mesas</th>
+                                    <th>Estado Preparacion</th>
                                     <th>Opciones</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <?php if(!empty($ordenes)):?>
-                                    <?php foreach($ordenes as $orden):?>
-                                        <tr>
-                                            <td><?php echo $orden->id;?></td>
-
-                                            <?php 
-                                            $mesas = "";
-                                            foreach ($orden->mesas as $mesa){
-                                                $mesas .= $mesa->numero.","; 
-                                            } 
-
-                                            ?>
-                                            <td><?php echo substr($mesas, 0, -1);?> <!-- <button type="button" class="btn btn-link btn-mesa">Cambiar o Unir Mesas</button></td> -->
-                                            <td>
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn btn-primary btn-info-pedido" data-toggle="modal" data-target="#modal-venta" value="<?php echo $orden->id;?>"><span class="fa fa-search"></span></button>
-                                                    <a href="<?php echo base_url()?>movimientos/ordenes/edit/<?php echo $orden->id;?>" class="btn btn-warning"><span class="fa fa-pencil"></span></a>
-                                                    <?php if($permisos->delete == 1):?>
-                                                    <a href="<?php echo base_url();?>movimientos/ordenes/pay/<?php echo $orden->id;?>" class="btn btn-success"><i class="fa fa-credit-card" aria-hidden="true"></i></a>
-                                                    
-                                                    <a href="<?php echo base_url();?>movimientos/ordenes/delete/<?php echo $orden->id;?>" class="btn btn-danger btn-delete"><i class="fa fa-times" aria-hidden="true"></i></a>
-                                                   <?php endif;?>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach;?>
-                                <?php endif;?>
-                            </tbody>
                         </table>
                     </div>
                     <div class="col-md-6">

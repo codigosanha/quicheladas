@@ -38,7 +38,7 @@
 <!-- AdminLTE for demo purposes -->
 <script src="<?php echo base_url();?>assets/template/dist/js/demo.js"></script>
 <script src="<?php echo base_url();?>assets/template/alertify/lib/alertify.min.js"></script>
-<script src="<?php echo base_url();?>assets/template/sweetalert/sweetalert.min.js"></script>
+
 <script src="<?php echo base_url();?>assets/template/jquery/jquery-confirm.min.js"></script>
 <script></script>
 <script>

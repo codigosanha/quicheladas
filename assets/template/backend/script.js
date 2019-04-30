@@ -1,9 +1,70 @@
 $(document).ready(function () {
 
+    //cargarData();
+
     $('.select2').select2({
         placeholder: "Seleccione una opcion",
         allowClear: true
     });
+
+    $('#tbordenes').DataTable({
+            
+            "ajax":{
+                "method" :"POST",
+                "url": base_url + "movimientos/ordenes/getOrdenes",
+                "dataType": "json",
+                "type": "POST",
+                "data":{  '<?php echo $this->security->get_csrf_token_name(); ?>' : '<?php echo $this->security->get_csrf_hash(); ?>' }
+            },
+            "columns": [
+                { "data": "id" },
+                { "data": "mesas" },
+                { "data": "preparado" },
+               
+                {
+                    mRender: function (data, type, row) {
+                        var btnView = '<button type="button" class="btn btn-primary btn-info-pedido" data-toggle="modal" data-target="#modal-venta" value="'+row.id+'"><span class="fa fa-search"></span></button>';
+                        var btnEdit = '<a href="' + base_url +'movimientos/ordenes/edit/'+row.id+'" class="btn btn-warning"><span class="fa fa-pencil"></span></a>';
+                                                    
+                        var btnPay = '<a href="'+base_url+ 'movimientos/ordenes/pay/'+row.id+'" class="btn btn-success"><i class="fa fa-credit-card" aria-hidden="true"></i></a>';
+                                                    
+                        var btnDelete = '<a href="'+base_url+'movimientos/ordenes/delete/'+row.id+'" class="btn btn-danger btn-delete"><i class="fa fa-times" aria-hidden="true"></i></a>';
+                                                   
+                        return btnView +" "+btnEdit +" "+btnPay +" "+btnDelete;
+                    }
+                } 
+            ],
+            language: {
+                "lengthMenu": "Mostrar _MENU_ registros por pagina",
+                "zeroRecords": "No se encontraron resultados en su busqueda",
+                "searchPlaceholder": "Buscar registros",
+                "info": "Mostrando registros de _START_ al _END_ de un total de  _TOTAL_ registros",
+                "infoEmpty": "No existen registros",
+                "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "search": "Buscar:",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+            }
+
+        });
+
+
+    /*if ( $("#listado-pedidos").length ) {
+        setTimeout(refrescar, 10000);
+    }
+
+    if ( $("#listado-ordenes").length ) {
+        setTimeout(refrescar, 20000);
+    }
+
+    function refrescar(){
+        //Actualiza la el div con los datos de imagenes.php
+         location.reload();
+    }*/
 
     $(document).on("click", ".btn-view-corte-caja", function(){
         idCaja = $(this).val();
@@ -2390,3 +2451,51 @@ function obtenerDescuento(cantidadPagar,cantidadDesc,montoDesc){
     return descuento.toFixed(2);
 
 }
+
+
+    var cargarData = function(){
+        $('#tbordenes').DataTable({
+            
+            "ajax":{
+                "method" :"POST",
+                "url": base_url + "movimientos/ordenes/getOrdenes",
+                "dataType": "json",
+                "type": "POST",
+                "data":{  '<?php echo $this->security->get_csrf_token_name(); ?>' : '<?php echo $this->security->get_csrf_hash(); ?>' }
+            },
+            "columns": [
+                { "data": "id" },
+                { "data": "mesas" },
+                { "data": "preparado" },
+                { "data": "preparado" },
+                /*{
+                    mRender: function (data, type, row) {
+                        var btnView = '<button type="button" class="btn btn-primary btn-info-pedido" data-toggle="modal" data-target="#modal-venta" value="'+row.id+'"><span class="fa fa-search"></span></button>';
+                        var btnEdit = '<a href="' + base_url +'movimientos/ordenes/edit/'+row.id+'" class="btn btn-warning"><span class="fa fa-pencil"></span></a>';
+                                                    
+                        var btnPay = '<a href="'+base_url+ 'movimientos/ordenes/pay/'+row.id+'" class="btn btn-success"><i class="fa fa-credit-card" aria-hidden="true"></i></a>';
+                                                    
+                        var btnDelete = '<a href="'+base_url+'movimientos/ordenes/delete/'+row.id+'" class="btn btn-danger btn-delete"><i class="fa fa-times" aria-hidden="true"></i></a>';
+                                                   
+                        return btnView +" "+btnEdit +" "+btnPay +" "+btnDelete;
+                    }
+                } */
+            ],
+            language: {
+                "lengthMenu": "Mostrar _MENU_ registros por pagina",
+                "zeroRecords": "No se encontraron resultados en su busqueda",
+                "searchPlaceholder": "Buscar registros",
+                "info": "Mostrando registros de _START_ al _END_ de un total de  _TOTAL_ registros",
+                "infoEmpty": "No existen registros",
+                "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "search": "Buscar:",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+            }
+
+        });
+    }

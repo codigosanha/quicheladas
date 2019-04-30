@@ -40,6 +40,49 @@ class Ordenes extends CI_Controller {
 
 	}
 
+	public function getOrdenes(){
+
+		$ordenes = $this->Ordenes_model->getOrdenes();
+
+        $data = array();
+        if(!empty($ordenes))
+        {
+            foreach ($ordenes as $orden)
+            {
+
+                $nestedData['id'] = $orden->id;
+
+                $mesas = "";
+                foreach ($orden->mesas as $mesa){
+                    $mesas .= $mesa->numero.","; 
+                } 
+     
+                $nestedData['mesas'] = substr($mesas, 0, -1);
+                switch ($orden->preparado) {
+                	case '0':
+                		$texto = 'Pendiente';
+                		break;
+                	case '1':
+                		$texto = 'Preparando';
+                		break;
+                	default:
+                		$texto = 'Listo a Entregar';
+                		break;
+                }
+                $nestedData['preparado'] = $texto;
+                
+                $data[] = $nestedData;
+
+            }
+        }
+          
+        $json_data = array(
+                    "data"            => $data   
+                    );
+            
+        echo json_encode($json_data); 
+	}
+
 	public function add(){
 		$data  = array(
 			'categorias' => $this->Categorias_model->getCategorias(), 

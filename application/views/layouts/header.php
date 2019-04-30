@@ -130,6 +130,7 @@
     </style>
     <!-- jQuery 3 -->
 <script src="<?php echo base_url();?>assets/template/jquery/jquery.min.js"></script>
+<script src="<?php echo base_url();?>assets/template/sweetalert/sweetalert.min.js"></script>
 </head>
 <body class="hold-transition skin-black sidebar-mini">
     <!-- Site wrapper -->

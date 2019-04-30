@@ -27,19 +27,26 @@ class Auth extends CI_Controller {
 		if (!$res) {
 			/*$this->session->set_flashdata("error","El usuario y/o contraseña son incorrectos");*/
 			//redirect(base_url());
-			echo "0";
+			$response  = array(
+				'status' => 0, 
+			);
 		}
 		else{
 			$data  = array(
 				'id' => $res->id, 
 				'nombre' => $res->nombres,
 				'rol' => $res->rol_id,
-				'login' => TRUE
+				'login' => TRUE,
+				'ruta' => $res->ruta,
 			);
 			$this->session->set_userdata($data);
 			//redirect(base_url()."dashboard");
-			echo "1";
+			$response  = array(
+				'status' => 1, 
+				'ruta' => $res->ruta
+			);
 		}
+		echo json_encode($response);
 	}
 
 	public function logout(){

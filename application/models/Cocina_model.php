@@ -6,6 +6,7 @@ class Cocina_model extends CI_Model {
 	public function getOrdenes($subcategoria){
 		$this->db->where("fecha", date("Y-m-d"));
 		$this->db->where("estado","1");
+		$this->db->order_by("id","DESC");
 		$resultados = $this->db->get("pedidos");
 
 
@@ -53,9 +54,9 @@ class Cocina_model extends CI_Model {
 
 	}
 
-	public function update($id,$data){
+	public function updatePedido($id,$data){
 		$this->db->where("id",$id);
-		return $this->db->update("areas",$data);
+		return $this->db->update("pedidos",$data);
 	}
 
 	public function getMesas($idArea){

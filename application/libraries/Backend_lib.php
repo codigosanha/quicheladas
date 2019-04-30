@@ -4,6 +4,7 @@ class Backend_lib{
 	private $CI;
 	public function __construct(){
 		$this->CI = & get_instance();
+		
 	}
 
 	public function control(){

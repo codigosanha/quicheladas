@@ -61,10 +61,11 @@
       url : url,
       type: "POST",
       data: data,
+      dataType: 'json',
       success:function(resp){
 
 
-        if (resp == "0") {
+        if (resp.status == 0) {
 
             swal({
                 title: "Error",
@@ -83,7 +84,7 @@
                 showConfirmButton: false,
                 type: 'success'
             });
-          window.location.href = base_url + "dashboard";
+          window.location.href = base_url + resp.ruta;
         }
       }
     });
