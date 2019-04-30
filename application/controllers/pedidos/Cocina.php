@@ -26,6 +26,15 @@ class Cocina extends CI_Controller {
 
 	}
 
+	public function getPedidos(){
+		$subcategoria = $this->Subcategorias_model->getIdSubcategoria('comida');
+		$data  = array(
+			'permisos' => $this->permisos,
+			'pedidos' => $this->Cocina_model->getOrdenes($subcategoria),
+		);
+		$this->load->view("admin/cocina/pedidos",$data);
+	}
+
 	public function add(){
 
 		$this->load->view("layouts/header");

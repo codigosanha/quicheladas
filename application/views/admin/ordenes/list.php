@@ -18,18 +18,20 @@
                             <a href="<?php echo base_url();?>movimientos/ordenes/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Orden</a>
                             <a href="<?php echo base_url();?>movimientos/ordenes/venta_directa" class="btn btn-warning btn-flat"><span class="fa fa-plus"></span> Venta Directa</a>
                         <?php endif ?>
+
+                        <input type="hidden" id="permisos" value='<?php echo json_encode($permisos);?>'>
                         
                     </div>
                 </div>
                 <hr>
                 <div class="row">
                     <div class="col-md-6">
-                        <table id="tbordenes" class="table table-bordered table-hover">
+                        <table id="tbordenes" class="table table-bordered table-hover" width="100%">
                             <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>Mesas</th>
-                                    <th>Estado Preparacion</th>
+                                    <th>Preparacion</th>
                                     <th>Opciones</th>
                                 </tr>
                             </thead>

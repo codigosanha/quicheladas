@@ -1,11 +1,14 @@
 $(document).ready(function () {
 
-    //cargarData();
-
     $('.select2').select2({
         placeholder: "Seleccione una opcion",
         allowClear: true
     });
+
+    setInterval(function(){
+        cargarPedidos();
+        $('#tbordenes').DataTable().ajax.reload();
+    }, 10000);
 
     $('#tbordenes').DataTable({
             
@@ -19,18 +22,39 @@ $(document).ready(function () {
             "columns": [
                 { "data": "id" },
                 { "data": "mesas" },
-                { "data": "preparado" },
+                { "data": "preparado",
+                    fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
+                        if (oData.preparado == 0) {
+                            html = '<span class="label label-danger">Pendiente</span>';
+                        }else if (oData.preparado == 1){
+                            html = '<span class="label label-danger">Preparado</span>';
+
+                        } else{
+                            html = '<span class="label label-success">Listo a Entregar</span>';
+                        }
+                        $(nTd).html(html);
+                    }
+                },
                
                 {
                     mRender: function (data, type, row) {
-                        var btnView = '<button type="button" class="btn btn-primary btn-info-pedido" data-toggle="modal" data-target="#modal-venta" value="'+row.id+'"><span class="fa fa-search"></span></button>';
-                        var btnEdit = '<a href="' + base_url +'movimientos/ordenes/edit/'+row.id+'" class="btn btn-warning"><span class="fa fa-pencil"></span></a>';
+                        var permisos = JSON.parse($("#permisos").val());
+                       
+                        var btnView = '<button type="button" class="btn btn-primary btn-info-pedido btn-sm" data-toggle="modal" data-target="#modal-venta" value="'+row.id+'"><span class="fa fa-search"></span></button>';
+                        
+                        var btnEdit = '';
+                        var btnPay = '';
+                        if (permisos.update == 1) {
+                            btnEdit = '<a href="' + base_url +'movimientos/ordenes/edit/'+row.id+'" class="btn btn-warning btn-sm"><span class="fa fa-pencil"></span></a>';
                                                     
-                        var btnPay = '<a href="'+base_url+ 'movimientos/ordenes/pay/'+row.id+'" class="btn btn-success"><i class="fa fa-credit-card" aria-hidden="true"></i></a>';
-                                                    
-                        var btnDelete = '<a href="'+base_url+'movimientos/ordenes/delete/'+row.id+'" class="btn btn-danger btn-delete"><i class="fa fa-times" aria-hidden="true"></i></a>';
-                                                   
-                        return btnView +" "+btnEdit +" "+btnPay +" "+btnDelete;
+                            btnPay = '<a href="'+base_url+ 'movimientos/ordenes/pay/'+row.id+'" class="btn btn-success btn-sm"><i class="fa fa-credit-card" aria-hidden="true"></i></a>';
+                        }
+                        var btnDelete = '';
+                        if (permisos.delete == 1) {
+                            btnDelete = '<a href="'+base_url+'movimientos/ordenes/delete/'+row.id+'" class="btn btn-danger btn-delete btn-sm"><i class="fa fa-times" aria-hidden="true"></i></a>';
+
+                        }                     
+                        return "<div class='btn-group'>" + btnView +" "+btnEdit +" "+btnPay +" "+btnDelete + "</div>";
                     }
                 } 
             ],
@@ -58,13 +82,15 @@ $(document).ready(function () {
     }
 
     if ( $("#listado-ordenes").length ) {
-        setTimeout(refrescar, 20000);
-    }
+        setTimeout(refrescar, 10000);
+    }*/
 
     function refrescar(){
         //Actualiza la el div con los datos de imagenes.php
-         location.reload();
-    }*/
+         //location.reload();
+         alert("hola");
+         $('#tbordenes').dataTable().fnDraw();
+    }
 
     $(document).on("click", ".btn-view-corte-caja", function(){
         idCaja = $(this).val();
@@ -932,7 +958,7 @@ $(document).ready(function () {
         
     });
 
-    $(".btn-info-pedido").on("click", function(){
+    $(document).on("click",".btn-info-pedido", function(){
         idpedido = $(this).val();
         $.ajax({
             url:base_url + "movimientos/ordenes/view",
@@ -2452,50 +2478,12 @@ function obtenerDescuento(cantidadPagar,cantidadDesc,montoDesc){
 
 }
 
-
-    var cargarData = function(){
-        $('#tbordenes').DataTable({
-            
-            "ajax":{
-                "method" :"POST",
-                "url": base_url + "movimientos/ordenes/getOrdenes",
-                "dataType": "json",
-                "type": "POST",
-                "data":{  '<?php echo $this->security->get_csrf_token_name(); ?>' : '<?php echo $this->security->get_csrf_hash(); ?>' }
-            },
-            "columns": [
-                { "data": "id" },
-                { "data": "mesas" },
-                { "data": "preparado" },
-                { "data": "preparado" },
-                /*{
-                    mRender: function (data, type, row) {
-                        var btnView = '<button type="button" class="btn btn-primary btn-info-pedido" data-toggle="modal" data-target="#modal-venta" value="'+row.id+'"><span class="fa fa-search"></span></button>';
-                        var btnEdit = '<a href="' + base_url +'movimientos/ordenes/edit/'+row.id+'" class="btn btn-warning"><span class="fa fa-pencil"></span></a>';
-                                                    
-                        var btnPay = '<a href="'+base_url+ 'movimientos/ordenes/pay/'+row.id+'" class="btn btn-success"><i class="fa fa-credit-card" aria-hidden="true"></i></a>';
-                                                    
-                        var btnDelete = '<a href="'+base_url+'movimientos/ordenes/delete/'+row.id+'" class="btn btn-danger btn-delete"><i class="fa fa-times" aria-hidden="true"></i></a>';
-                                                   
-                        return btnView +" "+btnEdit +" "+btnPay +" "+btnDelete;
-                    }
-                } */
-            ],
-            language: {
-                "lengthMenu": "Mostrar _MENU_ registros por pagina",
-                "zeroRecords": "No se encontraron resultados en su busqueda",
-                "searchPlaceholder": "Buscar registros",
-                "info": "Mostrando registros de _START_ al _END_ de un total de  _TOTAL_ registros",
-                "infoEmpty": "No existen registros",
-                "infoFiltered": "(filtrado de un total de _MAX_ registros)",
-                "search": "Buscar:",
-                "paginate": {
-                    "first": "Primero",
-                    "last": "Último",
-                    "next": "Siguiente",
-                    "previous": "Anterior"
-                },
-            }
-
-        });
-    }
+function cargarPedidos(){
+    $.ajax({
+        url: base_url + "pedidos/cocina/getPedidos",
+        type:"POST",
+        success: function(resp){
+            $("#cocina").html(resp);
+        }
+    });
+}

@@ -58,18 +58,8 @@ class Ordenes extends CI_Controller {
                 } 
      
                 $nestedData['mesas'] = substr($mesas, 0, -1);
-                switch ($orden->preparado) {
-                	case '0':
-                		$texto = 'Pendiente';
-                		break;
-                	case '1':
-                		$texto = 'Preparando';
-                		break;
-                	default:
-                		$texto = 'Listo a Entregar';
-                		break;
-                }
-                $nestedData['preparado'] = $texto;
+                
+                $nestedData['preparado'] = $orden->preparado;
                 
                 $data[] = $nestedData;
 
