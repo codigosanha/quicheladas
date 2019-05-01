@@ -1,19 +1,17 @@
 $(document).ready(function () {
-
+    cargarPedidos();
     $('.select2').select2({
         placeholder: "Seleccione una opcion",
         allowClear: true
     });
 
-    setInterval(function(){
-        cargarPedidos();
+    /*setInterval(function(){
         $('#tbordenes').DataTable().ajax.reload();
-    }, 10000);
+    }, 10000);*/
 
     $('#tbordenes').DataTable({
-            
+            "destroy":"true",
             "ajax":{
-                "method" :"POST",
                 "url": base_url + "movimientos/ordenes/getOrdenes",
                 "dataType": "json",
                 "type": "POST",
@@ -27,7 +25,7 @@ $(document).ready(function () {
                         if (oData.preparado == 0) {
                             html = '<span class="label label-danger">Pendiente</span>';
                         }else if (oData.preparado == 1){
-                            html = '<span class="label label-danger">Preparado</span>';
+                            html = '<span class="label label-warning">Preparado</span>';
 
                         } else{
                             html = '<span class="label label-success">Listo a Entregar</span>';
@@ -72,6 +70,9 @@ $(document).ready(function () {
                     "next": "Siguiente",
                     "previous": "Anterior"
                 },
+            },
+            "drawCallback": function( settings ) {
+                setTimeout(refreshDataTable, 10000);
             }
 
         });
@@ -85,11 +86,11 @@ $(document).ready(function () {
         setTimeout(refrescar, 10000);
     }*/
 
-    function refrescar(){
+    function refreshDataTable(){
         //Actualiza la el div con los datos de imagenes.php
          //location.reload();
-         alert("hola");
-         $('#tbordenes').dataTable().fnDraw();
+         //alert("hola");
+         $('#tbordenes').DataTable().ajax.reload();
     }
 
     $(document).on("click", ".btn-view-corte-caja", function(){
@@ -2484,6 +2485,7 @@ function cargarPedidos(){
         type:"POST",
         success: function(resp){
             $("#cocina").html(resp);
+            setTimeout(cargarPedidos, 10000);
         }
     });
 }

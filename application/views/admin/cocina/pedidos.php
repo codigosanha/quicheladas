@@ -11,7 +11,7 @@
                                 }
 
                             ?>
-                            <div class="col-md-3 col-sm-6 col-xs-6">
+                            <div class="col-md-3 col-sm-6 col-xs-12">
                                 <div class="panel panel-<?php echo $status;?>">
                                     <div class="panel-heading text-center">
                                         Pedido N° - <?php echo $pedido->id;?>
@@ -62,6 +62,7 @@
                                     
                                 </div>
                             </div>
+                            
                         <?php endforeach ?>
                     <?php else: ?>
                         <div class="col-md-12 text-center">
