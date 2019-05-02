@@ -1,9 +1,9 @@
 <?php if($this->session->flashdata("success")):?>
 
     <script>
-
         $(document).ready(function(){
-            $("#modal-default").modal("show");
+            var id= '<?php echo $this->session->flashdata("success"); ?>';
+            showAjuste(id);
         });
 
     </script>
@@ -109,8 +109,11 @@
                                             <td>
 
                                                 <?php if($permisos->update == 1):?>
-
-                                                    <a href="<?php echo base_url();?>mantenimiento/ajuste/edit/<?php echo $ajuste->id;?>" class="btn btn-primary btn-flat"><span class="fa fa-pencil"></span></a>
+                                                    <button type="button" class="btn btn-info btn-view-ajuste" value="<?php echo $ajuste->id;?>">
+                                                        <span class="fa fa-eye"></span>
+                                                    </button>
+                                                    <a href="<?php echo base_url();?>mantenimiento/ajuste/edit/<?php echo $ajuste->id;?>" class="btn btn-warning btn-flat"><span class="fa fa-pencil"></span></a>
+                                                    
 
                                                 <?php endif;?>
 
@@ -150,7 +153,7 @@
 
 
 
-<div class="modal fade" id="modal-default">
+<div class="modal fade" id="modal-ajuste">
 
   <div class="modal-dialog">
 
@@ -162,12 +165,12 @@
 
           <span aria-hidden="true">&times;</span></button>
 
-        <h4 class="modal-title">Informacion de la Categoria</h4>
+        <h4 class="modal-title">Informacion del Ajuste</h4>
 
       </div>
 
       <div class="modal-body">
-
+        <p></p>
         
 
       </div>
@@ -175,6 +178,7 @@
       <div class="modal-footer">
 
         <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary btn-print-ajuste">Imprimir</button>
 
       </div>
 

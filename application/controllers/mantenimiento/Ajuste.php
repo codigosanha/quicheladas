@@ -114,7 +114,7 @@ class Ajuste extends CI_Controller {
 		if ($ajuste_id != false) {
 
 			$this->saveAjusteProductos($ajuste_id,$productos,$stocks_bd,$stocks_fisico,$stocks_diferencia);
-			$this->session->set_flashdata("success","No se pudo guardar la informacion");
+			$this->session->set_flashdata("success",$ajuste_id);
 
 			redirect(base_url()."mantenimiento/ajuste");
 		}
@@ -153,7 +153,11 @@ class Ajuste extends CI_Controller {
 
 			);
 
+			$dataProducto = array(
+				'stock' => $stocks_fisico[$i]
+			);
 
+			$this->Productos_model->update($productos[$i], $dataProducto);
 
 			$this->Ajustes_model->saveAjusteProductos($data);
 
@@ -207,6 +211,12 @@ class Ajuste extends CI_Controller {
 
 			);
 
+			$dataProducto = array(
+				'stock' => $stocks_fisico[$i]
+			);
+
+			$this->Productos_model->update($productos[$i], $dataProducto);
+
 
 
 			$this->Ajustes_model->updateAjuste($idAjuste,$productos[$i],$data);
@@ -217,12 +227,22 @@ class Ajuste extends CI_Controller {
 
 		
 
-		$this->session->set_flashdata("success","La informacion del ajuste se actualizo");
+		$this->session->set_flashdata("success",$idAjuste);
 
 		redirect(base_url()."mantenimiento/ajuste");
 
 		
 
+	}
+
+
+	public function view($ajuste_id){
+		$data = array(
+			'ajuste' => $this->Ajustes_model->getAjuste($ajuste_id),
+			'productos' => $this->Ajustes_model->getAjusteProductos($ajuste_id),
+		);
+
+		$this->load->view("admin/ajustes/view", $data);
 	}
 
 
