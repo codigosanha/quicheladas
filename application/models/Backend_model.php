@@ -93,5 +93,20 @@ class Backend_model extends CI_Model {
 			return false;
 		}
 	}
+
+	public function getMesasPrendidas(){
+
+		$this->db->select("pp.pedido_id, SUM(pp.cantidad) as cantidad");
+		$this->db->from("pedidos_productos pp");
+		$this->db->join("pedidos p", "pp.pedido_id = p.id");
+		$this->db->where("p.fecha",date("Y-m-d"));
+		$this->db->where("p.estado",1);
+		$this->db->order_by("cantidad", "desc"); 
+		$this->db->limit(4);
+		$this->db->group_by("pp.pedido_id");
+		$resultados = $this->db->get();
+		return $resultados->result();
+
+	}
 	
 }

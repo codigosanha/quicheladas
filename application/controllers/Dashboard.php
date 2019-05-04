@@ -10,7 +10,7 @@ class Dashboard extends CI_Controller {
 		}
 		$this->load->model("Ventas_model");
 		$this->load->model("Permisos_model");
-
+		$this->load->helper("functions");
 	}
 	public function index()
 	{
@@ -21,7 +21,9 @@ class Dashboard extends CI_Controller {
 			"cantProductos" => $this->Backend_model->rowCount("productos"),
 			'productoslast' => $this->Ventas_model->getLastProductos(),
 			'productosmvendidos' => $this->Ventas_model->getProductosmasVendidos(),
-				'pstockminimo' => $this->Ventas_model->getProductosStockMinimo(),
+			'pstockminimo' => $this->Ventas_model->getProductosStockMinimo(),
+			'clientes' => $this->Ventas_model->getMejoresClientes(),
+			'pedidos' => $this->Backend_model->getMesasPrendidas(),
 		);
 
 		$this->load->view("layouts/header");

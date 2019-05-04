@@ -331,5 +331,23 @@ if(!function_exists('getGastos'))
 }
 
 
+if(!function_exists('getProductosFromPedido'))
+{
+	function getProductosFromPedido($pedido_id)
+	{
+	    //asignamos a $ci el super objeto de codeigniter
+		//$ci será como $this
+		$ci =& get_instance();
+		$ci->db->select('p.nombre, pp.cantidad');
+		$ci->db->from('pedidos_productos pp');
+		$ci->db->join("productos p", "pp.producto_id = p.id");
+		$ci->db->where('pp.pedido_id',$pedido_id);
+		$query = $ci->db->get();
+		return $query->result();
+	 
+	}
+}
+
+
 
 //end application/helpers/ayuda_helper.php

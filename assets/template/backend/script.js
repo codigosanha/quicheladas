@@ -5,6 +5,22 @@ $(document).ready(function () {
         allowClear: true
     });
 
+    if ( $("#grafico-torta").length ) {
+        i=0;
+        datos = [];
+        $("#tb-productos-vendidos tbody tr").each(function(){
+            if (i>0) {
+                nombre = $(this).children("td:eq(1)").text();
+                valor = $(this).children("td:eq(1)").find("input").val();
+                datos.push({"name":nombre,"y": Number(valor)});
+            }
+
+            i++;
+            
+        });
+        graficoTorta(datos);
+    }
+
     /*setInterval(function(){
         $('#tbordenes').DataTable().ajax.reload();
     }, 10000);*/
@@ -2533,4 +2549,40 @@ function showAjuste(id){
             $("#modal-ajuste .modal-body").html(resp);
         }
     });
+}
+
+function graficoTorta(datos){
+    console.log(datos);
+    Highcharts.chart('grafico-torta', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Productos'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                style: {
+                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                }
+            }
+        }
+    },
+    series: [{
+        name: 'Brands',
+        colorByPoint: true,
+        data: datos,
+    }]
+});
 }

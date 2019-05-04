@@ -223,7 +223,7 @@ class Ventas_model extends CI_Model {
 		$this->db->from("productos p");
 		$this->db->join("categorias c","p.categoria_id = c.id");
 		$this->db->order_by('id',"desc");
-		$this->db->limit(5);
+		$this->db->limit(10);
 		$resultados = $this->db->get();
 		return $resultados->result();
 	}
@@ -248,6 +248,16 @@ class Ventas_model extends CI_Model {
 		$this->db->order_by("totalVendidos", "desc"); 
 		$this->db->limit(10);
 		$this->db->group_by("dv.producto_id");
+		$resultados = $this->db->get();
+		return $resultados->result();
+	}
+
+	public function getMejoresClientes(){
+		$this->db->select("cliente_id,SUM(total) as total");
+		$this->db->from("ventas");
+		$this->db->order_by("total", "desc"); 
+		$this->db->limit(10);
+		$this->db->group_by("cliente_id");
 		$resultados = $this->db->get();
 		return $resultados->result();
 	}

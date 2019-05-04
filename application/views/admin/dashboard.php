@@ -76,7 +76,7 @@
                 </div>
                     <!-- ./col -->
                     
-                    <div class="row">
+        <div class="row">
             <div class="col-md-12">
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
@@ -98,15 +98,16 @@
                 <!-- nav-tabs-custom -->
             </div>
         </div>
-                <!-- ./col -->
-                    
-                    <div style="background-color: white;" class="row">
-                    <div  class="col-md-12">
-                        <div align="center">
-                        <div calss="col-md-12 content-header"> <strong>Ultimos 5 Productos Agregados</strong></div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="table-responsive "></div>
+
+        <div class="row">
+            <div class="col-md-6">
+              <div class="box box-solid">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Los ultimos 10 productos agregados</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="table-responsive">
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
@@ -129,19 +130,22 @@
                                 <?php endif;?>
                             </tbody>
                         </table>
-                     </div>
-                 </div>
-             </div>
-             <hr>
-             <!--Productos mas vendidos-->
-             <div style="background-color: white;" class="row">
-                    <div  class="col-md-12">
-                        <div align="center">
-                        <div calss="col-md-12 content-header"> <strong>Top 10 Productos mas Vendidos</strong></div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="table-responsive "></div>
-                        <table class="table table-bordered table-hover table-striped">
+                    </div>
+                </div>
+                <!-- /.box-body -->
+              </div>
+              <!-- /.box -->
+            </div>
+            <!-- /.col (left) -->
+            <div class="col-md-6">
+              <div class="box box-solid">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Top 10 productos mas vendidos</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-striped" id="tb-productos-vendidos">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -155,7 +159,7 @@
                                     <?php foreach($productosmvendidos as $pmv):?>
                                         <tr>
                                             <td><?php echo $i++;?></td>
-                                            <td><?php echo $pmv->nombre;?></td>
+                                            <td><input type="hidden" value="<?php echo $pmv->totalVendidos;?>"><?php echo $pmv->nombre;?></td>
                                             <td><?php echo $pmv->categoria;?></td>
                                             
                                         </tr>
@@ -163,57 +167,117 @@
                                 <?php endif;?>
                             </tbody>
                         </table>
-                     </div>
-                 </div>
-             </div>
-                <!-- /.row -->
-                  <!--Productos con Stock Agotado-->
-             <div style="background-color: white;" class="row">
-                    <div  class="col-md-12">
-                        <div align="center">
-                        <div calss="col-md-12 content-header"> <strong>Productos con Stock Critico</strong></div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="table-responsive "></div>
-                        <table class="table table-bordered table-hover table-striped">
+                    </div>
+                </div>
+                <!-- /.box-body -->
+              </div>
+              <!-- /.box -->
+            </div>
+            <!-- /.col (right) -->
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+              <div class="box box-solid">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Mesas mas Prendidas</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <?php foreach ($pedidos as $pedido): ?>
+                            <?php $mesasArea = getMesasFromPedido($pedido->pedido_id);?>
+                            <div class="col-md-3">
+                            <div class="panel panel-default">
+                                <div class="panel-heading text-center">
+                                     <strong>Mesas: </strong><?php echo substr($mesasArea['mesas'],0,-1);?> - <strong>Area: </strong><?php echo $mesasArea['area'];?> 
+                                </div>
+                                <div class="panel-body no-padding">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Producto</th>
+                                                <th>Cantidad</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php $productos = getProductosFromPedido($pedido->pedido_id);?>
+                                            <?php $i = 1;?>
+                                            <?php if (!empty($productos)): ?>
+                                                <?php foreach ($productos as $p): ?>
+                                                    <tr>
+                                                        <td><?php echo $i ?></td>
+                                                        <td><?php echo $p->nombre ?></td>
+                                                        <td><?php echo $p->cantidad ?></td>
+                                                    </tr>
+                                                    <?php $i++;?>
+                                                <?php endforeach ?>
+                                            <?php endif ?>
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            </div>
+                         <?php endforeach ?> 
+                    </div>
+                </div>
+                <!-- /.box-body -->
+              </div>
+              <!-- /.box -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+              <div class="box box-solid">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Top 10 Mejores Clientes</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Nombre</th>
-                                      <th>Categoria</th>
-                                    <th>Existencias</th>
-                                  
+                                    <th>Cliente</th>
+                                    <th>Monto de Ventas</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php if(!empty($pstockminimo)):?>
-                                    <?php $i=1;?>
-                                    <?php foreach($pstockminimo as $psm):?>
+                                <?php $i=1;?>
+                                <?php if(!empty($clientes)):?>
+                                    <?php foreach($clientes as $c):?>
                                         <tr>
-                                            <td><?php echo $i++;?></td>
-                                            <td><?php echo $psm->nombre;?></td>
-                                            <td><?php echo $psm->categoria;?></td>
-                                            <?php if($psm->condicion == "1"):?>
-                                                <?php if ($psm->stock <= $psm->stock_minimo): ?>
-                                                    <td style="color: red;"><b><?php echo $psm->stock;?></b></td>
-                                                <?php else:?>
-                                                    <td style="color: green;"><b><?php echo $psm->stock;?></b></td>
-                                                <?php endif ?>
-                                                
-                                            <?php else: ?>
-                                                <td>N/A</td>
-                                                <td>N/A</td>
-                                            <?php endif;?>
                                             
-                                            
+                                            <td><?php echo $i;?></td>
+                                            <td><?php echo getCliente($c->cliente_id)->nombre;?></td>
+                                            <td><?php echo $c->total;?></td>
+                                            <?php $i++;?>
                                         </tr>
                                     <?php endforeach;?>
                                 <?php endif;?>
                             </tbody>
                         </table>
-                     </div>
-                 </div>
-             </div>
+                </div>
+                <!-- /.box-body -->
+              </div>
+              <!-- /.box -->
+            </div>
+            <div class="col-md-6">
+              <div class="box box-solid">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Grafico de Productos mas Vendidos</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div id="grafico-torta" style="min-width: 310px; height: 400px;margin: 0 auto"></div>
+                </div>
+                <!-- /.box-body -->
+              </div>
+              <!-- /.box -->
+            </div>
+        </div>
                 <!-- /.row -->
                 <?php endif ?>
             </section>
