@@ -138,14 +138,15 @@ class Ordenes extends CI_Controller {
 		}
 	}
 
-	protected function saveExtrasProductoOrden($extras,$idOrden){
+	protected function saveExtrasProductoOrden($extras,$idOrden,$codigo){
 		for ($i=0; $i < count($extras); $i++) { 
 			$extra = $extras[$i];
 			$infoExtra = explode("*", $extra);
 			$data = array(
 				'orden_id' => $idOrden,
 				'producto_id' => $infoExtra[1],
-				'extra_id' => $infoExtra[0]
+				'extra_id' => $infoExtra[0],
+				'codigo' => $codigo
 			);
 			$this->Ordenes_model->saveExtrasProductoOrden($data);
 		}

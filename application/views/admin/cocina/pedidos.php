@@ -1,6 +1,9 @@
 <div class="row">
                     <?php if (!empty($pedidos)): ?>
                         <?php foreach ($pedidos as $pedido): ?>
+                            <?php if (!empty($pedido->productos)): ?>
+                                
+                            
                             <?php 
                                 if ($pedido->preparado == 0) {
                                     $status = "danger";
@@ -62,7 +65,7 @@
                                     
                                 </div>
                             </div>
-                            
+                            <?php endif ?>
                         <?php endforeach ?>
                     <?php else: ?>
                         <div class="col-md-12 text-center">
