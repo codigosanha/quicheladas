@@ -37,7 +37,7 @@
 
                             $totalExtras = 0;
                             $nombreExtras = '';
-                            $preciosExtras = getPreciosExtras($pedido,$p->idprod);
+                            $preciosExtras = getPreciosExtras($pedido,$p->idprod,$p->codigo);
                             if (!empty($preciosExtras)) {
                                 $nombreExtras = 'Extras: ';
                                 foreach ($preciosExtras as $pe) {

@@ -64,6 +64,7 @@
                             </table>
                             <div id="extras"></div>
                             </div>
+                            <div id="extras"></div>
                             <?php 
                                 $mesasActual = "";
                                 foreach ($pedidomesas as $pedidomesa){

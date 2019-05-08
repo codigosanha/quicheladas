@@ -28,7 +28,7 @@ if(!function_exists('getInsumos'))
  
 if(!function_exists('getPreciosExtras'))
 {
-	function getPreciosExtras($pedido, $producto)
+	function getPreciosExtras($pedido, $producto, $codigo)
 	{
 	    //asignamos a $ci el super objeto de codeigniter
 		//$ci será como $this
@@ -40,6 +40,7 @@ if(!function_exists('getPreciosExtras'))
 		$ci->db->join('extras e',"ope.extra_id = e.id");
 		$ci->db->where('ope.orden_id',$pedido);
 		$ci->db->where('ope.producto_id',$producto);
+		$ci->db->where('ope.codigo',$codigo);
 		$query = $ci->db->get();
 		return $query->result();
 	 
