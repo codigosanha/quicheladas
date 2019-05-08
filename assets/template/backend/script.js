@@ -558,19 +558,22 @@ $(document).ready(function () {
     $(document).on("change",".check-extra", function(){
         infoCheck = $(this).val();
         dataCheck = infoCheck.split("*");
+        tr_id = $("#tr-id").val();
         idProducto = $("#idProducto").val();
         if($(this).prop('checked') == true){
-            valueInput = dataCheck[0] + "*" + idProducto;
-            html = "<input type='hidden' id='e"+dataCheck[0]+"' name='extras[]' value='"+valueInput+"' class='e"+idProducto+"'>";
-            $("#extras").append(html);
+            valueInput = dataCheck[0] + "*" + idProducto + "*" + tr_id;
+            html = "<input type='hidden' class='e"+dataCheck[0]+tr_id+"' name='extras[]' value='"+valueInput+"' ><p style='margin:0px;' class='e"+dataCheck[0]+tr_id+"'><i>"+dataCheck[1]+"</i></p>";
+            $("#"+tr_id).children("td:eq(0)").append(html);
         }else{
-            $("#e"+dataCheck[0]).remove();
+            $(".e"+dataCheck[0]+tr_id).remove();
         }
     })
     $(document).on("click", ".btn-view-extras", function(){
         idProducto = $(this).val();
         $("#idProducto").val(idProducto);
-        nombreProducto = $(this).closest("tr").find("td:eq(0)").text();
+        tr_id = $(this).closest("tr").attr("id");
+        $("#tr-id").val(tr_id);
+        nombreProducto = $(this).closest("tr").find("td:eq(0)").children("p").text();
         $("#modal-extras .modal-title").text("Extras del producto "+ nombreProducto);
         $.ajax({
             url: base_url + "mantenimiento/productos/getExtras/"+idProducto,
@@ -579,11 +582,12 @@ $(document).ready(function () {
             success:function(data){
                 html = "";
                 var extras = extrasAgregados();
-               
+         
                 $.each(data, function(key, value){
                     var data = value.id +"*"+value.nombre+"*"+value.precio; 
                     var checked = '';
-                    if (extras.includes(value.id)) {
+
+                    if (extras.includes(value.id+"*"+idProducto+"*"+tr_id)) {
                         checked = 'checked';
                     }
                     html += "<tr>";
@@ -1082,18 +1086,16 @@ $(document).ready(function () {
         valorBtn = $(this).attr('data-href');
         infoBtn = valorBtn.split("*");
 
-        if (verificar(infoBtn[0])) {
-            alert("El producto ya fue agregado");
-        }else{
+        var id = new Date().getUTCMilliseconds();
 
             if (infoBtn[4] == "N/A") {
                 max = "";
             }else{
                 max = infoBtn[4];
             }
-            html = "<tr>";
-            html += "<td><input type='hidden' name='productos[]' value='"+infoBtn[0]+"'>"+infoBtn[2]+"</td>";
-            html += "<td>"+infoBtn[4]+"</td>";
+            html = "<tr id='"+id+"'>";
+            html += "<td><input type='hidden' name='productos[]' value='"+infoBtn[0]+"'><p>"+infoBtn[2]+"</p></td>";
+            html += "<td><input type='hidden' name='codigos[]' value='"+id+"'>"+infoBtn[4]+"</td>";
             html += "<td>";
             html += '<div class="input-group">';
             html +='<span class="input-group-btn">'
@@ -1111,7 +1113,7 @@ $(document).ready(function () {
 
             $("#tborden tbody").append(html);
             $(".btn-guardar").removeAttr("disabled");
-        }
+        
     });
 
     $(document).on("click", ".product-selected-vd", function(){
@@ -1995,7 +1997,7 @@ $(document).ready(function () {
     $(document).on("click",".btn-delprod", function(){
         idProducto = $(this).val();
         $(this).closest("tr").remove();
-        $(".e"+idProducto).remove();
+      
     });
 
     $("#btn-agregar").on("click",function(){
@@ -2505,8 +2507,8 @@ function extrasAgregados(){
     var extras = new Array;
     $('input[name^="extras"]').each(function() {
         info = $(this).val();
-        data = info.split("*");
-        extras.push(data[0]);
+ /*       data = info.split("*");*/
+        extras.push(info);
     });
 
     return extras;

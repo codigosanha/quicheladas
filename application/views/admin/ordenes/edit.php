@@ -62,6 +62,7 @@
                                     <?php endforeach ?>
                                 </tbody>
                             </table>
+                            <div id="extras"></div>
                             </div>
                             <?php 
                                 $mesasActual = "";
@@ -216,8 +217,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button id="btn-cmodal" type="button" class="btn btn-danger pull-left btn-cerrar-imp" data-dismiss="modal">Cerrar</button>
-    <button type="button" class="btn btn-primary btn-flat btn-print"><span class="fa fa-print"></span> Imprimir</button>
+        <button id="btn-cmodal" type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
     <!-- /.modal-content -->

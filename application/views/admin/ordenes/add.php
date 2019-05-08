@@ -107,8 +107,10 @@
       </div>
       <div class="modal-body">
         <div class="panel panel-primary">
+
             <div class="panel-heading">Listado de Extras</div>
             <div class="panel-body">
+                <input type="hidden" id="tr-id">
                 <input type="hidden" id="idProducto">
                 <table class="table table-hover table-bordered" id="tbextras">
                     <thead>

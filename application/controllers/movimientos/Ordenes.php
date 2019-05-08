@@ -89,6 +89,7 @@ class Ordenes extends CI_Controller {
 
 		$mesas = $this->input->post("mesas");
 		$productos = $this->input->post("productos");
+		$codigos = $this->input->post("codigos");
 		$cantidades = $this->input->post("cantidades");
 		$extras = $this->input->post("extras");
 
@@ -233,6 +234,7 @@ class Ordenes extends CI_Controller {
 		$productos = $this->input->post("productos");
 		$mesa = $this->input->post("mesa");
 		$nuevamesa = $this->input->post("nuevamesa");
+		$extras = $this->input->post("extras");
 
 		if (!empty($mesa)) {
 			$dataPedidoMesas = array(
@@ -303,6 +305,10 @@ class Ordenes extends CI_Controller {
             $this->updateProductosAsociados($productos[$i],$cantidades[$i]);
 
 		}
+
+		if (!empty($extras)) {
+				$this->saveExtrasProductoOrden($extras,$idPedido);
+			}
 
 		$dataP  = array(
 			'mesas' => $this->Ordenes_model->getPedidosMesas($idPedido),
