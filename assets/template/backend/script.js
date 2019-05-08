@@ -1094,7 +1094,7 @@ $(document).ready(function () {
                 max = infoBtn[4];
             }
             html = "<tr id='"+id+"'>";
-            html += "<td><input type='hidden' name='productos[]' value='"+infoBtn[0]+"'><p>"+infoBtn[2]+"</p></td>";
+            html += "<td><input type='hidden' name='productos[]' value='"+infoBtn[0]+"'><p style='margin-bottom:0;'>"+infoBtn[2]+"</p></td>";
             html += "<td><input type='hidden' name='codigos[]' value='"+id+"'>"+infoBtn[4]+"</td>";
             html += "<td>";
             html += '<div class="input-group">';

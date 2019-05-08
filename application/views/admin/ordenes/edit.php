@@ -35,6 +35,10 @@
                                             <td>
                                                 <input type="hidden" value="<?php echo $producto->producto_id?>">
                                                 <?php echo $producto->nombre;?>
+                                                <?php $extras = getPreciosExtras($orden->id,$producto->producto_id,$producto->codigo);?>
+                                                <?php foreach ($extras as $e): ?>
+                                                  <p style="margin: 0"><i><?php echo $e->nombre;?></i></p>
+                                                <?php endforeach ?>
                                                     
                                             </td>
                                             <?php 
@@ -200,6 +204,7 @@
         <div class="panel panel-primary">
             <div class="panel-heading">Listado de Extras</div>
             <div class="panel-body">
+                <input type="hidden" id="tr-id">
                 <input type="hidden" id="idProducto">
                 <table class="table table-hover table-bordered" id="tbextras">
                     <thead>

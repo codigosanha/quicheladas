@@ -119,7 +119,7 @@ class Ordenes extends CI_Controller {
 					"pedido_id" => $pedido_id,
 					"producto_id" => $productos[$i],
 					"cantidad" => $cantidades[$i],
-					"codigo" => $codigo
+					"codigo" => $codigos[$i]
 				);
 
 				$this->Ordenes_model->savePedidoProductos($dataPedidoProductos);
@@ -142,7 +142,7 @@ class Ordenes extends CI_Controller {
 
 			$this->reset_stock_negative();
 			if (!empty($extras)) {
-				$this->saveExtrasProductoOrden($extras,$pedido_id,$codigo);
+				$this->saveExtrasProductoOrden($extras,$pedido_id);
 			}
 			
 
@@ -173,7 +173,7 @@ class Ordenes extends CI_Controller {
 		}
 	}
 
-	protected function saveExtrasProductoOrden($extras,$idOrden,$codigo){
+	protected function saveExtrasProductoOrden($extras,$idOrden){
 		for ($i=0; $i < count($extras); $i++) { 
 			$extra = $extras[$i];
 			$infoExtra = explode("*", $extra);
@@ -181,7 +181,7 @@ class Ordenes extends CI_Controller {
 				'orden_id' => $idOrden,
 				'producto_id' => $infoExtra[1],
 				'extra_id' => $infoExtra[0],
-				'codigo' => $codigo
+				'codigo' => $infoExtra[2]
 			);
 			$this->Ordenes_model->saveExtrasProductoOrden($data);
 		}
@@ -238,6 +238,7 @@ class Ordenes extends CI_Controller {
 		$mesa = $this->input->post("mesa");
 		$nuevamesa = $this->input->post("nuevamesa");
 		$extras = $this->input->post("extras");
+		$codigos = $this->input->post("codigos");
 
 		if (!empty($mesa)) {
 			$dataPedidoMesas = array(
@@ -302,7 +303,7 @@ class Ordenes extends CI_Controller {
                 'producto_id'     => $productos[$i],
                 'cantidad' => $cantidades[$i],
                 'estado' => 0,
-                'codigo' => $codigo
+                'codigo' => $codigos[$i]
             );
 
             $this->Ordenes_model->savePedidoProductos($dataDetalle);
@@ -310,12 +311,8 @@ class Ordenes extends CI_Controller {
 
 		}
 		if (!empty($extras)) {
-			$this->saveExtrasProductoOrden($extras,$idPedido,$codigo);
+			$this->saveExtrasProductoOrden($extras,$idPedido);
 		}
-
-		if (!empty($extras)) {
-				$this->saveExtrasProductoOrden($extras,$idPedido);
-			}
 
 		$dataP  = array(
 			'mesas' => $this->Ordenes_model->getPedidosMesas($idPedido),
