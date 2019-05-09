@@ -49,7 +49,7 @@ class Ventas_model extends CI_Model {
 	}
 
 	public function getDetalle($id){
-		$this->db->select("dt.*,p.codigo,p.nombre,p.stock,p.condicion");
+		$this->db->select("dt.*,p.nombre,p.stock,p.condicion");
 		$this->db->from("detalle_venta dt");
 		$this->db->join("productos p","dt.producto_id = p.id");
 		$this->db->where("dt.venta_id",$id);

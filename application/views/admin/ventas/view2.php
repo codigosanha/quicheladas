@@ -43,11 +43,28 @@
 			</thead>
 			<tbody>
 				<?php foreach($detalles as $detalle):?>
+				<?php 
+					$htmlExtras = "";
+					$totalExtras = 0.00;
+					$extras = getPreciosExtras($venta->pedido_id,$detalle->producto_id,$detalle->codigo);
+
+					if (!empty($extras)) {
+						foreach ($extras as $e) {
+							$htmlExtras .= "<tr>";
+							$htmlExtras .= "<td></td>";
+							$htmlExtras .= "<td><i>".$e->nombre."</i></td>";
+							$htmlExtras .= "<td style='text-align: right;'>".number_format($e->precio * $detalle->cantidad, 2, '.', '')."</td>";
+							$htmlExtras .= "</tr>";
+							$totalExtras = $totalExtras + $e->precio;
+						}
+					}
+				?>
 				<tr>
 					<td><?php echo $detalle->cantidad;?></td>
 					<td><?php echo $detalle->nombre;?></td>
-					<td style="text-align: right;"><?php echo $detalle->importe;?></td>
+					<td style="text-align: right;"><?php echo number_format($detalle->importe - ($totalExtras * $detalle->cantidad), 2, '.', '');?></td>
 				</tr>
+				<?php echo $htmlExtras;?>
 				<?php endforeach;?>
 			</tbody>
 			<tfoot>

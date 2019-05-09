@@ -43,7 +43,7 @@
                                                 $sumaCant = $sumaCant + $producto->cantidad;
                                                 $sumaPag = $sumaPag + $producto->pagados;
                                                 $extras = getPreciosExtras($orden->id,$producto->producto_id,$producto->codigo);
-                                                $data = $producto->idprod."*".$producto->nombre."*".$producto->precio."*".$producto->cantidad."*".$producto->pagados."*".$producto->id."*".$producto->cantidad_descuento."*".$producto->monto_descuento."*".json_encode($extras);
+                                                $data = $producto->idprod."*".$producto->nombre."*".$producto->precio."*".$producto->cantidad."*".$producto->pagados."*".$producto->id."*".$producto->cantidad_descuento."*".$producto->monto_descuento."*".json_encode($extras)."*".$producto->codigo;
                                             ?>
                                             <?php 
                                                 $opciones ="";

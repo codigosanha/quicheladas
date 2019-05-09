@@ -115,6 +115,7 @@ class Ventas extends CI_Controller {
 		$importes = $this->input->post("importes");
 		$descuentos = $this->input->post("descuentos");
 		$pedidoproductos = $this->input->post("pedidoproductos");
+		$codigos = $this->input->post("codigos");
 
 		switch ($tipo_pago) {
 			case '1':
@@ -187,7 +188,7 @@ class Ventas extends CI_Controller {
 			}
 			$this->updateComprobante($idcomprobante);
 			$this->updatePedidoProductos($pedidoproductos,$cantidades);
-			$this->save_detalle($idproductos,$idventa,$precios,$cantidades,$importes,$descuentos);
+			$this->save_detalle($idproductos,$idventa,$precios,$cantidades,$importes,$descuentos,$codigos);
 			if ($estadoPedido == 1) {
 				$mesas = $this->Ordenes_model->getPedidosMesas($idPedido);
 				$dataMesa = array(
@@ -338,7 +339,7 @@ class Ventas extends CI_Controller {
 		$this->Ventas_model->updateComprobante($idcomprobante,$data);
 	}
 
-	protected function save_detalle($productos,$idventa,$precios,$cantidades,$importes,$descuentos){
+	protected function save_detalle($productos,$idventa,$precios,$cantidades,$importes,$descuentos,$codigos){
 		for ($i=0; $i < count($productos); $i++) { 
 			$data  = array(
 				'producto_id' => $productos[$i], 
@@ -346,7 +347,8 @@ class Ventas extends CI_Controller {
 				'precio' => $precios[$i],
 				'cantidad' => $cantidades[$i],
 				'importe'=> $importes[$i],
-				'descuento' => $descuentos[$i]
+				'descuento' => $descuentos[$i],
+				'codigo'=> $codigos[$i]
 			);
 
 			$this->Ventas_model->save_detalle($data);

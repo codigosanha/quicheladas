@@ -1041,7 +1041,7 @@ $(document).ready(function () {
             if($(this).is(":checked") && !$(this).is('[disabled]')) {
                 dataDescuento = info[6]+"*"+info[7]
                 var extras = JSON.parse(info[8]);
-                console.log(extras);
+           
                 htmlExtras = "";
                 totalExtras = 0;
                 if (extras.length > 0) {
@@ -1052,7 +1052,7 @@ $(document).ready(function () {
                     }
                 }
                 html = "<tr>";
-                html += "<td><input type='hidden' name='pedidoproductos[]' value='"+info[5]+"'><input type='hidden' name='productos[]' value='"+info[0]+"'><input type='hidden' name='totalExtra' value='"+totalExtras+"'>"+info[1]+htmlExtras+"</td>";
+                html += "<td><input type='hidden' name='pedidoproductos[]' value='"+info[5]+"'><input type='hidden' name='productos[]' value='"+info[0]+"'><input type='hidden' name='totalExtra' value='"+totalExtras+"'><input type='hidden' name='codigos[]' value='"+info[9]+"'>"+info[1]+htmlExtras+"</td>";
                 html += "<td><input type='hidden' name='precios[]' value='"+info[2]+"'>"+info[2]+"</td>";
                 
 
@@ -1065,7 +1065,7 @@ $(document).ready(function () {
                 html +='<button class="btn btn-primary btn-aumentar btn-sm" type="button" value="'+dataDescuento+'"><span class="fa fa-plus"></span></button></span></div></td>';
                 var descuento = obtenerDescuento((info[3] - info[4]),info[6],info[7]);
                 html +='<td><input type="text" name="descuentos[]" readonly="readonly" class="form-control descuento input-sm" value="'+descuento+'"></td>'; 
-                importe = (info[2] * (info[3] - info[4])) - descuento;
+                importe = (info[2] * (info[3] - info[4])) + ((info[3] - info[4])*totalExtras) - descuento;
                 html += "<td><input type='hidden' name='importes[]' value='"+importe.toFixed(2)+"'><p>"+importe.toFixed(2)+"</p></td>";
                 html += "</tr>";
                 
@@ -1214,6 +1214,7 @@ $(document).ready(function () {
     $(document).on("click", ".btn-reducir", function(){
         infoDesc =  $(this).val();
         dataDesc = infoDesc.split("*");
+        totalExtras = Number($(this).closest("tr").children("td:eq(0)").find("input[name=totalExtra]").val());
         precio = $(this).closest("tr").find("td:eq(1)").text();
         input = $(this).closest(".input-group").find("input");
         valorAct = Number(input.val());
@@ -1229,7 +1230,7 @@ $(document).ready(function () {
         }else{
             input.val(resto);
             descuento = obtenerDescuento(resto,dataDesc[0],dataDesc[1]);
-            importe = (resto * precio) - descuento;
+            importe = (resto * precio) + (resto * totalExtras) - descuento;
             $(this).closest("tr").find("td:eq(3)").children("input").val(descuento);
 
             $(this).closest("tr").find("td:eq(4)").children("p").text(importe.toFixed(2));
@@ -1278,6 +1279,7 @@ $(document).ready(function () {
 
     });
     $(document).on("click", ".btn-aumentar", function(){
+        totalExtras = Number($(this).closest("tr").children("td:eq(0)").find("input[name=totalExtra]").val());
         precio = $(this).closest("tr").find("td:eq(1)").text();
         input = $(this).closest(".input-group").find("input");
         valorAct = Number(input.val());
@@ -1300,7 +1302,7 @@ $(document).ready(function () {
                 input.val(aumento);
                 
                 descuento = obtenerDescuento(aumento,dataDesc[0],dataDesc[1]);
-                importe = (aumento * precio) - descuento;
+                importe = (aumento * precio) + (aumento*totalExtras) - descuento;
                 $(this).closest("tr").find("td:eq(3)").children("input").val(descuento);
                 $(this).closest("tr").find("td:eq(4)").children("p").text(importe.toFixed(2));
                 $(this).closest("tr").find("td:eq(4)").children("input").val(importe.toFixed(2));
@@ -1669,7 +1671,7 @@ $(document).ready(function () {
         $("#modal-default .modal-body").html(html);
     });
   
-    $(".btn-view-cliente").on("click", function(){
+    $(document).on("click",".btn-view-cliente", function(){
         var cliente = $(this).val(); 
         //alert(cliente);
         var infocliente = cliente.split("*");
