@@ -1040,8 +1040,19 @@ $(document).ready(function () {
             html="";
             if($(this).is(":checked") && !$(this).is('[disabled]')) {
                 dataDescuento = info[6]+"*"+info[7]
+                var extras = JSON.parse(info[8]);
+                console.log(extras);
+                htmlExtras = "";
+                totalExtras = 0;
+                if (extras.length > 0) {
+                    
+                    for(var i=0; i< extras.length; i++){
+                        htmlExtras += "<p style='margin:0;'><i>"+extras[i].nombre+"</i></p>";
+                        totalExtras = totalExtras + Number(extras[i].precio);
+                    }
+                }
                 html = "<tr>";
-                html += "<td><input type='hidden' name='pedidoproductos[]' value='"+info[5]+"'><input type='hidden' name='productos[]' value='"+info[0]+"'>"+info[1]+"</td>";
+                html += "<td><input type='hidden' name='pedidoproductos[]' value='"+info[5]+"'><input type='hidden' name='productos[]' value='"+info[0]+"'><input type='hidden' name='totalExtra' value='"+totalExtras+"'>"+info[1]+htmlExtras+"</td>";
                 html += "<td><input type='hidden' name='precios[]' value='"+info[2]+"'>"+info[2]+"</td>";
                 
 
@@ -1057,6 +1068,10 @@ $(document).ready(function () {
                 importe = (info[2] * (info[3] - info[4])) - descuento;
                 html += "<td><input type='hidden' name='importes[]' value='"+importe.toFixed(2)+"'><p>"+importe.toFixed(2)+"</p></td>";
                 html += "</tr>";
+                
+
+
+
 
                 $("#tbpago tbody").append(html);
 

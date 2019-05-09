@@ -42,7 +42,8 @@
                                             <?php
                                                 $sumaCant = $sumaCant + $producto->cantidad;
                                                 $sumaPag = $sumaPag + $producto->pagados;
-                                                $data = $producto->idprod."*".$producto->nombre."*".$producto->precio."*".$producto->cantidad."*".$producto->pagados."*".$producto->id."*".$producto->cantidad_descuento."*".$producto->monto_descuento;
+                                                $extras = getPreciosExtras($orden->id,$producto->producto_id,$producto->codigo);
+                                                $data = $producto->idprod."*".$producto->nombre."*".$producto->precio."*".$producto->cantidad."*".$producto->pagados."*".$producto->id."*".$producto->cantidad_descuento."*".$producto->monto_descuento."*".json_encode($extras);
                                             ?>
                                             <?php 
                                                 $opciones ="";
@@ -51,10 +52,13 @@
                                                 } 
                                             ?>
                                             <td>
-                                                <input type="checkbox" id="cbox1" value="<?php echo $data;?>" <?php echo $opciones;?>>
+                                                <input type="checkbox" id="cbox1" value='<?php echo $data;?>' <?php echo $opciones;?>>
                                             </td>
                                             <td>
                                                 <?php echo $producto->nombre;?>
+                                                <?php foreach ($extras as $e): ?>
+                                                    <p style="margin: 0;"><i><?php echo $e->nombre;?></i></p>
+                                                <?php endforeach ?>
                                                     
                                             </td>
                                             <td><?php echo $producto->cantidad;?>
