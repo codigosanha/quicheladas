@@ -50,7 +50,7 @@ class Productos extends CI_Controller {
 		$descripcion = $this->input->post("descripcion");
 		$precio = $this->input->post("precio");
 		$precio_compra = $this->input->post("precio_compra");
-		$stock = $this->input->post("stock");
+		
 		$categoria = $this->input->post("categoria");
 		$subcategoria = $this->input->post("subcategoria");
 		$stockminimo = $this->input->post("stockminimo");
@@ -67,9 +67,7 @@ class Productos extends CI_Controller {
 		$this->form_validation->set_rules("codigo","Codigo","required|is_unique[productos.codigo]");
 		$this->form_validation->set_rules("nombre","Nombre","required");
 		$this->form_validation->set_rules("precio","Precio","required");
-		if ($condicion=="1") {
-			$this->form_validation->set_rules("stock","Stock","required");
-		}else{
+		if ($condicion=="0") {
 			$stock = 1 ;
 			$stockminimo = 0 ;
 		}
@@ -95,7 +93,7 @@ class Productos extends CI_Controller {
 				'descripcion' => $descripcion,
 				'precio' => $precio,
 				'precio_compra' => $precio_compra,
-				'stock' => $stock,
+				
 				'categoria_id' => $categoria,
 				"subcategoria" => $subcategoria,
 				'estado' => "1",

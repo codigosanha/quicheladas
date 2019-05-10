@@ -77,11 +77,7 @@
                                     <label for="stockminimo">Stock Minimo:</label>
                                     <input type="text" class="form-control" id="stockminimo" name="stockminimo">
                                 </div>
-                                <div class="form-group <?php echo !empty(form_error('stock')) ? 'has-error':'';?>">
-                                    <label for="stock">Stock:</label>
-                                    <input type="text" class="form-control" id="stock" name="stock" value="<?php echo set_value('stock');?>">
-                                    <?php echo form_error("stock","<span class='help-block'>","</span>");?>
-                                </div>
+                                
 
                                 <div class="form-group">
                                     <label for="imagen">Imagen:</label>
