@@ -17,7 +17,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <?php if($permisos->insert == 1):?>
-                        <a href="<?php echo base_url();?>administradpr/cupones/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Area</a>
+                        <a href="<?php echo base_url();?>administrador/cupones/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Configuracion</a>
                         <?php endif;?>
                     </div>
                 </div>
@@ -53,11 +53,19 @@
                                                     }
                                                 ?>     
                                             </td>
-                                            <td><?php echo $c->monto_inicial." - ".$c->monto_final;?></td>
+                                            <td><?php echo $c->valor;?></td>
+                                            <td><?php echo $c->monto_minimo." - ".$c->monto_maximo;?></td>
                                             <td><?php echo $c->fecha_inicio;?></td>
                                             <td><?php echo $c->fecha_final;?></td>
                                             <td>
-                                                
+                                                <div class="btn-group">
+                                                    <a href="<?php echo base_url();?>administrador/cupones/edit/<?php echo $c->id;?>" class="btn btn-warning">
+                                                        <span class="fa fa-pencil"></span>
+                                                    </a>
+                                                    <a href="<?php echo base_url();?>administrador/cupones/delete/<?php echo $c->id;?>" class="btn btn-danger">
+                                                        <span class="fa fa-times"></span>
+                                                    </a>
+                                                </div>
                                             </td>
                                         </tr>
                                     <?php endforeach;?>

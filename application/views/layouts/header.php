@@ -93,7 +93,7 @@
         #modal-venta .modal-dialog, #modal-corte .modal-dialog, #modal-ajuste .modal-dialog{
             width: 310px !important;
         }
-        .contenido{
+        .contenido, .content-cupon{
             width: 280px;
         }
         .contenido label{

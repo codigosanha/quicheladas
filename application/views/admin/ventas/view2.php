@@ -89,6 +89,7 @@
 			</tfoot>
 		</table>
 	</div>
+	
 	<div class="form-group text-center">
         <p>Gracias por tu preferencia!!!</p>
         <p>Si el servicio fue de tu agrado te agradeceremos una <strong>Propina</strong></p>
@@ -96,4 +97,17 @@
         <p><i class="fa fa-globe"> www.quicheladas.com</i></p>
         <p><i class="fa fa-facebook-square"> Quicheladas y Ceviches</i></p>
     </div>
+
+    <div class="form-group text-center content-cupon hide-cupon">
+		<?php if (!empty($cupon)): ?>
+			<h4>CUPON DE DESCUENTO</h4>
+			<p><strong>Valor:</strong></p>
+			<p>$<?php echo $cupon->valor; ?></p><br>
+			<p><strong>Fecha válida hasta:</strong></p>
+			<p><?php echo $cupon->fecha_limite;?></p>
+			<img src="<?php echo base_url();?>assets/images/qrcode/<?php echo $cupon->codigo;?>.png" alt="">
+			<p><?php echo strtoupper($cupon->codigo)?></p> <br>
+			<button type="button" class="btn btn-success btn-block btn-print-cupon no-print">Imprimir Cupon</button>
+		<?php endif ?>
+	</div>
 </div>

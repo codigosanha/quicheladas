@@ -14,6 +14,8 @@ class Ventas extends CI_Controller {
 		$this->load->model("Ordenes_model");
 		$this->load->model("Caja_model");
 		$this->load->model("Cuentas_cobrar_model");
+		$this->load->model("Cupones_model");
+		$this->load->library('phpqrcode/qrlib');
 		if (empty($this->products)) {
 			$this->products = $this->Ventas_model->getProducts();
 		}
@@ -189,6 +191,7 @@ class Ventas extends CI_Controller {
 			$this->updateComprobante($idcomprobante);
 			$this->updatePedidoProductos($pedidoproductos,$cantidades);
 			$this->save_detalle($idproductos,$idventa,$precios,$cantidades,$importes,$descuentos,$codigos);
+			$cupon = $this->generarCupon($total,$fecha);
 			if ($estadoPedido == 1) {
 				$mesas = $this->Ordenes_model->getPedidosMesas($idPedido);
 				$dataMesa = array(
@@ -205,7 +208,8 @@ class Ventas extends CI_Controller {
 			
 			$data = array(
 				"venta" => $this->Ventas_model->getVenta($idventa),
-				"detalles" =>$this->Ventas_model->getDetalle($idventa)
+				"detalles" =>$this->Ventas_model->getDetalle($idventa),
+				"cupon" => $cupon
 			);
 			$this->load->view("admin/ventas/view2",$data);
 
@@ -213,6 +217,32 @@ class Ventas extends CI_Controller {
 			//redirect(base_url()."movimientos/ventas/add");
 			echo "0";
 		}
+	}
+
+	protected function generarCupon($total,$fecha){
+		$configuracion_cupon = $this->Cupones_model->checkConfiguracion($total,$fecha);
+		if ($configuracion_cupon != false) {
+			$codigo = substr(md5(microtime()),rand(0,26),5);
+
+			$SERVERFILEPATH = FCPATH .'assets/images/qrcode/';
+		   
+			$folder = $SERVERFILEPATH;
+			$file_name1 = $codigo.".png";
+			$file_name = $folder.$file_name1;
+			QRcode::png($codigo,$file_name,'H',8,1);
+
+			$data  = array(
+				'codigo' => $codigo,
+				'tipo_cupon' => $configuracion_cupon->tipo_cupon,
+				'valor' => $configuracion_cupon->valor,
+				'estado' => 1,
+				'fecha_limite' => $configuracion_cupon->fecha_final
+			);
+			return $this->Cupones_model->generarCupon($data);
+		}
+
+		return false;
+
 	}
 
 	public function save_venta_directa(){

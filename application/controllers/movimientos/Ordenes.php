@@ -19,6 +19,7 @@ class Ordenes extends CI_Controller {
 		$this->load->model("Caja_model");
 		$this->load->model("Tarjetas_model");
 		$this->load->model("Insumos_model");
+		$this->load->model("Cupones_model");
 		$this->load->helper("functions");
 	}
 
@@ -638,5 +639,19 @@ class Ordenes extends CI_Controller {
 		$this->load->view("admin/ordenes/venta_directa",$data);
 		$this->load->view("layouts/footer");
 	
+	}
+
+	public function validarCupon(){
+		$codigo = $this->input->post("codigo");
+		$cupon = $this->Cupones_model->getCupon($codigo);
+		if ($cupon != false) {
+			$data  = array('estado' => 0);
+			$this->Cupones_model->updateCupon($cupon->id,$data);
+			echo json_encode($cupon);
+
+		}
+		else{
+			echo "0";
+		}
 	}
 }

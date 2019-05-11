@@ -14,7 +14,7 @@ class Cupones extends CI_Controller {
 	{
 		$data  = array(
 			'permisos' => $this->permisos,
-			'configuraciones' => $this->Correos_model->getConfiguraciones(), 
+			'configuraciones' => $this->Cupones_model->getConfiguraciones(), 
 		);
 		$this->load->view("layouts/header");
 		$this->load->view("layouts/aside");
@@ -27,40 +27,78 @@ class Cupones extends CI_Controller {
 
 		$this->load->view("layouts/header");
 		$this->load->view("layouts/aside");
-		$this->load->view("admin/areas/add");
+		$this->load->view("admin/cupones/add");
 		$this->load->view("layouts/footer");
 	}
 
 	public function store(){
 
-		$correo = $this->input->post("correo");
+		$tipo_cupon = $this->input->post("tipo_cupon");
+		$valor = $this->input->post("valor");
+		$monto_minimo = $this->input->post("monto_minimo");
+		$monto_maximo = $this->input->post("monto_maximo");
+		$fecha_inicio = $this->input->post("fecha_inicio");
+		$fecha_final = $this->input->post("fecha_final");
 
-		$this->form_validation->set_rules("correo","Correo","required|is_unique[correos.correo]");
+		$data  = array(
+			'tipo_cupon' => $tipo_cupon,
+			'valor' => $valor,
+			'monto_maximo' => $monto_maximo,
+			'monto_minimo' => $monto_minimo,
+			'fecha_final' => $fecha_final,
+			'fecha_inicio' => $fecha_inicio,
+		);
 
-		if ($this->form_validation->run()==TRUE) {
-
-			$data  = array(
-				'correo' => $correo,
-			);
-
-			if ($this->Correos_model->save($data)) {
-				redirect(base_url()."administrador/correos");
-			}else{
-				redirect(base_url()."administrador/correos");
-			}
+		if ($this->Cupones_model->saveConfiguracion($data)) {
+			redirect(base_url()."administrador/cupones");
+		}else{
+			redirect(base_url()."administrador/cupones/add");
 		}
-		else{
-			/*redirect(base_url()."administrador/categorias/add");*/
-			$this->index();
-		}
+	
+	}
 
-		
+	public function edit($id){
+		$data = array(
+			'configuracion' => $this->Cupones_model->getConfiguracion($id)
+		);
+
+	
+		$this->load->view("layouts/header");
+		$this->load->view("layouts/aside");
+		$this->load->view("admin/cupones/edit",$data);
+		$this->load->view("layouts/footer");
+	}
+
+	public function update(){
+		$idConfiguracion = $this->input->post("idConfiguracion");
+		$tipo_cupon = $this->input->post("tipo_cupon");
+		$valor = $this->input->post("valor");
+		$monto_minimo = $this->input->post("monto_minimo");
+		$monto_maximo = $this->input->post("monto_maximo");
+		$fecha_inicio = $this->input->post("fecha_inicio");
+		$fecha_final = $this->input->post("fecha_final");
+
+		$data  = array(
+			'tipo_cupon' => $tipo_cupon,
+			'valor' => $valor,
+			'monto_maximo' => $monto_maximo,
+			'monto_minimo' => $monto_minimo,
+			'fecha_final' => $fecha_final,
+			'fecha_inicio' => $fecha_inicio,
+		);
+
+		if ($this->Cupones_model->updateConfiguracion($idConfiguracion,$data)) {
+			redirect(base_url()."administrador/cupones");
+		}else{
+			redirect(base_url()."administrador/cupones/edit/".$idConfiguracion);
+		}
+	
 	}
 
 	public function delete($id){
 		
-		$this->Correos_model->delete($id);
-		redirect(base_url()."administrador/correos");
+		$this->Cupones_model->delete($id);
+		redirect(base_url()."administrador/cupones");
 	}
 
 	public function pdf()

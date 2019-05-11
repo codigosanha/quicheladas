@@ -22,35 +22,36 @@
                                 
                              </div>
                         <?php endif;?>
-                        <form action="<?php echo base_url();?>administrador/cupones/store" method="POST">
+                        <form action="<?php echo base_url();?>administrador/cupones/update" method="POST">
+                            <input type="hidden" name="idConfiguracion" value="<?php echo $configuracion->id;?>">
                             <div class="form-group">
                                 <label for="tipo_cupon">Tipo de Cupon</label>
                                 <select name="tipo_cupon" id="tipo_cupon" class="form-control" required="required">
                                     <option value="">Seleccione</option>
-                                    <option value="1">Cupon de Descuento</option>
-                                    <option value="2">Cupon de Almuerzo Gratis</option>
-                                    <option value="3">Cupon de Premio</option>
+                                    <option value="1" <?php echo $configuracion->tipo_cupon=="1" ? "selected":"";?>>Cupon de Descuento</option>
+                                    <option value="2" <?php echo $configuracion->tipo_cupon=="2" ? "selected":"";?>>Cupon de Almuerzo Gratis</option>
+                                    <option value="3" <?php echo $configuracion->tipo_cupon=="3" ? "selected":"";?>>Cupon de Premio</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="valor">Valor</label>
-                                <input type="text" name="valor" id="valor" class="form-control" required="required">
+                                <input type="text" name="valor" id="valor" class="form-control" required="required" value="<?php echo $configuracion->valor;?>">
                             </div>
                             <div class="form-group">
                                 <label for="monto_minimo">Rango de Monto Minimo</label>
-                                <input type="text" name="monto_minimo" id="monto_minimo" class="form-control" required="required">
+                                <input type="text" name="monto_minimo" id="monto_minimo" class="form-control" required="required" value="<?php echo $configuracion->monto_minimo;?>">
                             </div>
                             <div class="form-group">
                                 <label for="monto_maximo">Rango de Monto Maximo</label>
-                                <input type="text" name="monto_maximo" id="monto_maximo" class="form-control" required="required">
+                                <input type="text" name="monto_maximo" id="monto_maximo" class="form-control" required="required" value="<?php echo $configuracion->monto_maximo;?>">
                             </div>
                             <div class="form-group">
                                 <label for="fecha_inicio">Fecha de Inicio</label>
-                                <input type="date" name="monto_maximo" id="fecha_inicio" class="form-control">
+                                <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control" value="<?php echo $configuracion->fecha_inicio;?>">
                             </div>
                             <div class="form-group">
                                 <label for="fecha_final">Fecha Final</label>
-                                <input type="date" name="fecha_final" id="fecha_final" class="form-control">
+                                <input type="date" name="fecha_final" id="fecha_final" class="form-control" value="<?php echo $configuracion->fecha_final;?>">
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success btn-flat">Guardar</button>

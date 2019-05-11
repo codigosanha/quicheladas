@@ -195,33 +195,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Ketchup</td>
-                            <td>2.00</td>
-                            <td>
-                                <button type="button" class="btn btn-danger btn-remove">
-                                    <span class="fa fa-times"></span>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Mostaza</td>
-                            <td>3.00</td>
-                            <td>
-                                <button type="button" class="btn btn-danger btn-remove">
-                                    <span class="fa fa-times"></span>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Mayonesa</td>
-                            <td>4.00</td>
-                            <td>
-                                <button type="button" class="btn btn-danger btn-remove">
-                                    <span class="fa fa-times"></span>
-                                </button>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
             </div>

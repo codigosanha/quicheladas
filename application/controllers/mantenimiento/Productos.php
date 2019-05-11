@@ -70,9 +70,10 @@ class Productos extends CI_Controller {
 		if ($condicion=="0") {
 			$stock = 1 ;
 			$stockminimo = 0 ;
+		}else{
+			$stock = 0;
 		}
 		
-
 		if ($this->form_validation->run()) {
 			$imagen = 'image_default.jpg';
 			if (!empty($_FILES['imagen']['name'])) {
@@ -93,7 +94,7 @@ class Productos extends CI_Controller {
 				'descripcion' => $descripcion,
 				'precio' => $precio,
 				'precio_compra' => $precio_compra,
-				
+				'stock' => $stock,
 				'categoria_id' => $categoria,
 				"subcategoria" => $subcategoria,
 				'estado' => "1",

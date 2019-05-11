@@ -46,7 +46,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="fecha_inicio">Fecha de Inicio</label>
-                                <input type="date" name="monto_maximo" id="fecha_inicio" class="form-control">
+                                <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="fecha_final">Fecha Final</label>

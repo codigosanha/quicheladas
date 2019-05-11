@@ -5,6 +5,29 @@ $(document).ready(function () {
         allowClear: true
     });
 
+    $("#formCanjearCupon").submit(function(e){
+        e.preventDefault();
+        var dataForm = $(this).serialize();
+        var url = $(this).attr("action");
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: dataForm,
+            dataType: "json",
+            success: function(data){
+                if (data == "0") {
+                    swal("Error!", "El cupón no es válido", "error");
+                }else{
+                    $("#modal-cupon").modal("hide");
+                    $("input[name=descuento]").val(data.valor);
+                    $("p.descuento").text(data.valor);
+                    sumar();
+                    swal("Bien Hecho!", "El cupón es válido", "success");
+                }
+            }
+        });
+    });
+
     if ( $("#grafico-torta").length ) {
         i=0;
         datos = [];
@@ -2122,7 +2145,7 @@ $(document).ready(function () {
             globalStyles: true,
             mediaPrint: false,
             stylesheet: null,
-            noPrintSelector: ".no-print",
+            noPrintSelector: ".hide-cupon",
             append: null,
             prepend: null,
             manuallyCopyFormValues: true,
@@ -2155,6 +2178,23 @@ $(document).ready(function () {
     $(document).on("click",".btn-print-cierre",function(){
         $(".contenido-cierre").addClass("impresion");
         $(".contenido-cierre").print({
+            globalStyles: true,
+            mediaPrint: false,
+            stylesheet: null,
+            noPrintSelector: ".no-print",
+            append: null,
+            prepend: null,
+            manuallyCopyFormValues: true,
+            deferred: $.Deferred(),
+            timeout: 750,
+            title: "  ",
+            doctype: '<!doctype html>'
+        });
+    });
+
+    $(document).on("click",".btn-print-cupon",function(){
+        //$(".content-cupon").addClass("impresion");
+        $(".content-cupon").print({
             globalStyles: true,
             mediaPrint: false,
             stylesheet: null,
