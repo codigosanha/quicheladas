@@ -1,0 +1,31 @@
+CREATE TABLE `configuraciones_cupones` (
+  `id` int(11) NOT NULL,
+  `tipo_cupon` int(11) NOT NULL,
+  `valor` double(10,2) NOT NULL,
+  `monto_minimo` decimal(10,2) NOT NULL,
+  `monto_maximo` decimal(10,2) NOT NULL,
+  `fecha_inicio` date NOT NULL,
+  `fecha_final` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `cupones_generados` (
+  `id` int(11) NOT NULL,
+  `codigo` varchar(150) NOT NULL,
+  `tipo_cupon` int(11) NOT NULL,
+  `valor` double(10,2) NOT NULL,
+  `estado` tinyint(1) NOT NULL DEFAULT '1',
+  `fecha_limite` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE `configuraciones_cupones`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `cupones_generados`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `configuraciones_cupones`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `cupones_generados`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;

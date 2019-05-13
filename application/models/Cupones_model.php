@@ -53,9 +53,9 @@ class Cupones_model extends CI_Model {
 		}
 	}
 
-	public function getCupon($codigo){
+	public function getCupon($codigo,$tipo_cupon){
 		$this->db->where("codigo", $codigo);
-		$this->db->where("tipo", 1);
+		$this->db->where("tipo_cupon", $tipo_cupon);
 		$this->db->where("fecha_limite >=", date("y-m-d"));
 		$this->db->where("estado",1);
 		$resultado = $this->db->get("cupones_generados");

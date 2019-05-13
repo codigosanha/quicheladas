@@ -2193,12 +2193,12 @@ $(document).ready(function () {
     });
 
     $(document).on("click",".btn-print-cupon",function(){
-        //$(".content-cupon").addClass("impresion");
-        $(".content-cupon").print({
+        $(".contenido").addClass("impresion");
+        $(".contenido").print({
             globalStyles: true,
             mediaPrint: false,
             stylesheet: null,
-            noPrintSelector: ".no-print",
+            noPrintSelector: ".hide-venta",
             append: null,
             prepend: null,
             manuallyCopyFormValues: true,

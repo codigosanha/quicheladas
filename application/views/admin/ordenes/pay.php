@@ -299,6 +299,7 @@
           <div class="form-group">
               <label for="">Ingrese Codigo</label>
               <input type="text" class="form-control" name="codigo" id="codigo">
+              <input type="hidden" name="tipo_cupon" value="1">
           </div>
       </div>
       <div class="modal-footer">

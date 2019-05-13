@@ -643,7 +643,8 @@ class Ordenes extends CI_Controller {
 
 	public function validarCupon(){
 		$codigo = $this->input->post("codigo");
-		$cupon = $this->Cupones_model->getCupon($codigo);
+		$tipo_cupon = $this->input->post("tipo_cupon");
+		$cupon = $this->Cupones_model->getCupon($codigo,$tipo_cupon);
 		if ($cupon != false) {
 			$data  = array('estado' => 0);
 			$this->Cupones_model->updateCupon($cupon->id,$data);

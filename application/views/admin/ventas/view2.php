@@ -7,6 +7,7 @@
 		3a. Calle 1-06 Zona 1, 2do. Nivel Farmacia Batres Don Paco
 		Santa Cruz del Quiche
 	</div>
+	<div class="hide-venta">
 	<div class="form-group text-center">
 		<label for=""><?php echo $venta->tipocomprobante;?></label><br>
 		<?php echo $venta->serie ." - ".$venta->num_documento;?>
@@ -96,6 +97,8 @@
         <p>Recuerda visitarnos en:</p>
         <p><i class="fa fa-globe"> www.quicheladas.com</i></p>
         <p><i class="fa fa-facebook-square"> Quicheladas y Ceviches</i></p>
+    </div>
+
     </div>
 
     <div class="form-group text-center content-cupon hide-cupon">
