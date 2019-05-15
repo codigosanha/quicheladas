@@ -41,9 +41,9 @@
                             </table>
                             </div>
                             <div id="extras"></div>
-                            <div class="form-group">
+                            <div class="form-group" id="content-mesas">
                                 <label for="">Mesas</label>
-                                <select name="mesas[]" class="form-control select2" multiple="multiple" data-placeholder="Seleccione mesas" style="width: 100%;" required="required">
+                                <select name="mesas[]" class="form-control select2" multiple="multiple" data-placeholder="Seleccione mesas" style="width: 100%;" required="required" id="mesas">
                                   <?php foreach ($mesas as $mesa): ?>
                                       <option value="<?php echo $mesa->id;?>"><?php echo $mesa->numero;?></option>
                                   <?php endforeach ?>

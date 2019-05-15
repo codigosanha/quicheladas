@@ -55,12 +55,15 @@ class Ordenes extends CI_Controller {
 			
 			$mesas = $this->Ordenes_model->getPedidosMesas($orden->id);
 			$num_mesas = '';
-			foreach ($mesas as $mesa) {
-				$num_mesas .= $mesa->numero.','; 
+
+			if (!empty($mesas)) {
+				foreach ($mesas as $mesa) {
+					$num_mesas .= $mesa->numero.','; 
+				}
 			}
 
 			$data['id'] = $orden->id;
-			$data['mesas'] = substr($num_mesas, 0, -1);
+			$data['mesas'] = $num_mesas == '' ? '':substr($num_mesas,0,-1);
 			$data['preparado'] = $orden->preparado;
 			$data['tipo_consumo'] = $orden->tipo_consumo == 1 ? 'Comer en el Restaurant':'LLevar';
 
@@ -103,18 +106,19 @@ class Ordenes extends CI_Controller {
 		$pedido_id = $this->Ordenes_model->save($dataPedido);
 
 		if ($pedido_id != false) {
-			for($i = 0; $i < count($mesas);$i++){
-				$dataMesas = array(
-					"estado" => 0
-				);
-				$dataPedidoMesas = array(
-					"pedido_id" => $pedido_id,
-					"mesa_id" => $mesas[$i],
-				);
-				$this->Ordenes_model->updateMesa($mesas[$i],$dataMesas);
-				$this->Ordenes_model->savePedidoMesa($dataPedidoMesas);
+			if (!empty($mesas)) {
+				for($i = 0; $i < count($mesas);$i++){
+					$dataMesas = array(
+						"estado" => 0
+					);
+					$dataPedidoMesas = array(
+						"pedido_id" => $pedido_id,
+						"mesa_id" => $mesas[$i],
+					);
+					$this->Ordenes_model->updateMesa($mesas[$i],$dataMesas);
+					$this->Ordenes_model->savePedidoMesa($dataPedidoMesas);
+				}
 			}
-
 			for ($i=0; $i < count($productos) ; $i++) { 
 				$dataPedidoProductos = array(
 					"pedido_id" => $pedido_id,

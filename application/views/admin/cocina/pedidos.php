@@ -20,6 +20,7 @@
                                         Pedido N° - <?php echo $pedido->id;?>
                                     </div>
                                     <div class="panel-body">
+                                        <p class="text-center"><strong>El consumo es para:</strong> <?php echo $pedido->tipo_consumo == '1' ? 'Comer en el Restaurant':'Para Llevar';?></p>
                                         <p class="text-center">
 
                                             <?php 
@@ -28,7 +29,10 @@
                                                     $nummesas .= $mesa->numero.","; 
                                                 } 
                                             ?>
-                                            <strong>Mesa(s) : </strong> <?php echo substr($nummesas, 0, -1); ?>
+                                            <?php if ($pedido->tipo_consumo == 1): ?>
+                                                <strong>Mesa(s) : </strong> <?php echo substr($nummesas, 0, -1); ?>
+                                            <?php endif ?>
+                                            
 
                                             
                                         </p>

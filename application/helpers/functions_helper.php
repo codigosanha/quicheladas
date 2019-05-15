@@ -25,6 +25,20 @@ if(!function_exists('getInsumos'))
 	 
 	}
 }
+
+if(!function_exists('getPedido'))
+{
+	function getPedido($pedido)
+	{
+	    //asignamos a $ci el super objeto de codeigniter
+		//$ci será como $this
+		$ci =& get_instance();
+		$ci->db->where('id',$pedido);
+		$query = $ci->db->get('pedidos');
+		return $query->row();
+	 
+	}
+}
  
 if(!function_exists('getPreciosExtras'))
 {

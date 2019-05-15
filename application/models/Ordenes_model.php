@@ -7,8 +7,8 @@ class Ordenes_model extends CI_Model {
 
 		$this->db->select("p.id,p.preparado,p.tipo_consumo");
 		$this->db->from("pedidos p");
-		$this->db->join("pedidos_mesa pm", "pm.pedido_id = p.id");
-		$this->db->join("mesas m", "pm.mesa_id = m.id");
+		$this->db->join("pedidos_mesa pm", "pm.pedido_id = p.id",'left');
+		$this->db->join("mesas m", "pm.mesa_id = m.id",'left');
 		$this->db->where("p.estado", 1);
 		$this->db->where("p.fecha", date("Y-m-d"));
 
