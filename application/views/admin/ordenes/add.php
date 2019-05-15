@@ -18,6 +18,13 @@
                     <div class="col-md-6">
                         <form action="<?php echo base_url();?>movimientos/ordenes/store" method="POST" id="add-orden">
                             <h4 class="page-header">Productos Agregado a la Orden</h4>
+                            <div class="form-group">
+                                <label for="">El consumo es para:</label>
+                                <select name="tipo_consumo" id="tipo_consumo" class="form-control">
+                                    <option value="1">Comer en el Restaurant</option>
+                                    <option value="2">Llevar</option>
+                                </select>
+                            </div>
                             <div class="table-responsive">
                             <table class="table table-hover table-bordered" id="tborden">
                                 <thead>

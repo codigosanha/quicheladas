@@ -3,6 +3,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Ordenes_model extends CI_Model {
 
+	public function getOrdenesActual($numero = false, $start = false, $records = false){
+
+		$this->db->select("p.id,p.preparado,p.tipo_consumo");
+		$this->db->from("pedidos p");
+		$this->db->join("pedidos_mesa pm", "pm.pedido_id = p.id");
+		$this->db->join("mesas m", "pm.mesa_id = m.id");
+		$this->db->where("p.estado", 1);
+		$this->db->where("p.fecha", date("Y-m-d"));
+
+		if ($numero) {
+			$this->db->like('m.numero', $numero);
+		}
+
+		if ($start !== false && $records!== false) {
+			$this->db->limit($records, $start);
+		}
+		$this->db->group_by("p.id");
+
+		$resultados = $this->db->get();
+		return $resultados->result();
+	}
+
 	public function getOrdenes(){
 		$this->db->where("fecha", date("Y-m-d"));
 		$this->db->where("estado","1");

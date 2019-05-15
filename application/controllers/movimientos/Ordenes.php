@@ -42,36 +42,34 @@ class Ordenes extends CI_Controller {
 	}
 
 	public function getOrdenes(){
+		$value = $this->input->post("value");
+		$records_per_page = $this->input->post("records_per_page");
+		$page_current = $this->input->post("page_current");
 
-		$ordenes = $this->Ordenes_model->getOrdenes();
+		$page = ($page_current - 1) * $records_per_page;
 
-        $data = array();
-        if(!empty($ordenes))
-        {
-            foreach ($ordenes as $orden)
-            {
+		$totalOrdenes  = $this->Ordenes_model->getOrdenesActual($value);
+		$ordenes = $this->Ordenes_model->getOrdenesActual($value,$page,$records_per_page);
+		$dataOrdenes = array();
+		foreach ($ordenes as $orden) {
+			
+			$mesas = $this->Ordenes_model->getPedidosMesas($orden->id);
+			$num_mesas = '';
+			foreach ($mesas as $mesa) {
+				$num_mesas .= $mesa->numero.','; 
+			}
 
-                $nestedData['id'] = $orden->id;
+			$data['id'] = $orden->id;
+			$data['mesas'] = substr($num_mesas, 0, -1);
+			$data['preparado'] = $orden->preparado;
+			$data['tipo_consumo'] = $orden->tipo_consumo == 1 ? 'Comer en el Restaurant':'LLevar';
 
-                $mesas = "";
-                foreach ($orden->mesas as $mesa){
-                    $mesas .= $mesa->numero.","; 
-                } 
-     
-                $nestedData['mesas'] = substr($mesas, 0, -1);
-                
-                $nestedData['preparado'] = $orden->preparado;
-                
-                $data[] = $nestedData;
-
-            }
-        }
-          
-        $json_data = array(
-                    "data"            => $data   
-                    );
-            
-        echo json_encode($json_data); 
+			$dataOrdenes[] = $data;
+		}
+		echo json_encode([
+			'totalOrdenes' => count($totalOrdenes),
+			'ordenes' => $dataOrdenes
+		]);
 	}
 
 	public function add(){
@@ -93,11 +91,13 @@ class Ordenes extends CI_Controller {
 		$codigos = $this->input->post("codigos");
 		$cantidades = $this->input->post("cantidades");
 		$extras = $this->input->post("extras");
+		$tipo_consumo = $this->input->post("tipo_consumo");
 
 		$dataPedido = array(
 			"fecha" => date("Y-m-d"),
 			"usuario_id" => $this->session->userdata("id"),
-			"estado" => 1
+			"estado" => 1,
+			'tipo_consumo' => $tipo_consumo
 		);
 
 		$pedido_id = $this->Ordenes_model->save($dataPedido);
@@ -240,6 +240,7 @@ class Ordenes extends CI_Controller {
 		$nuevamesa = $this->input->post("nuevamesa");
 		$extras = $this->input->post("extras");
 		$codigos = $this->input->post("codigos");
+
 
 		if (!empty($mesa)) {
 			$dataPedidoMesas = array(

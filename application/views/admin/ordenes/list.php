@@ -24,18 +24,39 @@
                     </div>
                 </div>
                 <hr>
+                
                 <div class="row">
                     <div class="col-md-6">
-                        <table id="tbordenes" class="table table-bordered table-hover" width="100%">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Mesas</th>
-                                    <th>Preparacion</th>
-                                    <th>Opciones</th>
-                                </tr>
-                            </thead>
-                        </table>
+                        <div class="row form-group">
+                            <div class="col-md-7 col-xs-12">
+                                Mostrar
+                                    <select name="records_per_page" id="records_per_page" class="form-control" style="width: 80px !important; display: inline;">
+                                        <option value="10">10</option>
+                                        <option value="25" selected="selected">25</option>
+                                    </select>
+                                registros por pagina
+                            </div>
+                            <div class="col-md-5 col-xs-12 text-right">
+                                Buscar: <input type="text" class="form-control" id="search-orden" name="search-orden" placeholder="Buscar..." style="width: 130px !important; display: inline;">
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="tbordenesactual" class="table table-bordered table-hover" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Mesas</th>
+                                        <th>Preparacion</th>
+                                        <th>El consumo es para:</th>
+                                        <th>Opciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                        <ul class="pagination">
+                        </ul>
                     </div>
                     <div class="col-md-6">
                               <!-- Custom Tabs (Pulled to the right) -->

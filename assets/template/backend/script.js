@@ -1,8 +1,25 @@
 $(document).ready(function () {
     cargarPedidos();
+    cargarListaPedidos(1);
+    setInterval(function(){
+        cargarListaPedidos(1)
+    }, 15000);
+    //setInterval(cargarListaPedidos(1), 15000);
     $('.select2').select2({
         placeholder: "Seleccione una opcion",
         allowClear: true
+    });
+    $(document).on("keyup", "#search-orden", function(){
+        
+        cargarListaPedidos(1);
+    });
+
+    $(document).on("click", ".link", function(e){
+        e.preventDefault();
+
+        page = Number($(this).attr("href"));
+        console.log(page);
+        cargarListaPedidos(page);
     });
 
     $("#formCanjearCupon").submit(function(e){
@@ -59,74 +76,6 @@ $(document).ready(function () {
     });
 
 
-    $('#tbordenes').DataTable({
-            "destroy":"true",
-            "ajax":{
-                "url": base_url + "movimientos/ordenes/getOrdenes",
-                "dataType": "json",
-                "type": "POST",
-                "data":{  '<?php echo $this->security->get_csrf_token_name(); ?>' : '<?php echo $this->security->get_csrf_hash(); ?>' }
-            },
-            "columns": [
-                { "data": "id" },
-                { "data": "mesas" },
-                { "data": "preparado",
-                    fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
-                        if (oData.preparado == 0) {
-                            html = '<span class="label label-danger">Pendiente</span>';
-                        }else if (oData.preparado == 1){
-                            html = '<span class="label label-warning">Preparado</span>';
-
-                        } else{
-                            html = '<span class="label label-success">Listo a Entregar</span>';
-                        }
-                        $(nTd).html(html);
-                    }
-                },
-               
-                {
-                    mRender: function (data, type, row) {
-                        var permisos = JSON.parse($("#permisos").val());
-                       
-                        var btnView = '<button type="button" class="btn btn-primary btn-info-pedido btn-sm" data-toggle="modal" data-target="#modal-venta" value="'+row.id+'"><span class="fa fa-search"></span></button>';
-                        
-                        var btnEdit = '';
-                        var btnPay = '';
-                        if (permisos.update == 1) {
-                            btnEdit = '<a href="' + base_url +'movimientos/ordenes/edit/'+row.id+'" class="btn btn-warning btn-sm"><span class="fa fa-pencil"></span></a>';
-                                                    
-                            btnPay = '<a href="'+base_url+ 'movimientos/ordenes/pay/'+row.id+'" class="btn btn-success btn-sm"><i class="fa fa-credit-card" aria-hidden="true"></i></a>';
-                        }
-                        var btnDelete = '';
-                        if (permisos.delete == 1) {
-                            btnDelete = '<a href="'+base_url+'movimientos/ordenes/delete/'+row.id+'" class="btn btn-danger btn-delete btn-sm"><i class="fa fa-times" aria-hidden="true"></i></a>';
-
-                        }                     
-                        return "<div class='btn-group'>" + btnView +" "+btnEdit +" "+btnPay +" "+btnDelete + "</div>";
-                    }
-                } 
-            ],
-            language: {
-                "lengthMenu": "Mostrar _MENU_ registros por pagina",
-                "zeroRecords": "No se encontraron resultados en su busqueda",
-                "searchPlaceholder": "Buscar registros",
-                "info": "Mostrando registros de _START_ al _END_ de un total de  _TOTAL_ registros",
-                "infoEmpty": "No existen registros",
-                "infoFiltered": "(filtrado de un total de _MAX_ registros)",
-                "search": "Buscar:",
-                "paginate": {
-                    "first": "Primero",
-                    "last": "Último",
-                    "next": "Siguiente",
-                    "previous": "Anterior"
-                },
-            },
-            "drawCallback": function( settings ) {
-                setTimeout(refreshDataTable, 10000);
-            }
-
-        });
-
 
     /*if ( $("#listado-pedidos").length ) {
         setTimeout(refrescar, 10000);
@@ -140,7 +89,7 @@ $(document).ready(function () {
         //Actualiza la el div con los datos de imagenes.php
          //location.reload();
          //alert("hola");
-         $('#tbordenes').DataTable().ajax.reload();
+        
     }
 
     $(document).on("click", ".btn-view-corte-caja", function(){
@@ -2595,6 +2544,77 @@ function cargarPedidos(){
         success: function(resp){
             $("#cocina").html(resp);
             setTimeout(cargarPedidos, 10000);
+        }
+    });
+}
+function cargarListaPedidos(pageCurrent){
+    search = $("#search-orden").val();
+    records_per_page = $("#records_per_page").val(); 
+    $.ajax({
+        url: base_url + "movimientos/ordenes/getOrdenes",
+        type:"POST",
+        dataType: 'json',
+        data: {value:search, records_per_page: records_per_page, page_current: pageCurrent},
+        success: function(data){
+
+            pagination = '';
+            num_links = Math.ceil(data.totalOrdenes / records_per_page);
+            if (Number(pageCurrent)==1) {
+                pagination += "<li class='disabled'><a href='#'>Anterior</a></li>";
+            }else{
+                pagination += "<li><a href='"+(pageCurrent-1)+"' class='link'>Anterior</a></li>";
+            }
+            for( i= 1; i<=num_links; i++){
+                
+                active = ((i == Number(pageCurrent)) ? 'active' : '');
+                pagination += "<li class='"+active+"'><a href='"+i+"' class='link'>"+i+"</a></li>";
+            } 
+            if (Number(pageCurrent)==num_links) {
+                pagination += "<li class='disabled'><a href='#'>Siguiente</a></li>";
+            }else{
+                pagination += "<li><a href='"+(pageCurrent+1)+"' class='link'>Siguiente</a></li>";
+            }
+            $(".pagination").html(pagination);
+
+            html = "";
+            $.each(data.ordenes, function(key, value){
+                html += "<tr>"; 
+                
+                html += "<td>"+value.mesas+"</td>";
+                estado = '';
+                if (value.preparado == 0) {
+                    estado ="<span class='label label-danger'>Pendiente</span>";
+                } else if(value.preparado == 1){
+                    estado ="<span class='label label-warning'>En Preparación</span>";
+                } else{
+                    estado ="<span class='label label-success'>Listo a Entregar</span>";
+                }
+                html += "<td>"+estado+"</td>";
+                html += "<td>"+value.tipo_consumo+"</td>";  
+
+                var permisos = JSON.parse($("#permisos").val());
+                       
+                var btnView = '<button type="button" class="btn btn-primary btn-info-pedido btn-sm" data-toggle="modal" data-target="#modal-venta" value="'+value.id+'"><span class="fa fa-search"></span></button>';
+                
+                var btnEdit = '';
+                var btnPay = '';
+                if (permisos.update == 1) {
+                    btnEdit = '<a href="' + base_url +'movimientos/ordenes/edit/'+value.id+'" class="btn btn-warning btn-sm"><span class="fa fa-pencil"></span></a>';
+                                            
+                    btnPay = '<a href="'+base_url+ 'movimientos/ordenes/pay/'+value.id+'" class="btn btn-success btn-sm"><i class="fa fa-credit-card" aria-hidden="true"></i></a>';
+                }
+                var btnDelete = '';
+                if (permisos.delete == 1) {
+                    btnDelete = '<a href="'+base_url+'movimientos/ordenes/delete/'+value.id+'" class="btn btn-danger btn-delete btn-sm"><i class="fa fa-times" aria-hidden="true"></i></a>';
+
+                }                     
+                html += "<td><div class='btn-group'>" + btnView +" "+btnEdit +" "+btnPay +" "+btnDelete + "</div></td>";
+
+                html += "</tr>"; 
+
+            });
+            $("#tbordenesactual tbody").html(html);
+            
         }
     });
 }
