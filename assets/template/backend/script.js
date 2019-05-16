@@ -23,10 +23,15 @@ $(document).ready(function () {
         } else {
             $("#content-mesas").hide();
             $("#mesas").removeAttr("required");
+            $("#mesas").val(null);
         }
     });
 
     $(document).on("keyup", "#search-orden", function(){
+        cargarListaPedidos(1);
+    });
+
+    $(document).on("change", "#records_per_page", function(){
         cargarListaPedidos(1);
     });
 
@@ -477,6 +482,24 @@ $(document).ready(function () {
         }else{
             $(".e"+dataCheck[0]+tr_id).remove();
         }
+
+        if ($("#"+tr_id+" input.totalE").length) {
+            totalE = 0;
+            $(".check-extra:checked").each(function(){
+                data = $(this).val();
+                info = data.split("*");
+                totalE = totalE + Number(info[2]);
+            });
+            $("#"+tr_id+" input.totalE").val(totalE);
+            precio = Number($("#"+tr_id).children("td:eq(1)").text());
+            
+            cantidad =  Number($("#"+tr_id).children("td:eq(3)").find("input").val());
+            descuento =  Number($("#"+tr_id).children("td:eq(4)").find("input").val());
+            nuevoImporte = (cantidad * precio) + (cantidad * totalE) - descuento;
+            $("#"+tr_id).children("td:eq(5)").find("input").val(nuevoImporte.toFixed(2));
+            $("#"+tr_id).children("td:eq(5)").find("p").text(nuevoImporte.toFixed(2));
+        }
+        
     })
     $(document).on("click", ".btn-view-extras", function(){
         idProducto = $(this).val();
@@ -981,19 +1004,17 @@ $(document).ready(function () {
     $(document).on("click", ".product-selected-vd", function(){
         valorBtn = $(this).attr('data-href');
         infoBtn = valorBtn.split("*");
-        if (verificar(infoBtn[0])) {
-            alert("El producto ya fue agregado");
-        }else{
+        var id = new Date().getUTCMilliseconds();
             dataDescuento = infoBtn[6]+"*"+infoBtn[7]
             if (infoBtn[4] == "N/A") {
                 max = "";
             }else{
                 max = infoBtn[4];
             }
-            html = "<tr>";
-            html += "<td><input type='hidden' name='productos[]' value='"+infoBtn[0]+"'>"+infoBtn[2]+"</td>";
+            html = "<tr id='"+id+"'>";
+            html += "<td><input type='hidden' name='productos[]' value='"+infoBtn[0]+"'><input type='hidden' class='totalE' value='0'>"+infoBtn[2]+"</td>";
             html += "<td><input type='hidden' name='precios[]' value='"+infoBtn[3]+"'>"+infoBtn[3]+"</td>";
-            html += "<td>"+infoBtn[4]+"</td>";
+            html += "<td><input type='hidden' name='codigos[]' value='"+id+"'>"+infoBtn[4]+"</td>";
             html += "<td>";
             html += '<div class="input-group" style="width:130px;">';
             html +='<span class="input-group-btn">'
@@ -1015,7 +1036,7 @@ $(document).ready(function () {
             $("#tb-venta-directa tbody").append(html);
             $(".btn-guardar").removeAttr("disabled");
             sumar();
-        }
+        
     });
 
     $(document).on("click", ".btn-categoria", function(){
@@ -1102,8 +1123,9 @@ $(document).ready(function () {
         }else{
             input.val(resto);
             if (formulario == "venta_directa") {
+                totalE = $(this).closest("tr").children("td:eq(0)").find("input.totalE").val();
                 descuento = obtenerDescuento(resto,dataDesc[0],dataDesc[1]);
-                importe = (resto * precio) - descuento;
+                importe = (resto * precio) + (resto * totalE) - descuento;
                 $(this).closest("tr").find("td:eq(4)").children("input").val(descuento);
 
                 $(this).closest("tr").find("td:eq(5)").children("p").text(importe.toFixed(2));
@@ -1155,8 +1177,10 @@ $(document).ready(function () {
         if (valorMax=="") {
             input.val(aumento);
             if (formulario == "venta_directa") {
+                totalE = $(this).closest("tr").children("td:eq(0)").find("input.totalE").val();
+
                 descuento = obtenerDescuento(aumento,dataDesc[0],dataDesc[1]);
-                importe = (aumento * precio) - descuento;
+                importe = (aumento * precio)+(totalE * aumento) - descuento;
                 $(this).closest("tr").find("td:eq(4)").children("input").val(descuento);
                 $(this).closest("tr").find("td:eq(5)").children("p").text(importe.toFixed(2));
                 $(this).closest("tr").find("td:eq(5)").children("input").val(importe.toFixed(2));
@@ -1174,8 +1198,9 @@ $(document).ready(function () {
             }else{
                 input.val(aumento);
                 if (formulario == "venta_directa") {
+                    totalE = $(this).closest("tr").children("td:eq(0)").find("input.totalE").val();
                     descuento = obtenerDescuento(aumento,dataDesc[0],dataDesc[1]);
-                    importe = (aumento * precio) - descuento;
+                    importe = (aumento * precio) + (totalE * aumento) - descuento;
                     $(this).closest("tr").find("td:eq(4)").children("input").val(descuento);
                     $(this).closest("tr").find("td:eq(5)").children("p").text(importe.toFixed(2));
                     $(this).closest("tr").find("td:eq(5)").children("input").val(importe.toFixed(2));
@@ -1333,14 +1358,15 @@ $(document).ready(function () {
         if (cantidadProductos < 1) {
             alertify.error("Agregue productos a pagar");
         }else{
-            //setEstado();
+            
             data = $(this).serialize();
-            ruta = $(this).attr("action");
+            var url = $(this).attr("action");
+         
             $.ajax({
-                url: ruta,
+                url: url,
                 type:"POST",
                 data: data,
-                //dataType: "json",
+           
                 success:function(resp){
                     if (resp != "0") {
                         alertify.success("La venta rapida fue registrada");

@@ -373,14 +373,6 @@ class Ordenes extends CI_Controller {
 		$this->load->view("layouts/footer");
 	}
 
-	/*public function view(){
-		$id = $this->input->post("idpedido");
-		$data  = array(
-			'mesas' => $this->Ordenes_model->getPedidosMesas($id),
-			'productos' => $this->Ordenes_model->getPedidosProductos($id), 
-		);
-		$this->load->view("admin/ordenes/view",$data);
-	}*/
 	public function view(){
 		$id = $this->input->post("idpedido");
 		$data  = array(

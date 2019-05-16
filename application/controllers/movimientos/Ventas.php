@@ -266,8 +266,6 @@ class Ventas extends CI_Controller {
 		$cantidades = $this->input->post("cantidades");
 		$importes = $this->input->post("importes");
 		$descuentos = $this->input->post("descuentos");
-
-
 		switch ($tipo_pago) {
 			case '1':
 				$monto_efectivo = $total;
@@ -321,7 +319,9 @@ class Ventas extends CI_Controller {
 			'monto_credito' => $monto_credito,
 			'monto_tarjeta' => $monto_tarjeta,
 			'tipo_pago' => $tipo_pago,
-			'tarjeta_id' => $tarjeta_id
+			'tarjeta_id' => $tarjeta_id,
+			'pedido_id' => 0,
+			'hora' => date("H:i A")
 		);
 
 		if ($this->Ventas_model->save($data)) {

@@ -39,10 +39,11 @@ class Ventas_model extends CI_Model {
 	}
 
 	public function getVenta($id){
-		$this->db->select("v.*,c.nombre,c.direccion,c.telefono,c.num_documento as documento,tc.nombre as tipocomprobante,tc.igv as porcentaje");
+		$this->db->select("v.*,c.nombre,c.direccion,c.telefono,c.num_documento as documento,tc.nombre as tipocomprobante,tc.igv as porcentaje, CONCAT(u.nombres,' ',u.apellidos) as usuario");
 		$this->db->from("ventas v");
 		$this->db->join("clientes c","v.cliente_id = c.id");
 		$this->db->join("tipo_comprobante tc","v.tipo_comprobante_id = tc.id");
+		$this->db->join("usuarios u","v.usuario_id = u.id");
 		$this->db->where("v.id",$id);
 		$resultado = $this->db->get();
 		return $resultado->row();
