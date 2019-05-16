@@ -23,7 +23,10 @@
 			<?php endif ?>
 			
 		<?php endif ?>
-		<p><b>El consumo es :</b> <?php echo $pedido->tipo_consumo == 1 ? 'En el Restaurant': 'Para Llevar';?></p>
+		<?php if ($venta->pedido_id!=0): ?>
+			<p><b>El consumo es :</b> <?php echo $pedido->tipo_consumo == 1 ? 'En el Restaurant': 'Para Llevar';?></p>
+		<?php endif ?>
+		
 		<p><b>Estado: </b><?php if ($venta->estado == "1") {
                                                     echo '<strong>Pagado</strong>';
                                                 }else if($venta->estado == "2"){
@@ -33,10 +36,13 @@
                                                 } ?>
                                             </p>
 		<p><b>Cliente: </b><?php echo $venta->nombre;?></p>
-		<?php if ($pedido->tipo_consumo == 2): ?>
-			<p><b>Telefono: </b><?php echo $venta->telefono;?></p>
-			<p><b>Direccion: </b><?php echo $venta->direccion;?></p>
+		<?php if ($venta->pedido_id!=0): ?>
+			<?php if ($pedido->tipo_consumo == 2): ?>
+				<p><b>Telefono: </b><?php echo $venta->telefono;?></p>
+				<p><b>Direccion: </b><?php echo $venta->direccion;?></p>
+			<?php endif ?>
 		<?php endif ?>
+		
 		
 		<p><b>Fecha y Hora: </b><?php echo $venta->fecha." ".$venta->hora;?></p>
 		<p><b>Cajero: </b><?php echo $venta->usuario;?></p>

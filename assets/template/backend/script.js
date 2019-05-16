@@ -498,6 +498,7 @@ $(document).ready(function () {
             nuevoImporte = (cantidad * precio) + (cantidad * totalE) - descuento;
             $("#"+tr_id).children("td:eq(5)").find("input").val(nuevoImporte.toFixed(2));
             $("#"+tr_id).children("td:eq(5)").find("p").text(nuevoImporte.toFixed(2));
+            sumar();
         }
         
     })

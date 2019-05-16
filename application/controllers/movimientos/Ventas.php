@@ -266,6 +266,8 @@ class Ventas extends CI_Controller {
 		$cantidades = $this->input->post("cantidades");
 		$importes = $this->input->post("importes");
 		$descuentos = $this->input->post("descuentos");
+		$codigos = $this->input->post("codigos");
+		$extras = $this->input->post("extras");
 		switch ($tipo_pago) {
 			case '1':
 				$monto_efectivo = $total;
@@ -323,11 +325,14 @@ class Ventas extends CI_Controller {
 			'pedido_id' => 0,
 			'hora' => date("H:i A")
 		);
-
+		//print_r($data);
 		if ($this->Ventas_model->save($data)) {
 			$idventa = $this->Ventas_model->lastID();
 			$this->updateComprobante($idcomprobante);
-			$this->save_detalle($idproductos,$idventa,$precios,$cantidades,$importes,$descuentos);
+			$this->save_detalle($idproductos,$idventa,$precios,$cantidades,$importes,$descuentos,$codigos);
+			if (!empty($extras)) {
+				$this->saveExtrasProductoOrden($extras,0);
+			}
 	
 			
 			$data = array(
@@ -339,6 +344,19 @@ class Ventas extends CI_Controller {
 		}else{
 			//redirect(base_url()."movimientos/ventas/add");
 			echo "0";
+		}
+	}
+	protected function saveExtrasProductoOrden($extras,$idOrden){
+		for ($i=0; $i < count($extras); $i++) { 
+			$extra = $extras[$i];
+			$infoExtra = explode("*", $extra);
+			$data = array(
+				'orden_id' => $idOrden,
+				'producto_id' => $infoExtra[1],
+				'extra_id' => $infoExtra[0],
+				'codigo' => $infoExtra[2]
+			);
+			$this->Ordenes_model->saveExtrasProductoOrden($data);
 		}
 	}
 

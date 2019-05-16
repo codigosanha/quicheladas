@@ -117,6 +117,7 @@
                                 <button id="btn-success" type="submit" class="btn btn-success btn-flat btn-guardar" disabled="disabled">Guardar</button>
                                 <a href="<?php echo base_url();?>movimientos/ordenes" class="btn btn-danger">Volver</a>
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-default2">Aplicar Descuento</button>
+                                <button class="btn btn-warning" type="button" data-toggle="modal" data-target="#modal-cupon">Canjear Cupón</button>
                             </div>
                         </form>
                     </div>
@@ -244,7 +245,31 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
-
+<div class="modal fade" id="modal-cupon">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Canjear Cupón</h4>
+      </div>
+      <form action="<?php echo base_url();?>movimientos/ordenes/validarCupon" method="POST" id="formCanjearCupon">
+      <div class="modal-body">
+          <div class="form-group">
+              <label for="">Ingrese Codigo</label>
+              <input type="text" class="form-control" name="codigo" id="codigo">
+              <input type="hidden" name="tipo_cupon" value="1">
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-success"><span class="fa fa-print"> </span>Comprobar</button>
+      </div>
+      </form>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
 <div class="modal fade" id="modal-default">
     <div class="modal-dialog">
