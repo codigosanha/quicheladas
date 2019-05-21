@@ -86,3 +86,5 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 
 define('EXT', '.php');
+
+define('APP_NAME','Quicheladas');

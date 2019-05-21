@@ -8,13 +8,15 @@ class Correos extends CI_Controller {
 		parent::__construct();
 		$this->permisos = $this->backend_lib->control();
 		$this->load->model("Correos_model");
+		$this->load->model("Backend_model");
 	}
 
 	public function index()
 	{
 		$data  = array(
 			'permisos' => $this->permisos,
-			'correos' => $this->Correos_model->getCorreos(), 
+			'correos' => $this->Correos_model->getCorreos(),
+			'configuracion' => $this->Backend_model->getConfiguracion()
 		);
 		$this->load->view("layouts/header");
 		$this->load->view("layouts/aside");
@@ -89,7 +91,26 @@ class Correos extends CI_Controller {
 	        
 	        redirect(base_url()."administrador/correos");
 	    }
+	}
 
-		
+	public function saveCorreoRemitente(){
+		$idConfiguracion = $this->input->post("idConfiguracion");
+		$correo_remitente = $this->input->post("correo_remitente");
+		$data  = array(
+			'correo_remitente' => $correo_remitente, 
+		);
+		if (!empty($idConfiguracion)) {
+			$resp = $this->Backend_model->updateCorreoRemitente($idConfiguracion, $data);
+		}else{
+			$resp = $this->Backend_model->saveCorreoRemitente($data);
+		}
+
+		if ($resp) {
+			$this->session->set_flashdata('success','El correo remitente ha sido establecido con exito');
+			redirect(base_url()."administrador/correos");
+		}else {
+			$this->session->set_flashdata('error','El correo remitente no ha sido establecido');
+			redirect(base_url()."administrador/correos");
+		}
 	}
 }

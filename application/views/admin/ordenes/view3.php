@@ -38,46 +38,41 @@
                     <td colspan="4" style="background-color: #3BB933; color: #FFF; font-weight: bold;" class="text-center"><?php echo $sp->nombre;?></td>
                 </tr>
                     <?php foreach ($sp->subs as $p): ?>
-                        <?php
+                        <?php $cantidad = $p->cantidad - $p->pagados;?>
+                        <tr>
+                            <td>
+                                <?php echo $p->nombre;?>
+                            </td>
+                            <td><?php echo $cantidad;?></td>
+                            <td style="text-align: left;">
+                                <?php echo number_format($p->precio, 2, '.', '');?>
+                            </td>
 
-                            $totalExtras = 0;
-                            $nombreExtras = '';
-                            $preciosExtras = getPreciosExtras($pedido,$p->idprod,$p->codigo);
-                            if (!empty($preciosExtras)) {
-                                $nombreExtras = 'Extras: ';
-                                foreach ($preciosExtras as $pe) {
-                                    $totalExtras = $totalExtras + $pe->precio;
-                                    $nombreExtras .= $pe->nombre.",";
+                            <td style="text-align: right;">
+                                <?php echo number_format(($cantidad * $p->precio), 2, '.', ''); ?>
+                            </td>
+                        </tr>
+                        <?php $total = $total + ($cantidad * $p->precio) ;?>
+                        <?php 
+                            $htmlExtras = "";
+                            $totalExtras = 0.00;
+                            $extras = getPreciosExtras($p->pedido_id,$p->producto_id,$p->codigo);
+
+                            if (!empty($extras)) {
+                                foreach ($extras as $e) {
+                                    $htmlExtras .= "<tr>";
+                                    $htmlExtras .= "<td><i>".$e->nombre."</i></td>";
+                                    $htmlExtras .= "<td>".$cantidad."</td>";
+                                    $htmlExtras .= "<td>".$e->precio."</td>";
+                                    $htmlExtras .= "<td style='text-align: right;'>".number_format($e->precio * $cantidad, 2, '.', '')."</td>";
+                                    $htmlExtras .= "</tr>";
+                                    $totalExtras = $totalExtras + ($e->precio * $cantidad);
                                 }
                             }
-                         ?>
-                        <tr>
-                        <td>
-                            <?php echo $p->nombre;?>
-                            <?php if ($nombreExtras!= ''): ?>
-                                <p class="text-muted" style="font-size: 10px;"><?php echo substr($nombreExtras, 0, -1);?></p>
-                            <?php endif ?>
-                        </td>
 
-                        <td>
-                            <?php 
-
-                                $cantidad = $p->cantidad - $p->pagados;
-
-                                echo $cantidad;
-
-                            ?>
-                        </td>
-                        <td style="text-align: left;">
-                            <?php echo number_format($p->precio, 2, '.', '');?>
-                        </td>
-
-                        <td style="text-align: right;">
-                            <?php echo number_format(($cantidad * $p->precio)+$totalExtras, 2, '.', ''); ?>
-                        </td>
-
-                            <?php $total = $total + ($cantidad * $p->precio) + $totalExtras;?>
-                    </tr>
+                            echo $htmlExtras;
+                            $total = $total + $totalExtras;
+                        ?>
                     <?php endforeach ?>
                 
                 <?php endforeach;?>

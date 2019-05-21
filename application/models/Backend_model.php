@@ -108,5 +108,22 @@ class Backend_model extends CI_Model {
 		return $resultados->result();
 
 	}
+
+	public function getConfiguracion(){
+		$resultado = $this->db->get("configuraciones");
+		if ($resultado->num_rows() > 0) {
+			return $resultado->row();
+		}
+		return false;
+	}
+
+	public function saveCorreoRemitente($data){
+		return $this->db->insert("configuraciones", $data);
+	}
+
+	public function updateCorreoRemitente($idConfiguracion, $data){
+		$this->db->where("id", $idConfiguracion);
+		return $this->db->update("configuraciones", $data);
+	}
 	
 }

@@ -861,6 +861,44 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on("click", ".btn-delete-orden", function(e){
+        e.preventDefault();
+        var configCorreos = $("#configCorreos").val();
+        if (configCorreos==1) {
+            url = $(this).attr("href");
+            swal({
+                title: "Esta seguro que desea eliminar este registro?",
+                text: "Esta operacion es irreversible",
+                type: "input",
+                showCancelButton: true,
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false,
+                confirmButtonText: "Eliminar",
+                cancelButtonText: "Cancelar",
+                closeOnConfirm: false,
+                inputPlaceholder: "Indique las observaciones"
+            }, function (inputValue) {
+                if (inputValue === false) return false;
+                if (inputValue === "") {
+                    swal.showInputError("Es necesario que indique las observaciones");
+                    return false
+                }
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data:{observaciones:inputValue},
+                    success: function(resp){
+                        window.location.href = base_url + resp;
+                    }
+                });
+            });
+        }else{
+            $("#modal-msgCorreos").modal('show');
+        }
+       
+    });
+
     $("#add-orden").submit(function(e){
         $('button[type=submit]').attr('disabled','disabled');
         $('button[type=submit]').text('Procesando...');
@@ -2288,7 +2326,7 @@ function cargarListaPedidos(pageCurrent){
                     }
                     var btnDelete = '';
                     if (permisos.delete == 1) {
-                        btnDelete = '<a href="'+base_url+'movimientos/ordenes/delete/'+value.id+'" class="btn btn-danger btn-delete btn-sm"><i class="fa fa-times" aria-hidden="true"></i></a>';
+                        btnDelete = '<a href="'+base_url+'movimientos/ordenes/delete/'+value.id+'" class="btn btn-danger btn-delete-orden btn-sm"><i class="fa fa-times" aria-hidden="true"></i></a>';
 
                     }                     
                     html += "<td><div class='btn-group'>" + btnView +" "+btnEdit +" "+btnPay +" "+btnDelete + "</div></td>";

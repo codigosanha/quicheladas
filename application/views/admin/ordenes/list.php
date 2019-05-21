@@ -12,6 +12,7 @@
         <!-- Default box -->
         <div class="box box-solid">
             <div class="box-body">
+                <input type="hidden" name="configCorreos" id="configCorreos" value="<?php echo $configCorreos;?>">
                 <div class="row">
                     <div class="col-md-12">
                         <?php if ($caja_abierta != false): ?>
@@ -118,6 +119,31 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
         <button type="button" class="btn btn-primary btn-flat btn-print"><span class="fa fa-print"></span> Imprimir</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+<div class="modal fade" id="modal-msgCorreos">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Informacion de Eliminacion</h4>
+      </div>
+      <div class="modal-body">
+        Esta acción requiere la configuración de un correo remitente y al menos un correo destinatario para enviar la información de la eliminación en formato PDF. <br> <br>
+        Póngase en contacto con su administrador para resolver esta diligencia.
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
+        
       </div>
     </div>
     <!-- /.modal-content -->

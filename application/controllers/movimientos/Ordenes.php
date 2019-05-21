@@ -20,11 +20,20 @@ class Ordenes extends CI_Controller {
 		$this->load->model("Tarjetas_model");
 		$this->load->model("Insumos_model");
 		$this->load->model("Cupones_model");
+		$this->load->model("Backend_model");
 		$this->load->helper("functions");
 	}
 
 	public function index()
 	{
+		$configCorreos = 0;
+		$configuracion = $this->Backend_model->getConfiguracion();
+		$correos = $this->Correos_model->getCorreos();
+		if ($configuracion != false && count($correos) > 0) {
+			if ($configuracion->correo_remitente != '') {
+				$configCorreos = 1;
+			}
+		}
 		$firstArea = $this->Areas_model->getFirstArea();
 		$data  = array(
 			'permisos' => $this->permisos,
@@ -33,6 +42,7 @@ class Ordenes extends CI_Controller {
 			'mesasArea' => $this->Areas_model->getMesas($firstArea),
 			'firstArea' => $firstArea,
 			'caja_abierta' => $this->Caja_model->getCajaAbierta(),
+			'configCorreos' => $configCorreos
 		);
 		$this->load->view("layouts/header");
 		$this->load->view("layouts/aside");
@@ -577,9 +587,10 @@ class Ordenes extends CI_Controller {
 	    	$sendCorreos[] = $c->correo; 
 	    }
 
-	   $this->load->library('email');
+	    $configuracion = $this->Backend_model->getConfiguracion();
+	   	$this->load->library('email');
 
-		$this->email->from('contacto@codigosanha.com', 'Codigosanha');
+		$this->email->from($configuracion->correo_remitente, APP_NAME);
 		$this->email->to($sendCorreos); 
 
 		$this->email->subject('Eliminacion de Productos');
@@ -609,9 +620,10 @@ class Ordenes extends CI_Controller {
 	    	$sendCorreos[] = $c->correo; 
 	    }
 
-	   $this->load->library('email');
+	   	$configuracion = $this->Backend_model->getConfiguracion();
+	   	$this->load->library('email');
 
-		$this->email->from('contacto@codigosanha.com', 'Codigosanha');
+		$this->email->from($configuracion->correo_remitente, APP_NAME);
 		$this->email->to($sendCorreos); 
 
 		$this->email->subject('Eliminacion de Orden');
