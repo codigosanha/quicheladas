@@ -69,6 +69,7 @@ class Compras_model extends CI_Model {
 		$this->db->select("p.id,CONCAT(p.codigo,' - ',p.nombre) as label,p.nombre,p.codigo,p.precio_compra,p.stock");
 		$this->db->from("productos p");
 		$this->db->like("CONCAT(p.codigo,'',p.nombre)",$valor);
+		$this->db->where("p.condicion","1");
 		$resultados = $this->db->get();
 		$return = array();
 

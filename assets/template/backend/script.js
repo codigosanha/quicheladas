@@ -599,6 +599,47 @@ $(document).ready(function () {
             }
         });
     });
+    $(document).on("click", ".btn-update-extra", function(){
+        var idExtra = $(this).val(); 
+        var nombre = $(this).closest("tr").find("td:eq(0)").find("input").val();
+        var precio = $(this).closest("tr").find("td:eq(1)").find("input").val();
+        var dataExtra = {
+            idExtra: idExtra,
+            nombre: nombre,
+            precio: precio
+        };
+        $.ajax({
+            url: base_url + "mantenimiento/productos/updateExtraProducto",
+            type: "POST",
+            data: dataExtra,
+            success: function(resp){
+                if (resp==1) {
+                    swal("Bien!","La informacion del extra se actualizo correctamente", "success");
+                    getExtras($("#idProducto").val());
+                }else{
+                    swal("Error","No se pudo actualizar la informacion del extra", "error");
+                }
+            }
+        });
+
+    })
+    $(document).on("click", ".btn-edit-extra", function(){
+        $(".btn-remove-extra").hide();
+        $(this).hide();
+        $(".btn-update-extra").show();
+        $(".btn-cancel-extra").show();
+        var nombre = $(this).closest("tr").find("td:eq(0)").text();
+        var precio = $(this).closest("tr").find("td:eq(1)").text();
+        var inputNombre = "<input type='text' name='nombre' value='"+nombre+"'>";
+        var inputPrecio = "<input type='text' name='precio' value='"+precio+"'>";
+        $(this).closest("tr").find("td:eq(0)").html(inputNombre);
+        $(this).closest("tr").find("td:eq(1)").html(inputPrecio);
+    })
+    $(document).on("click", ".btn-cancel-extra", function(){
+        var idExtra = $(this).val(); 
+        getExtras($("#idProducto").val());
+
+    })
     $(document).on("click", ".btn-remove-extra", function(){
         var idExtra = $(this).val(); 
         
@@ -692,6 +733,15 @@ $(document).ready(function () {
                         html += "<td>"+value.nombre+"</td>";
                         html += "<td>"+value.precio+"</td>";
                         html += "<td>";
+                        html += '<button type="button" class="btn btn-success btn-update-extra" value="'+value.id+'" style="display:none;">';
+                        html += '<span class="fa fa-save"></span>';
+                        html += '</button>';
+                        html += '<button type="button" class="btn btn-danger btn-cancel-extra" value="'+value.id+'" style="display:none;">';
+                        html += '<span class="fa fa-ban"></span>';
+                        html +='</button>';
+                        html += '<button type="button" class="btn btn-warning btn-edit-extra" value="'+value.id+'">';
+                        html += '<span class="fa fa-pencil"></span>';
+                        html += '</button>';
                         html += '<button type="button" class="btn btn-danger btn-remove-extra" value="'+value.id+'">';
                         html += '<span class="fa fa-times"></span>';
                         html += '</button></td>';

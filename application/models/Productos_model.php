@@ -21,6 +21,10 @@ class Productos_model extends CI_Model {
 		$this->db->where("id",$id);
 		return $this->db->update("productos_unidades_medidas", $data);
 	}
+	public function updateExtraProducto($id, $data){
+		$this->db->where("id",$id);
+		return $this->db->update("extras", $data);
+	}
 
 	public function countExtras($idproducto){
 		$this->db->where("producto_id", $idproducto);

@@ -422,4 +422,22 @@ class Productos extends CI_Controller {
 		}
 	}
 
+	public function updateExtraProducto(){
+		$idExtra = $this->input->post("idExtra");
+		$nombre = $this->input->post("nombre");
+		$precio = $this->input->post("precio");
+
+		$data = array(
+			
+			'nombre' => $nombre,
+			'precio' => $precio,
+		);
+		if ($this->Productos_model->updateExtraProducto($idExtra,$data)) {
+			echo "1";
+		}
+		else{
+			echo "0";
+		}
+	}
+
 }
