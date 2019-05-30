@@ -93,7 +93,7 @@
                                                         </li>
                                                         <?php endif;?>
                                                         <li>
-                                                            <a href="#modal-extras" class=" btn-extras" data-toggle="modal" data-target="#modal-extras" data-href="<?php echo $producto->id;?>">
+                                                            <a href="#modal-extras" class="btn-extras" data-toggle="modal" data-target="#modal-extras" data-href="<?php echo $producto->id;?>">
                                                                 <i class="fa fa-plus"></i>
                                                                 Extras
                                                             </a>
@@ -186,7 +186,7 @@
                 Listado de Extras
             </div>
             <div class="panel-body no-padding">
-                <table class="table table-bordered table-striped" id="tbmedidas">
+                <table class="table table-bordered table-striped" id="tbextras">
                     <thead>
                         <tr>
                             <th>Nombre</th>

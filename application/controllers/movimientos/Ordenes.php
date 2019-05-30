@@ -51,6 +51,16 @@ class Ordenes extends CI_Controller {
 
 	}
 
+	public function getExtras($idproducto){
+		if (!$this->input->is_ajax_request()) {
+		   exit('No direct script access allowed');
+		}else{
+			$resultados = $this->Productos_model->getExtras($idproducto);
+			echo json_encode($resultados);
+		}
+		
+	}
+
 	public function getOrdenes(){
 		$value = $this->input->post("value");
 		$records_per_page = $this->input->post("records_per_page");

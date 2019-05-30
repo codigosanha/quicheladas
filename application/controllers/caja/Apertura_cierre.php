@@ -57,40 +57,34 @@ class Apertura_cierre extends CI_Controller {
 		}	
 	}
 
+	public function check_pending_orders(){
+		echo $this->Caja_model->check_pending_orders();
+	}
+
 	public function cerrarCaja(){
-		if ($this->Caja_model->check_pending_orders() > 0) {
-			$response  = array(
-				'status' => 0, 
-				'message' => "Aún existen ordenes pendientes a cobrar"
-			);
-		}else{
-			$idCaja = $this->input->post("idCaja");
-			$observacion = $this->input->post("observaciones");
-			$montoEfectivo = $this->input->post("monto_efectivo");
-			$fecha = date("Y-m-d H:i:s");
-			$data  = array( 
-				'fecha_cierre' => $fecha,
-				'estado' => 0,
-				'observacion' => $observacion,
-				'monto_efectivo' => $montoEfectivo
-			);
+		
+		$idCaja = $this->input->post("idCaja");
+		$observacion = $this->input->post("observaciones");
+		$montoEfectivo = $this->input->post("monto_efectivo");
+		$fecha = date("Y-m-d H:i:s");
+		$data  = array( 
+			'fecha_cierre' => $fecha,
+			'estado' => 0,
+			'observacion' => $observacion,
+			'monto_efectivo' => $montoEfectivo
+		);
 
-			if ($this->Caja_model->update($idCaja,$data)) {
+		if ($this->Caja_model->update($idCaja,$data)) {
 
-				$response  = array(
-					'status' => 1, 
-					'caja_abierta' => $idCaja
-				);
-			}
-			else{
-
-				$response  = array(
-					'status' => 0, 
-					'message' => "No se pudo cerrar la caja activa"
-				);
-			}
+			$this->session->set_flashdata("cierre",$idCaja);
+			redirect(base_url()."caja/apertura_cierre");
 		}
-		echo json_encode($response);
+		else{
+
+			$this->session->set_flashdata("error","No se pudo cerrar la caja");
+			redirect(base_url()."caja/apertura_cierre");
+		}
+		
 		
 	}
 

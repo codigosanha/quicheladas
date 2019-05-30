@@ -418,6 +418,18 @@ $(document).ready(function () {
     $(document).on("click",".btn-cerrar-caja", function(){
         idCaja = $(this).val();
         $("#idCaja").val(idCaja);
+        $.ajax({
+            url: base_url + "caja/apertura_cierre/check_pending_orders",
+            type: "POST",
+            success: function(resp){
+               
+                if (resp == 0 ) {
+                    $("#modal-cierre").modal('show');
+                }else{
+                    swal("Error!","Aún hay ordenes pendiente de pago","error");
+                }
+            }
+        });
     });
 
     $("#form-cerrar-caja").submit(function(e){
@@ -510,7 +522,7 @@ $(document).ready(function () {
         nombreProducto = $(this).closest("tr").find("td:eq(0)").children("p").text();
         $("#modal-extras .modal-title").text("Extras del producto "+ nombreProducto);
         $.ajax({
-            url: base_url + "mantenimiento/productos/getExtras/"+idProducto,
+            url: base_url + "movimientos/ordenes/getExtras/"+idProducto,
             type:"POST",
             dataType: 'json',
             success:function(data){
@@ -672,7 +684,8 @@ $(document).ready(function () {
             type:"POST",
             dataType: 'json',
             success:function(data){
-                if (data.length) {
+                console.log(data.length);
+                if (data.length > 0) {
                     html = "";
                     $.each(data, function(key, value){
                         html += "<tr>";
@@ -2349,6 +2362,17 @@ function showAjuste(id){
         success: function(resp){
             $("#modal-ajuste").modal("show");
             $("#modal-ajuste .modal-body").html(resp);
+        }
+    });
+}
+
+function showCorte(id){
+    $.ajax({
+        url: base_url + "caja/apertura_cierre/viewCorte/" + id,
+        type: "POST",
+        success: function(resp){
+            $("#modal-corte").modal("show");
+            $("#modal-corte .modal-body").html(resp);
         }
     });
 }

@@ -1,3 +1,12 @@
+<?php if ($this->session->flashdata("cierre")): ?>
+    <script>
+        $(document).ready(function(){
+            var id= '<?php echo $this->session->flashdata("cierre"); ?>';
+            showCorte(id);
+        });
+
+    </script>
+<?php endif ?>
 <?php if ($this->session->flashdata("success")): ?>
     <script>
         swal("Caja Abierta","<?php echo $this->session->flashdata("success"); ?>", "success");
@@ -88,7 +97,7 @@
                                                     <?php endif ?>
                                                     <?php if ($this->session->userdata("rol")==1 || $this->session->userdata("id") == $caja->usuario_id): ?>
                                                         <?php if ($caja->estado == 1): ?>
-                                                            <button type="button" class="btn btn-danger btn-flat btn-cerrar-caja" value="<?php echo $caja->id;?>" data-toggle="modal" data-target="#modal-cierre">
+                                                            <button type="button" class="btn btn-danger btn-flat btn-cerrar-caja" value="<?php echo $caja->id;?>">
                                                                 <i class="fa fa-times"></i>
                                                                 Cerrar Caja
                                                             </button>
@@ -147,7 +156,7 @@
       <div class="modal-header">
         <h4 class="modal-title">Cierre de Caja </h4>
       </div>
-      <form action="<?php echo base_url();?>caja/apertura_cierre/cerrarCaja" method="POST" id="form-cerrar-caja">
+      <form action="<?php echo base_url();?>caja/apertura_cierre/cerrarCaja" method="POST">
       <div class="modal-body">
         <input type="hidden" name="idCaja" id="idCaja">
         <div class="form-group">
