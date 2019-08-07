@@ -30,10 +30,10 @@
                                 <thead>
                                     <tr>
                                         <th>Imagen</th>
-                                        <th style="width:35%;">Producto</th>
-                                        <th style="width:20%;">Stock Max</th>
-                                        <th style="width:30%;">Cantidad</th>
-                                        <th style="width:15%;"></th>
+                                        <th>Producto</th>
+                                        <th>Stock Max</th>
+                                        <th>Cantidad</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>

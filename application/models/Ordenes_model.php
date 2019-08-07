@@ -117,7 +117,7 @@ class Ordenes_model extends CI_Model {
 	}
 
 	public function getPedidosProductos($id,$modificado = false){
-		$this->db->select("p.id as idprod,p.nombre,p.stock,p.condicion,p.precio,p.cantidad_descuento,p.monto_descuento,pp.*");
+		$this->db->select("p.id as idprod,p.nombre,p.stock,p.condicion,p.precio,p.cantidad_descuento,p.monto_descuento,p.imagen,pp.*");
 		$this->db->from("pedidos_productos pp");
 		$this->db->join("productos p", "pp.producto_id=p.id");
 

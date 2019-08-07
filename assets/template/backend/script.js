@@ -490,7 +490,7 @@ $(document).ready(function () {
         if($(this).prop('checked') == true){
             valueInput = dataCheck[0] + "*" + idProducto + "*" + tr_id;
             html = "<input type='hidden' class='e"+dataCheck[0]+tr_id+"' name='extras[]' value='"+valueInput+"' ><p style='margin:0px;' class='e"+dataCheck[0]+tr_id+"'><i>"+dataCheck[1]+"</i></p>";
-            $("#"+tr_id).children("td:eq(0)").append(html);
+            $("#"+tr_id).children("td:eq(1)").append(html);
         }else{
             $(".e"+dataCheck[0]+tr_id).remove();
         }
@@ -503,13 +503,13 @@ $(document).ready(function () {
                 totalE = totalE + Number(info[2]);
             });
             $("#"+tr_id+" input.totalE").val(totalE);
-            precio = Number($("#"+tr_id).children("td:eq(1)").text());
+            precio = Number($("#"+tr_id).children("td:eq(2)").text());
             
-            cantidad =  Number($("#"+tr_id).children("td:eq(3)").find("input").val());
-            descuento =  Number($("#"+tr_id).children("td:eq(4)").find("input").val());
+            cantidad =  Number($("#"+tr_id).children("td:eq(4)").find("input").val());
+            descuento =  Number($("#"+tr_id).children("td:eq(5)").find("input").val());
             nuevoImporte = (cantidad * precio) + (cantidad * totalE) - descuento;
-            $("#"+tr_id).children("td:eq(5)").find("input").val(nuevoImporte.toFixed(2));
-            $("#"+tr_id).children("td:eq(5)").find("p").text(nuevoImporte.toFixed(2));
+            $("#"+tr_id).children("td:eq(6)").find("input").val(nuevoImporte.toFixed(2));
+            $("#"+tr_id).children("td:eq(6)").find("p").text(nuevoImporte.toFixed(2));
             sumar();
         }
         
@@ -1086,16 +1086,17 @@ $(document).ready(function () {
             html += "<td><img src='"+base_url+"assets/imagenes_productos/"+infoBtn[8]+"' class='img-responsive' width='100px;'></td>"
             html += "<td><input type='hidden' name='productos[]' value='"+infoBtn[0]+"'><p style='margin-bottom:0;'>"+infoBtn[2]+"</p></td>";
             html += "<td><input type='hidden' name='codigos[]' value='"+id+"'>"+infoBtn[4]+"</td>";
-            html += "<td>";
+            html += "<td style='text-align:left;'>";
             html += '<div class="input-group">';
+ 
+            html +='<input type="number" name="cantidades[]" class="form-control input-cantidad input-sm" readonly="readonly" style="font-weight: bold; width:50px;" value="1" min="1" max="'+max+'">';
+                       html +='<span class="input-group-btn">'
+            html +='<button class="btn btn-warning btn-sm btn-menos" type="button"><span class="fa fa-minus"></span></button></span>';
             html +='<span class="input-group-btn">'
-            html +='<button class="btn btn-danger btn-sm btn-menos" type="button"><span class="fa fa-minus"></span></button></span>';
-            html +='<input type="number" name="cantidades[]" class="form-control input-cantidad input-sm" readonly="readonly" style="font-weight: bold;" value="1" min="1" max="'+max+'">';
-            html +='<span class="input-group-btn">'
-            html +='<button class="btn btn-primary btn-sm btn-mas" type="button"><span class="fa fa-plus"></span></button></span></div></td>';
+            html +='<button class="btn btn-success btn-sm btn-mas" type="button"><span class="fa fa-plus"></span></button></span></div></td>';
             html +='<td><button class="btn btn-danger btn-delprod btn-sm" type="button" value="'+infoBtn[0]+'"><span class="fa fa-times"></span></button>';
             if (infoBtn[5] > 0) {
-                html +='<button class="btn btn-warning btn-sm btn-view-extras" type="button" value="'+infoBtn[0]+'" data-toggle="modal" data-target="#modal-extras">E</button>';
+                html +='<button class="btn btn-primary btn-sm btn-view-extras" type="button" value="'+infoBtn[0]+'" data-toggle="modal" data-target="#modal-extras">E</button>';
             }
             html += "</td>";
             html += "</tr>";
@@ -1115,14 +1116,16 @@ $(document).ready(function () {
                 max = infoBtn[4];
             }
             html = "<tr id='"+id+"'>";
+            html += "<td><img src='"+base_url+"assets/imagenes_productos/"+infoBtn[8]+"' class='img-responsive' style='width:50px;'></td>"
             html += "<td><input type='hidden' name='productos[]' value='"+infoBtn[0]+"'><input type='hidden' class='totalE' value='0'>"+infoBtn[2]+"</td>";
             html += "<td><input type='hidden' name='precios[]' value='"+infoBtn[3]+"'>"+infoBtn[3]+"</td>";
             html += "<td><input type='hidden' name='codigos[]' value='"+id+"'>"+infoBtn[4]+"</td>";
             html += "<td>";
             html += '<div class="input-group" style="width:130px;">';
+
+            html +='<input type="number" name="cantidades[]" class="form-control input-cantidad input-sm" readonly="readonly" style="font-weight: bold; width:50px;" value="1" min="1" max="'+max+'">';
             html +='<span class="input-group-btn">'
             html +='<button class="btn btn-danger btn-sm btn-menos" type="button" value="'+dataDescuento+'"><span class="fa fa-minus"></span></button></span>';
-            html +='<input type="number" name="cantidades[]" class="form-control input-cantidad input-sm" readonly="readonly" style="font-weight: bold;" value="1" min="1" max="'+max+'">';
             html +='<span class="input-group-btn">'
             html +='<button class="btn btn-primary btn-sm btn-mas" type="button" value="'+dataDescuento+'"><span class="fa fa-plus"></span></button></span></div></td>';
             var descuento = obtenerDescuento(1,infoBtn[6],infoBtn[7]);
@@ -1206,7 +1209,7 @@ $(document).ready(function () {
     $(document).on("click", ".btn-menos", function(){
         infoDesc = $(this).val();
         dataDesc = infoDesc.split("*");
-        precio = Number($(this).closest("tr").find("td:eq(1)").text());
+        precio = Number($(this).closest("tr").find("td:eq(2)").text());
         formulario = $("#formulario").val();
         input = $(this).closest(".input-group").find("input");
         valorAct = Number(input.val());
@@ -1222,13 +1225,13 @@ $(document).ready(function () {
         }else{
             input.val(resto);
             if (formulario == "venta_directa") {
-                totalE = $(this).closest("tr").children("td:eq(0)").find("input.totalE").val();
+                totalE = $(this).closest("tr").children("td:eq(1)").find("input.totalE").val();
                 descuento = obtenerDescuento(resto,dataDesc[0],dataDesc[1]);
                 importe = (resto * precio) + (resto * totalE) - descuento;
-                $(this).closest("tr").find("td:eq(4)").children("input").val(descuento);
+                $(this).closest("tr").find("td:eq(5)").children("input").val(descuento);
 
-                $(this).closest("tr").find("td:eq(5)").children("p").text(importe.toFixed(2));
-                $(this).closest("tr").find("td:eq(5)").children("input").val(importe.toFixed(2));
+                $(this).closest("tr").find("td:eq(6)").children("p").text(importe.toFixed(2));
+                $(this).closest("tr").find("td:eq(6)").children("input").val(importe.toFixed(2));
                 sumar();
             }
         }
@@ -1268,7 +1271,7 @@ $(document).ready(function () {
     $(document).on("click", ".btn-mas", function(){
         infoDesc = $(this).val();
         dataDesc = infoDesc.split("*");
-        precio = Number($(this).closest("tr").find("td:eq(1)").text());
+        precio = Number($(this).closest("tr").find("td:eq(2)").text());
         input = $(this).closest(".input-group").find("input");
         valorAct = Number(input.val());
         aumento = Number(valorAct + 1);
@@ -1276,13 +1279,13 @@ $(document).ready(function () {
         if (valorMax=="") {
             input.val(aumento);
             if (formulario == "venta_directa") {
-                totalE = $(this).closest("tr").children("td:eq(0)").find("input.totalE").val();
+                totalE = $(this).closest("tr").children("td:eq(1)").find("input.totalE").val();
 
                 descuento = obtenerDescuento(aumento,dataDesc[0],dataDesc[1]);
                 importe = (aumento * precio)+(totalE * aumento) - descuento;
-                $(this).closest("tr").find("td:eq(4)").children("input").val(descuento);
-                $(this).closest("tr").find("td:eq(5)").children("p").text(importe.toFixed(2));
-                $(this).closest("tr").find("td:eq(5)").children("input").val(importe.toFixed(2));
+                $(this).closest("tr").find("td:eq(5)").children("input").val(descuento);
+                $(this).closest("tr").find("td:eq(6)").children("p").text(importe.toFixed(2));
+                $(this).closest("tr").find("td:eq(6)").children("input").val(importe.toFixed(2));
                 sumar();
             }
         }else{
@@ -1297,12 +1300,12 @@ $(document).ready(function () {
             }else{
                 input.val(aumento);
                 if (formulario == "venta_directa") {
-                    totalE = $(this).closest("tr").children("td:eq(0)").find("input.totalE").val();
+                    totalE = $(this).closest("tr").children("td:eq(1)").find("input.totalE").val();
                     descuento = obtenerDescuento(aumento,dataDesc[0],dataDesc[1]);
                     importe = (aumento * precio) + (totalE * aumento) - descuento;
-                    $(this).closest("tr").find("td:eq(4)").children("input").val(descuento);
-                    $(this).closest("tr").find("td:eq(5)").children("p").text(importe.toFixed(2));
-                    $(this).closest("tr").find("td:eq(5)").children("input").val(importe.toFixed(2));
+                    $(this).closest("tr").find("td:eq(5)").children("input").val(descuento);
+                    $(this).closest("tr").find("td:eq(6)").children("p").text(importe.toFixed(2));
+                    $(this).closest("tr").find("td:eq(6)").children("input").val(importe.toFixed(2));
                     sumar();
                 }
             }
@@ -2017,7 +2020,7 @@ function sumar(){
         });
     }else{
         $("#tb-venta-directa tbody tr").each(function(){
-            subtotal = subtotal + Number($(this).find("td:eq(5)").text());
+            subtotal = subtotal + Number($(this).find("td:eq(6)").text());
         });
     }
     

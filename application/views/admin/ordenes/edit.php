@@ -15,7 +15,7 @@
             <div class="box-body">
               <input type="hidden" id="formulario" value="form-orden">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                         <form action="<?php echo base_url();?>movimientos/ordenes/update" method="POST" id="add-orden">
                             <input type="hidden" name="idPedido" value="<?php echo $orden->id;?>">
                             <h4>Productos Agregado a la Orden</h4>
@@ -23,15 +23,17 @@
                             <table class="table table-hover table-bordered" id="tborden">
                                 <thead>
                                     <tr>
-                                        <th style="width:50%;">Producto</th>
-                                        <th style="width:25%;">Stock Max</th>
-                                        <th style="width:25%;">Cantidad</th>
+                                        <th>Imagen</th>
+                                        <th>Producto</th>
+                                        <th>Stock Max</th>
+                                        <th>Cantidad</th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php foreach ($productos as $producto): ?>
                                         <tr>
+                                            <td><img src="<?php echo base_url(); ?>assets/imagenes_productos/<?php echo $producto->imagen ?>" class="img-responsive" style="width: 100px;" alt="<?php echo $producto->nombre ?>"></td>
                                             <td>
                                                 <input type="hidden" value="<?php echo $producto->producto_id?>">
                                                 <?php echo $producto->nombre;?>
@@ -51,11 +53,12 @@
                                             <td><?php echo $stock;?></td>
                                             <td>
                                                 <div class="input-group">
+                                                    
+                                                    <input type="number" class="form-control input-cantidad input-sm" readonly="readonly" style="font-weight: bold; width: 50px;" value="<?php echo $producto->cantidad - $producto->pagados;?>" min="1" max="">
                                                     <span class="input-group-btn">
-                                                    <button class="btn btn-danger btn-sm btn-menos" type="button" disabled="disabled"><span class="fa fa-minus"></span></button></span>
-                                                    <input type="number" class="form-control input-cantidad input-sm" readonly="readonly" style="font-weight: bold;" value="<?php echo $producto->cantidad - $producto->pagados;?>" min="1" max="">
+                                                    <button class="btn btn-warning btn-sm btn-menos" type="button" disabled="disabled"><span class="fa fa-minus"></span></button></span>
                                                     <span class="input-group-btn">
-                                                    <button class="btn btn-primary btn-sm btn-mas" type="button" disabled="disabled"><span class="fa fa-plus"></span></button></span>
+                                                    <button class="btn btn-success btn-sm btn-mas" type="button" disabled="disabled"><span class="fa fa-plus"></span></button></span>
                                                 </div>
                                             </td>
                                                 <td>
@@ -117,9 +120,9 @@
                             <?php endforeach ?>
                         <?php endif ?>
                     </div>
-                    <div class="col-md-4">
-                        <h4 class="page-header">Productos de la Categoria</h4>
-                        <div class="row" id="list-product">
+                    <div class="col-md-3">
+                        <h4 class="page-header">Lista de Productos</h4>
+                        <div class="list-group" id="lista-productos">
                         </div>
                     </div>
                 </div>

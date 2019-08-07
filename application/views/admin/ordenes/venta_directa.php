@@ -72,6 +72,7 @@
                             <table class="table table-hover table-bordered" id="tb-venta-directa">
                                 <thead>
                                     <tr>
+                                        <th>Imagen</th>
                                         <th>Producto</th>
                                         <th>Precio</th>
                                         <th>Stock Max</th>
@@ -86,28 +87,28 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="4" style="text-align: right;">Subtotal:</th>
-                                        <td><input type="hidden" name="subtotal" id="subtotal"><p class="subtotal"></p></td>
+                                        <th colspan="6" style="text-align: right;">Subtotal:</th>
+                                        <td colspan="2"><input type="hidden" name="subtotal" id="subtotal"><p class="subtotal"></p></td>
                                     </tr>
                                     <tr>
-                                        <th colspan="4" style="text-align: right;">IVA:</th>
-                                        <td><input type="hidden" name="iva" id="iva"><p class="iva"></p></td>
+                                        <th colspan="6" style="text-align: right;">IVA:</th>
+                                        <td colspan="2"><input type="hidden" name="iva" id="iva"><p class="iva"></p></td>
                                     </tr>
                                     <tr>
-                                        <th colspan="4" style="text-align: right;">Descuento:</th>
-                                        <td><input type="hidden" name="descuento" id="descuento" value="0.00"><p class="descuento"></p></td>
+                                        <th colspan="6" style="text-align: right;">Descuento:</th>
+                                        <td colspan="2"><input type="hidden" name="descuento" id="descuento" value="0.00"><p class="descuento"></p></td>
                                     </tr>
                                     <tr>
-                                        <th colspan="4" style="text-align: right;">Total:</th>
-                                        <td><input type="hidden" name="total" id="total"><p class="total"></p></td>
+                                        <th colspan="6" style="text-align: right;">Total:</th>
+                                        <td colspan="2"><input type="hidden" name="total" id="total"><p class="total"></p></td>
                                     </tr>
                                     <tr>
-                                        <th colspan="4" style="text-align: right;">Efectivo:</th>
-                                        <td><input type="text" name="monto_recibido" id="monto_recibido" width="60px"><p class="form_control monto_recibido"></p></td>
+                                        <th colspan="6" style="text-align: right;">Efectivo:</th>
+                                        <td colspan="2"><input type="text" name="monto_recibido" id="monto_recibido" width="60px"><p class="form_control monto_recibido"></p></td>
                                     </tr>
                                     <tr>
-                                        <th colspan="4" style="text-align: right;">Cambio:</th>
-                                        <td><input type="text" name="cambio" id="cambio" readonly="readonly" class="form-control cambio" width="60px"><p class="cambio"></p></td>
+                                        <th colspan="6" style="text-align: right;">Cambio:</th>
+                                        <td colspan="2"><input type="text" name="cambio" id="cambio" readonly="readonly" class="form-control cambio" width="60px"><p class="cambio"></p></td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -131,13 +132,9 @@
                         
                     </div>
                     <div class="col-md-3">
-                        <h4 class="page-header">Productos de la Categoria</h4>
-                        <div class="row" id="list-product">
-                            
-
+                        <h4 class="page-header">Lista de Productos</h4>
+                        <div class="list-group" id="lista-productos">
                         </div>
-
-                        
                     </div>
                 </div>
             </div>
