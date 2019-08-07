@@ -1083,6 +1083,7 @@ $(document).ready(function () {
                 max = infoBtn[4];
             }
             html = "<tr id='"+id+"'>";
+            html += "<td><img src='"+base_url+"assets/imagenes_productos/"+infoBtn[8]+"' class='img-responsive' width='100px;'></td>"
             html += "<td><input type='hidden' name='productos[]' value='"+infoBtn[0]+"'><p style='margin-bottom:0;'>"+infoBtn[2]+"</p></td>";
             html += "<td><input type='hidden' name='codigos[]' value='"+id+"'>"+infoBtn[4]+"</td>";
             html += "<td>";
@@ -1164,16 +1165,12 @@ $(document).ready(function () {
                     else{
                         stock = "N/A";
                     }
-                    data = value.id + "*"+ value.codigo+ "*"+ value.nombre+ "*"+ value.precio+ "*"+ stock +"*"+value.cantidad_extras+"*"+value.cantidad_descuento+"*"+value.monto_descuento;
-                    html+='<div class="col-md-6 info-product">';
-                    html+='<a href="javascript: void(0)" data-href="'+data+'" class="'+classImg+'">';
-                    html+='<img src="'+base_url+'assets/imagenes_productos/'+value.imagen+'" alt="'+value.nombre+'" class="img-responsive" >';
-                    html+='<p>'+value.nombre+'</p>';
-                    html+='</a>';
-                    html+='</div>';
+                    data = value.id + "*"+ value.codigo+ "*"+ value.nombre+ "*"+ value.precio+ "*"+ stock +"*"+value.cantidad_extras+"*"+value.cantidad_descuento+"*"+value.monto_descuento+"*"+value.imagen;
+
+                    html+='<a href="javascript: void(0)" data-href="'+data+'" class="list-group-item '+classImg+'">'+value.nombre+'</a>';
                 });
 
-                $("#list-product").html(html);
+                $("#lista-productos").html(html);
             }
         });
     });

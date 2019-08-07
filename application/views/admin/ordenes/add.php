@@ -15,7 +15,7 @@
             <div class="box-body">
                 <input type="hidden" id="formulario" value="form-orden">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                         <form action="<?php echo base_url();?>movimientos/ordenes/store" method="POST" id="add-orden">
                             <h4 class="page-header">Productos Agregado a la Orden</h4>
                             <div class="form-group">
@@ -29,6 +29,7 @@
                             <table class="table table-hover table-bordered" id="tborden">
                                 <thead>
                                     <tr>
+                                        <th>Imagen</th>
                                         <th style="width:35%;">Producto</th>
                                         <th style="width:20%;">Stock Max</th>
                                         <th style="width:30%;">Cantidad</th>
@@ -64,14 +65,10 @@
                         <?php endif ?>
                         
                     </div>
-                    <div class="col-md-4">
-                        <h4 class="page-header">Productos de la Categoria</h4>
-                        <div class="row" id="list-product">
-                            
-
+                    <div class="col-md-3">
+                        <h6 class="page-header">Lista de Productos</h6>
+                        <div class="list-group" id="lista-productos">
                         </div>
-
-                        
                     </div>
                 </div>
             </div>
