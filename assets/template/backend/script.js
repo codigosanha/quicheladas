@@ -1390,7 +1390,7 @@ $(document).ready(function () {
             type:"POST",
             data: data,
             success:function(resp){
-                if (resp == "1") {
+                if (resp == 1) {
                     $('#modal-default2').modal('hide');
                     alertify.success("El descuento se aplico correctamente");
                     $("#descuento").val(montoDescuento);

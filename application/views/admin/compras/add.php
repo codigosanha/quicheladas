@@ -50,7 +50,7 @@
                                
                             <div class="form-group">
                                 <label for="">Comprobante:</label>
-                                <select name="comprobante" id="comprobante" class="form-control">
+                                <select name="comprobante" class="form-control">
                                     <?php foreach ($tipocomprobantes as $tp): ?>
                                         <option value="<?php echo $tp->id;?>"><?php echo $tp->nombre;?></option>
                                     <?php endforeach ?>

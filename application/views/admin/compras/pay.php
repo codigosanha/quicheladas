@@ -281,11 +281,11 @@
                 <form action="#" method="POST" id="form-comprobar-password">
                     <div class="form-group">
                         <label for="">Monto</label>
-                        <input type="text" name="montoDescuento" id="montoDescuento" class="form-control" placeholder="Monto...">
+                        <input type="text" name="montoDescuento" id="montoDescuento" class="form-control" placeholder="Monto..." required="required">
                     </div>
                     <div class="form-group">
                         <label for="">Introduzca Contraseña</label>
-                        <input type="password" name="password" class="form-control" placeholder="Contraseña...">
+                        <input type="password" name="password" class="form-control" placeholder="Contraseña..." required="required">
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-success">Comprobar</button>
