@@ -49,7 +49,7 @@
                                         <?php foreach($gastos as $gasto):?>
                                             <tr>
                                                 <td><?php echo $gasto->id;?></td>
-                                                <td><?php echo getUsuario($gasto->id)->username;?></td>
+                                                <td><?php echo getUsuario($gasto->usuario_id)->username;?></td>
                                                 <td><?php echo $gasto->fecha;?></td>
                                                 <td><?php echo $gasto->nombre;?></td>
                                                 <td><?php echo $gasto->monto;?></td>

@@ -1830,6 +1830,7 @@ $(document).ready(function () {
     $(document).on("click",".btn-delprod", function(){
         idProducto = $(this).val();
         $(this).closest("tr").remove();
+        sumar();
       
     });
 

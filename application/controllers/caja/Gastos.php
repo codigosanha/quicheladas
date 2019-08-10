@@ -54,9 +54,11 @@ class Gastos extends CI_Controller {
 	public function delete($id){
 
 		if ($this->Gastos_model->delete($id)) {
-			echo "1";
+			//echo "1";
+			redirect(base_url()."caja/gastos");
 		}else{
-			echo "0";
+			//echo "0";
+			redirect(base_url()."caja/gastos");
 		}
 		
 	}
