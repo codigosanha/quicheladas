@@ -1577,7 +1577,7 @@ $(document).ready(function () {
         modulo = $("#modulo").val();
         var id = $(this).val();
         $.ajax({
-            url: base_url + "mantenimiento/"+modulo+"/view/" + id,
+            url: base_url +modulo+"/view/" + id,
             type:"POST",
             success:function(resp){
                 $("#modal-default .modal-body").html(resp);
@@ -1948,8 +1948,21 @@ $(document).ready(function () {
             title: "  ",
             doctype: '<!doctype html>'
         });
-
-
+    });
+    $(document).on("click",".btn-print-modal",function(){
+        $("#modal-default .modal-body").print({
+            globalStyles: true,
+            mediaPrint: false,
+            stylesheet: null,
+            noPrintSelector: ".hide-cupon",
+            append: null,
+            prepend: null,
+            manuallyCopyFormValues: true,
+            deferred: $.Deferred(),
+            timeout: 750,
+            title: "  ",
+            doctype: '<!doctype html>'
+        });
     });
     $(document).on("click",".btn-print-ajuste",function(){
         $(".contenido").addClass("impresion");
