@@ -156,13 +156,11 @@ class Ordenes_compras_model extends CI_Model {
         $error = $this->db->error();
         $this->session->set_flashdata('Error', $error["message"]);
     }
-    protected function updateStock($idproducto, $cantidad, $cantidadesMedida){
-    	$infoProducto = $this->getProducto($idproducto);
-    	$data = array(
-    		"stock" => $infoProducto->stock + ($cantidad * $cantidadesMedida)
-    	);
-    	$this->db->where("id",$idproducto);
-    	$this->db->update("productos",$data);
+
+    protected function updateEstado($id, $data){
+    	$this->db->where('id', $id);
+
+    	return $this->db->update("ordenes_compras", $data);
     }
 
     protected function getProducto($id){
@@ -236,8 +234,41 @@ class Ordenes_compras_model extends CI_Model {
 	}
 
 	public function update($id,$data){
+		$this->db->trans_start();
+
 		$this->db->where("id",$id);
-		return $this->db->update("ventas",$data);
+       	$this->db->update("ordenes_compras", $data);
+
+		$idproductos = $this->input->post("idproductos");
+		$cantidades = $this->input->post("cantidades");
+		$importes = $this->input->post("importes");
+		$precios = $this->input->post("precios");
+		$idMedidas = $this->input->post("idMedidas");
+		$cantidadesMedida = $this->input->post("cantidadesMedida");
+
+		$this->db->where("orden_compra_id",$id);
+		$this->db->delete("detalle_ordenes_compras");
+
+		for ($i=0; $i < count($idproductos); $i++) {
+			$dataDetalle = array(
+				"orden_compra_id" => $id,
+				"producto_id" => $idproductos[$i],
+				'unidad_medida_id' => $idMedidas[$i],
+				"precio" => $precios[$i],
+				"cantidad" => $cantidades[$i],
+				"importe" => $importes[$i]
+			); 
+			$this->db->insert("detalle_ordenes_compras",$dataDetalle);
+			//$this->updateStock($idproductos[$i],$cantidades[$i],$cantidadesMedida[$i]);
+		}
+
+        $this->db->trans_complete();
+        if($this->db->trans_status() === FALSE)
+        {
+            $this->set_flash_error();
+            return FALSE;  
+        }
+        return TRUE; //everything worked
 	}
 
 	public function comprobarPassword($password){

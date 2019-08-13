@@ -90,6 +90,24 @@ if(!function_exists('getCliente'))
 	 
 	}
 }
+if(!function_exists('getMedidasProducto'))
+{
+	function getMedidasProducto($idProducto)
+	{
+	    //asignamos a $ci el super objeto de codeigniter
+		//$ci será como $this
+		$ci =& get_instance();
+
+		$ci->db->select("um.id,pum.id as idpum, um.nombre, pum.cantidad, pum.precio");
+		$ci->db->from("productos_unidades_medidas pum");
+		$ci->db->join("unidades_medidas um", "pum.unidad_medida_id = um.id");
+		$ci->db->where("pum.producto_id",$idProducto);
+		$ci->db->where("pum.estado",1);
+		$resultado = $ci->db->get();
+		return $resultado->result();
+	 
+	}
+}
 
 if(!function_exists('getTotalAbonos'))
 {

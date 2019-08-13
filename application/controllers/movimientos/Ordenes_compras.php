@@ -115,4 +115,49 @@ class Ordenes_compras extends CI_Controller {
 		$this->load->view("layouts/footer");
 	}
 
+	public function update(){
+		$idOrden = $this->input->post("idOrden");
+		$tipo_pago = $this->input->post("tipo_pago");
+		$fecha = date("Y-m-d");
+		$proveedor_id = $this->input->post("proveedor_id");
+		$total = $this->input->post("total");
+		$idproductos = $this->input->post("idproductos");
+		$cantidades = $this->input->post("cantidades");
+		$importes = $this->input->post("importes");
+		$idMedidas = $this->input->post("idMedidas");
+		$cantidadesMedida = $this->input->post("cantidadesMedida");
+		
+		$data = array(
+			'fecha' => $fecha,
+			'total' => $total,
+			'proveedor_id' => $proveedor_id,
+			'tipo_pago' => $tipo_pago,
+			'usuario_id' => $this->session->userdata('id'),
+		);
+
+		if ($this->Ordenes_compras_model->update($idOrden,$data)) {
+			$this->session->set_flashdata("success", "Los datos fueron guardados exitosamente");
+			//echo "1";
+			redirect(base_url()."movimientos/ordenes_compras");
+		}
+		else{
+			$this->session->set_flashdata("error", "Los datos no fueron guardados");
+				//echo "1";
+			redirect(base_url()."movimientos/ordenes_compras/edit/".$idOrden);
+		}
+	}
+
+	public function cancelar($idOrden){
+		$data = array(
+			"estado" => "Cancelado"
+		);
+
+		if($this->Ordenes_compras_model->updateEstado($idOrden,$data)){
+			echo "1";
+		}else{
+			echo "0";
+		}
+
+	}
+
 }

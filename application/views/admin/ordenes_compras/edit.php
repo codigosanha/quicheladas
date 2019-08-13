@@ -44,20 +44,42 @@
                                         <?php foreach ($detalles as $detalle): ?>
                                             <tr>
                                                 <td>
-                                                    <input type="hidden" name="idProductos[]" value="<?php echo $detalle->producto_id ?>">
+                                                    <input type="hidden" name="idproductos[]" value="<?php echo $detalle->producto_id ?>">
                                                     <?php echo $detalle->codigo;?></td>
                                                 <td><?php echo $detalle->nombre;?></td>
-                                                <th><?php echo getUnidadMedida($detalle->unidad_medida_id)->nombre;?></th>
+                                                <?php  
+                                                    $select = "<select id='medida' name='medida' class='form-control medida' required='required'><option value='' disabled>Seleccione..</option>";
+
+                                                    $medidas = getMedidasProducto($detalle->producto_id);
+
+                                                    foreach ($medidas as $medida) {
+                                                        $selected="";
+                                                        $valueOption = $medida->id . "*" . $medida->idpum . "*" . $medida->nombre. "*" . $medida->cantidad. "*" . $medida->precio;
+                                                        if ($medida->id == $detalle->unidad_medida_id) {
+                                                            $cantidadesMedida = $medida->cantidad;
+                                                            $idMedidas = $medida->id;
+                                                            $selected = "selected";
+                                                        }
+                                                        $select .= "<option value='".$valueOption."' ".$selected.">".$medida->nombre." = ".$medida->cantidad." unids."."</option>";
+                                                    }
+
+                                                    $select .="</select>";
+
+                                                ?>
                                                 <td>
-                                                    <input type="hidden" name="precios[]" value="<?php echo $detalle->precio; ?>">
-                                                    <?php echo $detalle->precio;?></td>
+                                                    <?php echo $select; ?>
+                                                    <input type='hidden' name='cantidadesMedida[]' class='cantidadesMedida' value="<?php echo $cantidadesMedida; ?>">
+                                                    <input type='hidden' name='idMedidas[]' class='idMedidas' value="<?php echo $idMedidas ?>">
+                                                </td>
                                                 <td>
-                                                    <input type="hidden" name="cantidades[]" value="<?php echo $detalle->cantidad; ?>">
-                                                    <?php echo $detalle->cantidad;?></td>
+                                                    <input type="text" name="precios[]" value="<?php echo $detalle->precio; ?>" readonly="readonly" class="form-control"></td>
+                                                <td>
+                                                    <input type="text" name="cantidades[]" value="<?php echo $detalle->cantidad; ?>" class="form-control cantidadesCompra"></td>
 
                                                 <td>
-                                                    <input type="hidden" name="importes[]" value="<?php echo $detalle->importe; ?>">
-                                                    <?php echo $detalle->importe;?></td>
+                                                    <input type="text" name="importes[]" value="<?php echo $detalle->importe; ?>" readonly="readonly" class="form-control"></td>
+                                                <td><button type='button' class='btn btn-danger btn-remove-producto-compra'><span class='fa fa-times'></span></button></td>
+
                                             </tr>
                                         <?php endforeach ?>
                                     </tbody>
@@ -100,7 +122,7 @@
                                 </div>
                             </div> 
                             <div class="form-group">
-                                <button type="submit" class="btn btn-success btn-flat" id="btn-guardar-compra" disabled="disabled"><i class="fa fa-save"></i> Guardar</button>
+                                <button type="submit" class="btn btn-success btn-flat" id="btn-guardar-compra" ><i class="fa fa-save"></i> Guardar</button>
                                 <a href="<?php echo base_url().$this->uri->segment(1).'/'.$this->uri->segment(2); ?>" class="btn btn-danger btn-flat"><i class="fa fa-times"></i> Cancelar</a>
                             </div>      
                         </div>

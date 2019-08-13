@@ -1861,6 +1861,7 @@ $(document).ready(function () {
     });
     $(document).on("click",".btn-remove-producto-compra", function(){
         $(this).closest("tr").remove();
+        sumarCompra();
   
     });
 

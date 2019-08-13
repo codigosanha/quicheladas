@@ -51,7 +51,10 @@
                                                     <a href="<?php echo base_url(); ?>movimientos/ordenes_compras/edit/<?php echo $orden->id; ?>" class="btn btn-warning">
                                                         <span class="fa fa-pencil"></span>
                                                     </a>
-                                                    <a href="<?php echo base_url(); ?>movimientos/ordenes_compras/edit/<?php echo $orden->id; ?>" class="btn btn-danger">
+                                                    <a href="<?php echo base_url(); ?>movimientos/ordenes_compras/pay/<?php echo $orden->id; ?>" class="btn btn-success">
+                                                        <span class="fa fa-credit-card"></span>
+                                                    </a>
+                                                    <a href="<?php echo base_url(); ?>movimientos/ordenes_compras/cancelar/<?php echo $orden->id; ?>" class="btn btn-danger btn-cancelar-orden">
                                                         <span class="fa fa-times"></span>
                                                     </a>
                                                     
