@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-xs-12">
         <div class="form-group">
-            <p><strong>N° de Orden de Compra:</strong><?php echo $orden->id ?></p>
+            <p><strong>N° de Orden de Compra:</strong><?php echo $orden->numero ?></p>
             <p><strong>Proveedor:</strong><?php echo $orden->proveedor ?></p>
             <p><strong>Fecha:</strong><?php echo $orden->fecha ?></p>
             <p><strong>Estado:</strong><?php echo $orden->estado ?></p>

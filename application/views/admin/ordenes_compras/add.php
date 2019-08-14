@@ -49,6 +49,10 @@
                         </div>
                         <!--Inicio 2da Columna-->
                         <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="">Numero de Orden</label>
+                                <input type="text" name="numero" class="form-control" required="required">
+                            </div>
                            
                             <div class="form-group">
                                 <label for="">Tipo de Pago:</label>

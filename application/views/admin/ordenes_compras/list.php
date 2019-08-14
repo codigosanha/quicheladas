@@ -39,7 +39,7 @@
                                 <?php if(!empty($ordenes_compras)):?>
                                     <?php foreach($ordenes_compras as $orden):?>
                                         <tr>
-                                            <td><?php echo $orden->id;?></td>
+                                            <td><?php echo $orden->numero;?></td>
                                             <td><?php echo $orden->fecha;?></td>
                                             <td><?php echo $orden->proveedor;?></td>
                                             <td><?php echo $orden->tipo_pago;?></td>
@@ -48,15 +48,15 @@
                                             <td>
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-info btn-view" data-toggle="modal" data-target="#modal-default" value="<?php echo $orden->id;?>"><span class="fa fa-search"></span></button>
-                                                    <a href="<?php echo base_url(); ?>movimientos/ordenes_compras/edit/<?php echo $orden->id; ?>" class="btn btn-warning">
-                                                        <span class="fa fa-pencil"></span>
-                                                    </a>
-                                                    <a href="<?php echo base_url(); ?>movimientos/ordenes_compras/pay/<?php echo $orden->id; ?>" class="btn btn-success">
-                                                        <span class="fa fa-credit-card"></span>
-                                                    </a>
-                                                    <a href="<?php echo base_url(); ?>movimientos/ordenes_compras/cancelar/<?php echo $orden->id; ?>" class="btn btn-danger btn-cancelar-orden">
-                                                        <span class="fa fa-times"></span>
-                                                    </a>
+                                                    <?php if ($orden->estado == "Procesada" || $orden->estado =="Registrada"): ?>
+                                                        <a href="<?php echo base_url(); ?>movimientos/ordenes_compras/edit/<?php echo $orden->id; ?>" class="btn btn-warning">
+                                                            <span class="fa fa-pencil"></span>
+                                                        </a>
+                                                        <a href="<?php echo base_url(); ?>movimientos/ordenes_compras/cancelar/<?php echo $orden->id; ?>" class="btn btn-danger btn-cancelar-orden">
+                                                            <span class="fa fa-times"></span>
+                                                        </a>
+                                                    <?php endif ?>
+                                                    
                                                     
                                                 </div>
                                             </td>

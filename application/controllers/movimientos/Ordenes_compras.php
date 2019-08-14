@@ -8,6 +8,7 @@ class Ordenes_compras extends CI_Controller {
 		$this->permisos = $this->backend_lib->control();
 		$this->load->model("Productos_model");
 		$this->load->model("Ordenes_compras_model");
+		$this->load->model("Compras_model");
 		$this->load->model("Proveedores_model");
 		$this->load->helper("functions");
 	}
@@ -55,7 +56,7 @@ class Ordenes_compras extends CI_Controller {
 	public function store(){
 	
 		$tipo_pago = $this->input->post("tipo_pago");
-
+		$numero = $this->input->post("numero");
 		$fecha = date("Y-m-d");
 		$proveedor_id = $this->input->post("proveedor_id");
 		$total = $this->input->post("total");
@@ -72,7 +73,8 @@ class Ordenes_compras extends CI_Controller {
 			'proveedor_id' => $proveedor_id,
 			'tipo_pago' => $tipo_pago,
 			'usuario_id' => $this->session->userdata('id'),
-			'estado' => "Pendiente",
+			'estado' => "Registrada",
+			'numero' => $numero
 		);
 
 		if ($this->Ordenes_compras_model->save($data)) {
@@ -106,8 +108,8 @@ class Ordenes_compras extends CI_Controller {
 		$data = array(
 			"proveedores" => $this->Proveedores_model->getProveedores(),
 			"orden" => $this->Ordenes_compras_model->getOrden($idOrden),
-			"detalles" =>$this->Ordenes_compras_model->getDetalle($idOrden)
-	
+			"detalles" =>$this->Ordenes_compras_model->getDetalle($idOrden),
+			"tipocomprobantes" => $this->Compras_model->getComprobantes(),
 		);
 		$this->load->view("layouts/header");
 		$this->load->view("layouts/aside");
@@ -117,6 +119,8 @@ class Ordenes_compras extends CI_Controller {
 
 	public function update(){
 		$idOrden = $this->input->post("idOrden");
+		$numero = $this->input->post("numero");
+		$estado = $this->input->post("estado");
 		$tipo_pago = $this->input->post("tipo_pago");
 		$fecha = date("Y-m-d");
 		$proveedor_id = $this->input->post("proveedor_id");
@@ -133,9 +137,12 @@ class Ordenes_compras extends CI_Controller {
 			'proveedor_id' => $proveedor_id,
 			'tipo_pago' => $tipo_pago,
 			'usuario_id' => $this->session->userdata('id'),
+			"estado" => $estado,
+			"numero" => $numero
 		);
 
 		if ($this->Ordenes_compras_model->update($idOrden,$data)) {
+
 			$this->session->set_flashdata("success", "Los datos fueron guardados exitosamente");
 			//echo "1";
 			redirect(base_url()."movimientos/ordenes_compras");
@@ -149,7 +156,7 @@ class Ordenes_compras extends CI_Controller {
 
 	public function cancelar($idOrden){
 		$data = array(
-			"estado" => "Cancelado"
+			"estado" => "Cancelada"
 		);
 
 		if($this->Ordenes_compras_model->updateEstado($idOrden,$data)){

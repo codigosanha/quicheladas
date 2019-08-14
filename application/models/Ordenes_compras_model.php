@@ -157,7 +157,7 @@ class Ordenes_compras_model extends CI_Model {
         $this->session->set_flashdata('Error', $error["message"]);
     }
 
-    protected function updateEstado($id, $data){
+    public function updateEstado($id, $data){
     	$this->db->where('id', $id);
 
     	return $this->db->update("ordenes_compras", $data);

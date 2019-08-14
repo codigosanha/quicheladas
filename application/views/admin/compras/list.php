@@ -5,6 +5,7 @@
     <section class="content-header">
         <h1>
         Compras
+        
         </h1>
     </section>
     <!-- Main content -->

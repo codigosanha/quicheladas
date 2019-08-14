@@ -5,6 +5,7 @@
         <h1>
         Compras
         <small>Nueva</small>
+       
         </h1>
     </section>
     <!-- Main content -->

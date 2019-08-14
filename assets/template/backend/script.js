@@ -15,6 +15,39 @@ $(document).ready(function () {
         allowClear: true
     });
 
+    $(document).on("click",".btn-cancelar-orden", function(e){
+        e.preventDefault();
+        var url = $(this).attr("href");
+        swal({
+            title:"Esta seguro de cancelar la orden de compra?",
+            text: "Esta operacion es irreversible",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            buttonsStyling: false,
+            confirmButtonText: "Aceptar",
+            cancelButtonText: "Cancelar",
+            closeOnConfirm: false,
+        },
+        function(isConfirm){
+            if(isConfirm){
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    success: function(resp){
+                        if (resp == 1) {
+                            location.reload();
+                        }else{
+                            swal("Error","No se pudo cancelar la orden de compra","error");
+                        }
+                        
+                    }
+                });
+            }
+        });    
+    });
+
     $(document).on("change", "#tipo_consumo", function(){
         var tipo_consumo = $(this).val();
         if (tipo_consumo == 1) {
@@ -311,9 +344,9 @@ $(document).ready(function () {
             html += "<input type='hidden' name='idMedidas[]' class='idMedidas'></"
             html += "</td>";
 
-            html +="<td><input type='text' name='precios[]' readonly='readonly' class='form-control' style='width:80px;'></td>";
-            html +="<td><input type='text' name='cantidades[]' class='cantidadesCompra form-control' style='width:80px;'></td>";
-            html +="<td><input type='text' name='importes[]' readonly='readonly' class='form-control' style='width:80px;'></td>";
+            html +="<td><input type='text' name='precios[]' readonly='readonly' class='form-control' style='width:100px;'></td>";
+            html +="<td><input type='text' name='cantidades[]' class='cantidadesCompra form-control' style='width:100px;'></td>";
+            html +="<td><input type='text' name='importes[]' readonly='readonly' class='form-control' style='width:100px;'></td>";
             html +="<td><button type='button' class='btn btn-danger btn-remove-producto-compra'><span class='fa fa-times'></span></button></td>";
             html +="</tr>"
 
