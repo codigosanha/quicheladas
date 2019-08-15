@@ -7,22 +7,21 @@ class Cuentas_pagar extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
 		//$this->permisos = $this->backend_lib->control();
-		$this->load->model("Comun_model");
-		
+		$this->load->model("Cuentas_pagar_model");
+		$this->load->helper("functions");
 	}
 
 	public function index()
 	{
-		$contenido_interno  = array(
+		$data  = array(
 			//"permisos" => $this->permisos,
-			"cuentas_pagar" => $this->Comun_model->get_records("cuentas_pagar"), 
+			"cuentas_pagar" => $this->Cuentas_pagar_model->getCuentas(), 
 		);
 
-		$contenido_externo = array(
-			"title" => "cuentas_pagar", 
-			"contenido" => $this->load->view("admin/cuentas_pagar/list", $contenido_interno, TRUE)
-		);
-		$this->load->view("admin/template",$contenido_externo);
+		$this->load->view("layouts/header");
+		$this->load->view("layouts/aside");
+		$this->load->view("admin/cuentas_pagar/list",$data);
+		$this->load->view("layouts/footer");
 
 	}
 
@@ -46,14 +45,14 @@ class Cuentas_pagar extends CI_Controller {
 			'fecha' => date("Y-m-d H:i:s"),
 		);
 
-		if ($this->Comun_model->insert("pagos",$data)) {
+		if ($this->Cuentas_pagar_model->savePago($data)) {
 
 			if ($estado == 1) {
 				$data = array(
 					'estado' => 1, 
 				);
 
-				$this->Comun_model->update("cuentas_pagar","id='$idCuenta'",$data);
+				$this->Cuentas_pagar_model->updateCuenta($idCuenta,$data);
 			}
 			redirect(base_url()."backend/cuentas_pagar");
 		}
@@ -66,7 +65,7 @@ class Cuentas_pagar extends CI_Controller {
 	}
 
 	public function pagosByCuenta($idCuenta){
-		$pagos = $this->Comun_model->get_records("pagos","cuenta_pagar_id=".$idCuenta);
+		$pagos = $this->Cuentas_pagar_model->getPagosByCuenta($idCuenta);
 		echo json_encode($pagos);
 	}
 
@@ -93,7 +92,7 @@ class Cuentas_pagar extends CI_Controller {
 				"estado" => "1"
 			);
 
-			if ($this->Comun_model->insert("cuentas_pagar", $data)) {
+			if ($this->Cuentas_pagar_model->insert("cuentas_pagar", $data)) {
 				redirect(base_url()."almacen/calidades");
 			}
 			else{
@@ -109,7 +108,7 @@ class Cuentas_pagar extends CI_Controller {
 	public function edit($id){
 		$contenido_interno  = array(
 			//"permisos" => $this->permisos,
-			"calidad" => $this->Comun_model->get_record("cuentas_pagar","id=$id"), 
+			"calidad" => $this->Cuentas_pagar_model->get_record("cuentas_pagar","id=$id"), 
 		);
 
 		$contenido_externo = array(
@@ -124,7 +123,7 @@ class Cuentas_pagar extends CI_Controller {
 		$nombre = $this->input->post("nombre");
 		$descripcion = $this->input->post("descripcion");
 
-		$sucursalActual = $this->Comun_model->get_record("cuentas_pagar","id=$idCalidad");
+		$sucursalActual = $this->Cuentas_pagar_model->get_record("cuentas_pagar","id=$idCalidad");
 
 		if ($nombre == $sucursalActual->nombre) {
 			$is_unique_nombre = "";
@@ -140,7 +139,7 @@ class Cuentas_pagar extends CI_Controller {
 				"descripcion" => $descripcion,
 			);
 
-			if ($this->Comun_model->update("cuentas_pagar","id=$idCalidad",$data)) {
+			if ($this->Cuentas_pagar_model->update("cuentas_pagar","id=$idCalidad",$data)) {
 				redirect(base_url()."almacen/calidades");
 			}
 			else{
@@ -156,7 +155,7 @@ class Cuentas_pagar extends CI_Controller {
 
 	public function view($id){
 		$data  = array(
-			"calidad" => $this->Comun_model->get_record("cuentas_pagar", "id=$id"), 
+			"calidad" => $this->Cuentas_pagar_model->get_record("cuentas_pagar", "id=$id"), 
 		);
 		$this->load->view("admin/cuentas_pagar/view",$data);
 	}
@@ -165,7 +164,7 @@ class Cuentas_pagar extends CI_Controller {
 		$data  = array(
 			"estado" => "1", 
 		);
-		$this->Comun_model->update("cuentas_pagar","id=$id",$data);
+		$this->Cuentas_pagar_model->update("cuentas_pagar","id=$id",$data);
 		echo "almacen/calidades";
 	}
 
@@ -173,7 +172,7 @@ class Cuentas_pagar extends CI_Controller {
 		$data  = array(
 			"estado" => "0", 
 		);
-		$this->Comun_model->update("cuentas_pagar","id=$id",$data);
+		$this->Cuentas_pagar_model->update("cuentas_pagar","id=$id",$data);
 		echo "almacen/calidades";
 	}
 }

@@ -59,26 +59,17 @@ class Compras extends CI_Controller {
 		$tipo_pago = $this->input->post("tipo_pago");
 		$serie = $this->input->post("serie");
 		$numero = $this->input->post("numero");
-		$fecha = $this->input->post("fecha");
+		$fecha_compra = $this->input->post("fecha_compra");
 		$idproveedor = $this->input->post("idproveedor");
-
 		$subtotal = $this->input->post("subtotal");
-
 		$total = $this->input->post("total");
-
-		$idproductos = $this->input->post("idproductos");
-		$cantidades = $this->input->post("cantidades");
-		$importes = $this->input->post("importes");
-		$idMedidas = $this->input->post("idMedidas");
-		$cantidadesMedida = $this->input->post("cantidadesMedida");
-		
 
 		$data = array(
 			'serie' => $serie,
 			'numero' => $numero,
-			'fecha' => $fecha,
+			'fecha_compra' => $fecha_compra,
+			'fecha_registro' => date("Y-m-d H:i:s"),
 			'subtotal' => $subtotal,
-
 			'total' => $total,
 			'comprobante_id' => $comprobante,
 			'proveedor_id' => $idproveedor,

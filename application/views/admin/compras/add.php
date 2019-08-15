@@ -60,8 +60,8 @@
                             <div class="form-group">
                                 <label for="">Tipo de Pago:</label>
                                 <select name="tipo_pago" id="tipo_pago" class="form-control" required>
-                                    <option value="1">Efectivo</option>
-                                    <option value="2">Credito</option>
+                                    <option value="Efectivo">Efectivo</option>
+                                    <option value="Credito">Credito</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -74,7 +74,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Fecha de Compra:</label>
-                                <input type="date" class="form-control" name="fecha" value="<?php echo date("Y-m-d");?>" required>
+                                <input type="date" class="form-control" name="fecha_compra" value="<?php echo date("Y-m-d");?>" required>
                             </div>
                             <div class="form-group">
                                 <label for="">Proveedor:</label>

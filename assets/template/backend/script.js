@@ -15,39 +15,6 @@ $(document).ready(function () {
         allowClear: true
     });
 
-    $(document).on("click",".btn-cancelar-orden", function(e){
-        e.preventDefault();
-        var url = $(this).attr("href");
-        swal({
-            title:"Esta seguro de cancelar la orden de compra?",
-            text: "Esta operacion es irreversible",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonClass: 'btn btn-success',
-            cancelButtonClass: 'btn btn-danger',
-            buttonsStyling: false,
-            confirmButtonText: "Aceptar",
-            cancelButtonText: "Cancelar",
-            closeOnConfirm: false,
-        },
-        function(isConfirm){
-            if(isConfirm){
-                $.ajax({
-                    url: url,
-                    type: "POST",
-                    success: function(resp){
-                        if (resp == 1) {
-                            location.reload();
-                        }else{
-                            swal("Error","No se pudo cancelar la orden de compra","error");
-                        }
-                        
-                    }
-                });
-            }
-        });    
-    });
-
     $(document).on("change", "#tipo_consumo", function(){
         var tipo_consumo = $(this).val();
         if (tipo_consumo == 1) {
@@ -171,8 +138,13 @@ $(document).ready(function () {
         num_documento = $(this).closest("tr").find("td:eq(1)").text();
         texto = "<strong>Nro de Comprobante: </strong>"+num_documento;
         $("p.num_documento").html(texto);
+        if ($("#modulo").val() == "cuentas_cobrar") {
+            ruta = "cuentas_cobrar/creditos/pagosByCuenta/";
+        }else{
+            ruta = "backend/cuentas_pagar/pagosByCuenta/";
+        }
         $.ajax({
-            url: base_url + "cuentas_cobrar/creditos/pagosByCuenta/"+idCuenta,
+            url: base_url + ruta +idCuenta,
             type: "POST",
             dataType: "json",
             success: function(data){

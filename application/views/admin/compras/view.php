@@ -26,7 +26,7 @@
                         <th>Direccion:</th>
                         <td colspan="4"><?php echo $compra->direccion;?></td>
                         <th>Fecha Compra:</th>
-                        <td><?php echo $compra->fecha;?></td>
+                        <td><?php echo $compra->fecha_compra;?></td>
                     </tr>
                 </tbody>
             </table>

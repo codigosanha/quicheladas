@@ -141,6 +141,16 @@ class Compras_model extends CI_Model {
 			$this->updateStock($idproductos[$i],$cantidades[$i],$cantidadesMedida[$i]);
 		}
 
+		if ($this->input->post("tipo_pago") == "Credito") {
+			$dataCuenta = array(
+				"compra_id" => $compra_id,
+				"monto" => $this->input->post("total") ,
+				"fecha" => date("Y-m-d H:i:s"),
+				"estado" => "0"
+			);
+			$this->db->insert("cuentas_pagar", $dataCuenta);
+		}
+
         $this->db->trans_complete();
         if($this->db->trans_status() === FALSE)
         {

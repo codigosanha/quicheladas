@@ -13,12 +13,12 @@
         <!-- Default box -->
         <div class="box box-solid">
             <div class="box-body">
-                <input type="hidden" id="modulo" value="backend/cuentas_pagar">
+                <input type="hidden" id="modulo" value="cuentas_pagar">
                 
                 <div class="row">
                     <div class="col-md-12">
                         <div class="table-responsive">
-                            <table id="tableSimple" class="table table-bordered table-hover">
+                            <table id="example1" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
                                         <th>Proveedor</th>
@@ -34,24 +34,24 @@
                                 <tbody>
                                     <?php if(!empty($cuentas_pagar)):?>
                                         <?php foreach($cuentas_pagar as $cuenta):?>
-                                            <?php $compra = get_record("compras","id=".$cuenta->compra_id);?>
                                             <tr>
-                                                <td><?php echo get_record("proveedores","id=".$compra->proveedor_id)->nombre;?></td>
-                                                <td><?php echo $compra->numero_comprobante;?></td>
-                                                <td><?php echo get_record("comprobantes","id=".$compra->comprobante_id)->nombre;?></td>
+                                                <td><?php echo $cuenta->proveedor;?></td>
+                                                <td><?php echo $cuenta->numero;?></td>
+                                                <td><?php echo $cuenta->comprobante;?></td>
                                                 <td><?php echo $cuenta->fecha;?></td>
                                                 <td><?php echo $cuenta->monto;?></td>
-                                                <?php if (getTotalAbonosProveedores($cuenta->id) == 0): ?>
+                                                <?php $monto_abonado = getTotalAbonosProveedores($cuenta->id); ?>
+                                                <?php if  ($monto_abonado == 0): ?>
                                                     <td>0.00</td>
                                                 <?php else: ?>
                                                     <td>
                                                         <a href="#modal-pagos" data-toggle="modal" data-href="<?php echo $cuenta->id;?>" class="btn-pagos">
-                                                            <?php echo number_format(getTotalAbonosProveedores($cuenta->id), 2, '.', '');?>
+                                                            <?php echo number_format($monto_abonado, 2, '.', '');?>
                                                         </a>
                                                     </td>
                                                 <?php endif ?>
                                                 
-                                                <td><?php echo number_format($cuenta->monto - getTotalAbonosProveedores($cuenta->id), 2, '.', '');?></td>
+                                                <td><?php echo number_format($cuenta->monto - $monto_abonado, 2, '.', '');?></td>
                                                 <td>
                                                     <div class="btn-group">
                                                         
@@ -102,7 +102,7 @@
                     </div>
                     <div class="form-group">
                         <label for="">Monto a Abonar</label>
-                        <input type="text" id="monto_abonar" name="monto_abonar" class="form-control" required="required">
+                        <input type="text" id="monto_abonar" name="monto_abonar" class="form-control" required="required" autocomplete="off">
                     </div>
                 </div>
                 <div class="modal-footer">
