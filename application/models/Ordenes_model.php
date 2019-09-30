@@ -61,9 +61,10 @@ class Ordenes_model extends CI_Model {
 
 	public function getPedidosMesas($pedido_id)
 	{	
-		$this->db->select("m.id,m.numero");
+		$this->db->select("m.id,m.numero, a.nombre as area");
 		$this->db->from("pedidos_mesa pm");
 		$this->db->join("mesas m", "pm.mesa_id = m.id");
+		$this->db->join("areas a", "m.area_id = a.id");
 	    $this->db->where('pm.pedido_id', $pedido_id);
 	    $query = $this->db->get();
 	    return $query->result();
@@ -81,6 +82,7 @@ class Ordenes_model extends CI_Model {
 		$this->db->where("categoria_id",$categoria);
 		$this->db->where("stock >", "0");
 		$this->db->where("estado","1");
+		$this->db->order_by("nombre");
 		$resultados = $this->db->get("productos");
 		return $resultados->result();
 	}

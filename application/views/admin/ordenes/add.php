@@ -15,7 +15,7 @@
             <div class="box-body">
                 <input type="hidden" id="formulario" value="form-orden">
                 <div class="row">
-                    <div class="col-md-7">
+                    <div class="col-md-6">
                         <form action="<?php echo base_url();?>movimientos/ordenes/store" method="POST" id="add-orden">
                             <h4 class="page-header">Productos Agregado a la Orden</h4>
                             <div class="form-group">
@@ -29,7 +29,7 @@
                             <table class="table table-hover table-bordered" id="tborden">
                                 <thead>
                                     <tr>
-                                        <th>Imagen</th>
+                                        <!-- <th>Imagen</th> -->
                                         <th>Producto</th>
                                         <th>Stock Max</th>
                                         <th>Cantidad</th>
@@ -46,7 +46,7 @@
                                 <label for="">Mesas</label>
                                 <select name="mesas[]" class="form-control select2" multiple="multiple" data-placeholder="Seleccione mesas" style="width: 100%;" required="required" id="mesas">
                                   <?php foreach ($mesas as $mesa): ?>
-                                      <option value="<?php echo $mesa->id;?>"><?php echo $mesa->numero;?></option>
+                                      <option value="<?php echo $mesa->id;?>"><?php echo $mesa->numero." (".$mesa->area.")";?></option>
                                   <?php endforeach ?>
                                 </select>
                             </div>
@@ -56,7 +56,7 @@
                             </div>
                         </form>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <h4 class="page-header">Categorias</h4>
                         <?php if (!empty($categorias)): ?>
                             <?php foreach ($categorias as $categoria): ?>

@@ -5,6 +5,7 @@ class Categorias_model extends CI_Model {
 
 	public function getCategorias(){
 		$this->db->where("estado","1");
+		$this->db->order_by("nombre");
 		$resultados = $this->db->get("categorias");
 		return $resultados->result();
 	}

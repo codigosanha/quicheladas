@@ -15,7 +15,7 @@
             <div class="box-body">
               <input type="hidden" id="formulario" value="form-orden">
                 <div class="row">
-                    <div class="col-md-7">
+                    <div class="col-md-6">
                         <form action="<?php echo base_url();?>movimientos/ordenes/update" method="POST" id="add-orden">
                             <input type="hidden" name="idPedido" value="<?php echo $orden->id;?>">
                             <h4>Productos Agregado a la Orden</h4>
@@ -23,7 +23,7 @@
                             <table class="table table-hover table-bordered" id="tborden">
                                 <thead>
                                     <tr>
-                                        <th>Imagen</th>
+                                        <!-- <th>Imagen</th> -->
                                         <th>Producto</th>
                                         <th>Stock Max</th>
                                         <th>Cantidad</th>
@@ -33,7 +33,7 @@
                                 <tbody>
                                     <?php foreach ($productos as $producto): ?>
                                         <tr>
-                                            <td><img src="<?php echo base_url(); ?>assets/imagenes_productos/<?php echo $producto->imagen ?>" class="img-responsive" style="width: 100px;" alt="<?php echo $producto->nombre ?>"></td>
+                                            <!-- <td><img src="<?php echo base_url(); ?>assets/imagenes_productos/<?php echo $producto->imagen ?>" class="img-responsive" style="width: 100px;" alt="<?php echo $producto->nombre ?>"></td> -->
                                             <td>
                                                 <input type="hidden" value="<?php echo $producto->producto_id?>">
                                                 <?php echo $producto->nombre;?>
@@ -69,7 +69,6 @@
                                     <?php endforeach ?>
                                 </tbody>
                             </table>
-                            <div id="extras"></div>
                             </div>
                             <div id="extras"></div>
                             <?php 
@@ -78,32 +77,20 @@
                                     $mesasActual .= $pedidomesa->numero.",";
                                 }
                             ?>
-                            <div class="row">
-                                <div class="form-group col-md-12">
-                                    <strong>Mesa Actual</strong>:<?php echo $mesasActual; ?>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 form-group">
-
-                                    <label for="">Unir mesa con:</label>
-                                    <select name="mesa" id="mesa" class="form-control">
-                                       <option value="">Seleccione Mesa</option>
-                                       <?php foreach ($mesas as $mesa): ?>
-                                           <option value="<?php echo $mesa->id;?>"><?php echo $mesa->numero;?></option>
-                                       <?php endforeach ?>
-                                   </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="nuevamesa">Cambiar Mesa:</label>
-                                    <select name="nuevamesa" id="nuevamesa" class="form-control">
-                                       <option value="">Seleccione Mesa</option>
-                                       <?php foreach ($mesas as $mesa): ?>
-                                           <option value="<?php echo $mesa->id;?>"><?php echo $mesa->numero;?></option>
-                                       <?php endforeach ?>
-                                    </select>
-                                </div>
-                                
+                            <div class="form-group" id="content-mesas">
+                                <label for="">Mesas</label>
+                                <select name="mesas[]" class="form-control select2" multiple="multiple" data-placeholder="Seleccione mesas" style="width: 100%;" required="required" id="mesas">
+                                    <optgroup label="Mesa(s) Actual">
+                                    <?php foreach ($pedidomesas as $pedidomesa): ?>
+                                        <option value="<?php echo $pedidomesa->id;?>" selected="selected"><?php echo $pedidomesa->numero." (".$pedidomesa->area.")";?></option>
+                                    <?php endforeach ?>
+                                    </optgroup>
+                                    <optgroup label="Mesa(s) Disponibles">
+                                    <?php foreach ($mesas as $mesa): ?>
+                                        <option value="<?php echo $mesa->id;?>"><?php echo $mesa->numero." (".$mesa->area.")";?></option>
+                                    <?php endforeach ?>
+                                    </optgroup>
+                                </select>
                             </div>
                             
                             <div class="form-group">
@@ -112,7 +99,7 @@
                             </div>
                         </form>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <h4 class="page-header">Categorias</h4>
                         <?php if (!empty($categorias)): ?>
                             <?php foreach ($categorias as $categoria): ?>

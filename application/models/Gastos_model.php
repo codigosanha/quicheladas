@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Gastos_model extends CI_Model {
 
 	public function getGastos(){
-		$this->db->order_by("id","desc");
+		$this->db->order_by("fecha","desc");
 		$resultados = $this->db->get("gastos");
 		return $resultados->result();
 	}

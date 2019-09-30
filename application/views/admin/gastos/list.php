@@ -45,19 +45,23 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php $i=1; ?>
                                     <?php if(!empty($gastos)):?>
                                         <?php foreach($gastos as $gasto):?>
                                             <tr>
-                                                <td><?php echo $gasto->id;?></td>
+                                                <td><?php echo $i;?></td>
                                                 <td><?php echo getUsuario($gasto->usuario_id)->username;?></td>
                                                 <td><?php echo $gasto->fecha;?></td>
                                                 <td><?php echo $gasto->nombre;?></td>
                                                 <td><?php echo $gasto->monto;?></td>
                                                 <td><?php echo $gasto->observaciones;?></td>
                                                 <td>
-                                                    <a href="<?php echo base_url();?>caja/gastos/delete/<?php echo $gasto->id;?>" class="btn btn-danger">Eliminar</a>
+                                                    <button type="button" class="btn btn-danger btn-sm btn-delete-gasto" data-toggle="modal" data-target="#modal-default" value="<?php echo $gasto->id ?>">
+                                                        Eliminar
+                                                    </button>
                                                 </td>
                                             </tr>
+                                            <?php $i++; ?>
                                         <?php endforeach;?>
                                     <?php endif;?>
                                 </tbody>
@@ -101,6 +105,35 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
         <button type="submit" class="btn btn-success">Guardar</button>
+      </div>
+      </form>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div class="modal fade" id="modal-default">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Eliminar Gasto</h4>
+      </div>
+      <form action="#" method="POST" id="form-delete-gasto">
+      <div class="modal-body">
+        <div class="form-group">
+            <label for="">Ingrese Clave de Permiso</label>
+            <input type="password" class="form-control" name="clave" required="required">
+            <input type="hidden" name="idGasto" id="idGasto">
+        </div>
+    
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-primary btn-flat"><span class="fa fa-print"></span> Guardar</button>
       </div>
       </form>
     </div>

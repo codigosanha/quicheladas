@@ -440,4 +440,15 @@ class Productos extends CI_Controller {
 		}
 	}
 
+	public function changeStatus(){
+		$producto_id = $this->input->post("producto_id");
+		$status = $this->input->post("status");
+		$data["estado"] = $status;
+		if ($this->Productos_model->update($producto_id, $data)) {
+			echo "1";
+		}else{
+			echo "0";
+		}
+	}
+
 }

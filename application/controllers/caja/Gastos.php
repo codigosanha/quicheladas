@@ -9,6 +9,7 @@ class Gastos extends CI_Controller {
 		$this->permisos = $this->backend_lib->control();
 		$this->load->model("Gastos_model");
 		$this->load->model("Caja_model");
+		$this->load->model("Permisos_model");
 		$this->load->helper("functions");
 	}
 
@@ -51,15 +52,30 @@ class Gastos extends CI_Controller {
 	}
 
 
-	public function delete($id){
+	public function deleteGasto(){
+		$idGasto = $this->input->post("idGasto");
+		$clave = $this->input->post("clave");
 
-		if ($this->Gastos_model->delete($id)) {
-			//echo "1";
-			redirect(base_url()."caja/gastos");
+		$resultados = $this->Permisos_model->checkClave($clave);
+
+		if ($resultados) {
+
+			if ($this->Gastos_model->delete($idGasto)) {
+				$status = 1;
+				$message = "";
+			}else{
+				$status = 0;
+				$message = "No se produjo un error";
+			}
 		}else{
-			//echo "0";
-			redirect(base_url()."caja/gastos");
+			$status = 0;
+			$message = "La clave no es válido";
 		}
+
+		echo json_encode( array(
+			'status' => $status,
+			'message' => $message 
+		));
 		
 	}
 }

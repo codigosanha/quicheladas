@@ -35,14 +35,16 @@
                                     <th>Stock Min.</th>
                                     <th>Stock</th>
                                     <th>Categoria</th>
+                                    <th>Estado</th>
                                     <th>Opciones</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php $i = 1; ?>
                                 <?php if(!empty($productos)):?>
                                     <?php foreach($productos as $producto):?>
                                         <tr>
-                                            <td><?php echo $producto->id;?></td>
+                                            <td><?php echo $i;?></td>
                                             <td><?php echo $producto->codigo;?></td>
                                             <td><?php echo $producto->nombre;?></td>
                                             <td><?php echo $producto->descripcion;?></td>
@@ -61,6 +63,27 @@
                                             <?php endif;?>
 
                                             <td><?php echo $producto->categoria;?></td>
+                                            <td>
+                                                <?php 
+
+                                                    if ($producto->estado){
+                                                        $btn_off = "btn-default";
+                                                        $btn_on = "btn-success";
+                                                    } else {
+                                                        $btn_off = "btn-danger";
+                                                        $btn_on = "btn-default";
+                                                    }
+                                                ?>
+                                                <?php if ($permisos->delete): ?>
+                                                    <div class="btn-group">
+                                                        <button class="btn btn-xs btn-off <?php echo $btn_off; ?>" value="<?php echo $producto->id; ?>">OFF</button>
+                                                        <button class="btn btn-xs btn-on <?php echo $btn_on; ?>" value="<?php echo $producto->id; ?>">ON</button>
+                                                    </div>
+                                                <?php else: ?>
+                                                    <?php echo $producto->estado ? "Activo":"Inactivo"; ?>
+                                                <?php endif ?>
+                                                
+                                            </td>
                                             
                                             <td class="text-right">
                                                 <div class="btn-group">
@@ -84,14 +107,7 @@
                                                             </a>
                                                         </li>
                                                         <?php endif;?>
-                                                        <?php if($permisos->delete == 1):?>
-                                                        <li>
-                                                            <a href="<?php echo base_url();?>mantenimiento/productos/delete/<?php echo $producto->id;?>" class="btn-remove">
-                                                                <i class="fa fa-times"></i>
-                                                                Eliminar
-                                                            </a>
-                                                        </li>
-                                                        <?php endif;?>
+                                                        
                                                         <li>
                                                             <a href="#modal-extras" class="btn-extras" data-toggle="modal" data-target="#modal-extras" data-href="<?php echo $producto->id;?>">
                                                                 <i class="fa fa-plus"></i>
@@ -107,6 +123,7 @@
                                                 </div>
                                             </td>
                                         </tr>
+                                        <?php $i++; ?>
                                     <?php endforeach;?>
                                 <?php endif;?>
                             </tbody>

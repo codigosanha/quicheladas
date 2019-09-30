@@ -260,82 +260,80 @@ class Ordenes extends CI_Controller {
 		$idPedido = $this->input->post("idPedido");
 		$cantidades = $this->input->post("cantidades");
 		$productos = $this->input->post("productos");
-		$mesa = $this->input->post("mesa");
-		$nuevamesa = $this->input->post("nuevamesa");
+		$mesas = $this->input->post("mesas");
+		//$nuevamesa = $this->input->post("nuevamesa");
 		$extras = $this->input->post("extras");
 		$codigos = $this->input->post("codigos");
 
 
-		if (!empty($mesa)) {
-			$dataPedidoMesas = array(
-				'pedido_id' => $idPedido,
-				'mesa_id' => $mesa 
-			);
-			$this->Ordenes_model->savePedidoMesa($dataPedidoMesas);
-			$dataMesas = array(
-				"estado" => 0
-			);
-			$this->Ordenes_model->updateMesa($mesa,$dataMesas);
-		}
+		if (!empty($mesas)) {
 
-		if (!empty($nuevamesa)) {
-			$mesas = $this->Ordenes_model->getPedidosMesas($idPedido);
-			$this->Ordenes_model->deletePedidoMesas($idPedido);
-			foreach ($mesas as $m) {
+			$mesasPedidos = $this->Ordenes_model->getPedidosMesas($idPedido);
+			
+			foreach ($mesasPedidos as $m) {
 				$dataMesas = array(
 					"estado" => 1
 				);
 				$this->Ordenes_model->updateMesa($m->id,$dataMesas);
 			}
 
-			$dataPedidoMesas = array(
-				'pedido_id' => $idPedido,
-				'mesa_id' => $nuevamesa 
-			);
-			$this->Ordenes_model->savePedidoMesa($dataPedidoMesas);
-			$dataMesas = array(
-				"estado" => 0
-			);
-			$this->Ordenes_model->updateMesa($nuevamesa,$dataMesas);
+			$this->Ordenes_model->deletePedidoMesas($idPedido);
 
+			for ($i=0; $i < count($mesas); $i++) { 
+				$dataMesas = array(
+					"estado" => 0
+				);
+				$this->Ordenes_model->updateMesa($mesas[$i],$dataMesas);
+
+				$dataPedidoMesas = array(
+					'pedido_id' => $idPedido,
+					'mesa_id' => $mesas[$i] 
+				);
+				$this->Ordenes_model->savePedidoMesa($dataPedidoMesas);
+			}
 		}
+
 		$data  = array(
 			'updated' => 2, 
 		);
 		$this->Ordenes_model->setUpdated($idPedido,$data);
 
-		for ($i=0; $i < count($productos) ; $i++) { 
-			$infoproducto = $this->Productos_model->getProducto($productos[$i]);
+		if ($productos) {
+			for ($i=0; $i < count($productos) ; $i++) { 
+				$infoproducto = $this->Productos_model->getProducto($productos[$i]);
 
-            $dataProducto = array(
-                'stock' => $infoproducto->stock - $cantidades[$i], 
-            );
+	            $dataProducto = array(
+	                'stock' => $infoproducto->stock - $cantidades[$i], 
+	            );
 
-            if ($infoproducto->condicion == "1") {
-            	$this->Productos_model->update($productos[$i],$dataProducto);
-            	$productoActual = $this->Productos_model->getProducto($productos[$i]);
-				if ($productoActual->stock <= $productoActual->stock_minimo) {
-					$data = array(
-						'estado' => 0,
-						'producto_id' => $productos[$i] 
-					);
-					$this->Ventas_model->saveNotificacion($data);
-				}
-            }
+	            if ($infoproducto->condicion == "1") {
+	            	$this->Productos_model->update($productos[$i],$dataProducto);
+	            	$productoActual = $this->Productos_model->getProducto($productos[$i]);
+					if ($productoActual->stock <= $productoActual->stock_minimo) {
+						$data = array(
+							'estado' => 0,
+							'producto_id' => $productos[$i] 
+						);
+						$this->Ventas_model->saveNotificacion($data);
+					}
+	            }
 
 
-            $dataDetalle  = array(
-                'pedido_id'     => $idPedido, 
-                'producto_id'     => $productos[$i],
-                'cantidad' => $cantidades[$i],
-                'estado' => 0,
-                'codigo' => $codigos[$i]
-            );
+	            $dataDetalle  = array(
+	                'pedido_id'     => $idPedido, 
+	                'producto_id'     => $productos[$i],
+	                'cantidad' => $cantidades[$i],
+	                'estado' => 0,
+	                'codigo' => $codigos[$i]
+	            );
 
-            $this->Ordenes_model->savePedidoProductos($dataDetalle);
-            $this->updateProductosAsociados($productos[$i],$cantidades[$i]);
+	            $this->Ordenes_model->savePedidoProductos($dataDetalle);
+	            $this->updateProductosAsociados($productos[$i],$cantidades[$i]);
 
+			}
 		}
+
+		
 		if (!empty($extras)) {
 			$this->saveExtrasProductoOrden($extras,$idPedido);
 		}

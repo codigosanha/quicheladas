@@ -4,11 +4,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Mesas_model extends CI_Model {
 
 	public function getMesas($estado=false){
+		$this->db->select("m.*,a.nombre as area");
+		$this->db->from("mesas m");
+		$this->db->join("areas a", "m.area_id = a.id");
 		if ($estado!=false) {
-			$this->db->where("estado",$estado); 
+			$this->db->where("m.estado",$estado); 
 		}
 		
-		$resultados = $this->db->get("mesas");
+		$resultados = $this->db->get();
 		return $resultados->result();
 	}
 

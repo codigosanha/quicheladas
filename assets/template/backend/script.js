@@ -1,4 +1,64 @@
 $(document).ready(function () {
+    $(document).on("click",".btn-delete-gasto", function(){
+        var gasto_id = $(this).val();
+        $("#idGasto").val(gasto_id); 
+    });
+    $("#form-delete-gasto").submit(function(e){
+        e.preventDefault();
+        var formData = $(this).serialize();
+        $.ajax({
+            url: base_url + "caja/gastos/deleteGasto",
+            type: "POST",
+            data: formData,
+            dataType: "json",
+            success: function(resp){
+                if (resp.status == "1") {
+                    location.reload();
+                }else{
+                    swal("Error", resp.message, "error");
+                }
+            }
+
+        });
+    });
+    $(document).on("click", ".btn-off", function(){
+        if ($(this).hasClass("btn-default")) {
+            var producto_id = $(this).val();
+            var btn_off = $(this);
+            var btn_on = $(this).siblings();
+            $.ajax({
+                url: base_url + "mantenimiento/productos/changeStatus",
+                type: "POST",
+                data: {producto_id: producto_id,status:0},
+                success: function(resp){
+                    if (resp == 1) {
+                        alertify.error("El estado del producto paso Inactivo");
+                        btn_off.removeClass("btn-default").addClass("btn-danger");
+                        btn_on.removeClass("btn-success").addClass("btn-default");
+                    }
+                }
+            });
+        }
+    });
+    $(document).on("click", ".btn-on", function(){
+        if ($(this).hasClass("btn-default")) {
+            var producto_id = $(this).val();
+            var btn_on = $(this);
+            var btn_off = $(this).siblings();
+            $.ajax({
+                url: base_url + "mantenimiento/productos/changeStatus",
+                type: "POST",
+                data: {producto_id: producto_id,status:1},
+                success: function(resp){
+                    if (resp == 1) {
+                        alertify.success("El estado del producto paso Activo");
+                        btn_on.removeClass("btn-default").addClass("btn-success");
+                        btn_off.removeClass("btn-danger").addClass("btn-default");
+                    }
+                }
+            });
+        }
+    });
     if ( $("#listado-pedidos").length ) {
         cargarPedidos();
     }
@@ -1088,7 +1148,7 @@ $(document).ready(function () {
                 max = infoBtn[4];
             }
             html = "<tr id='"+id+"'>";
-            html += "<td><img src='"+base_url+"assets/imagenes_productos/"+infoBtn[8]+"' class='img-responsive' width='100px;'></td>"
+ /*           html += "<td><img src='"+base_url+"assets/imagenes_productos/"+infoBtn[8]+"' class='img-responsive' width='100px;'></td>"*/
             html += "<td><input type='hidden' name='productos[]' value='"+infoBtn[0]+"'><p style='margin-bottom:0;'>"+infoBtn[2]+"</p></td>";
             html += "<td><input type='hidden' name='codigos[]' value='"+id+"'>"+infoBtn[4]+"</td>";
             html += "<td style='text-align:left;'>";
