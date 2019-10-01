@@ -120,7 +120,10 @@ class Apertura_cierre extends CI_Controller {
 	public function viewCorte($id){
 		$data  = array(
 			'tarjetas' => $this->Tarjetas_model->getTarjetas(),
-			'caja' => $this->Caja_model->getCaja($id)
+			'caja' => $this->Caja_model->getCaja($id),
+			"descuentos" => $this->Caja_model->getDescuentos($id),
+			"gastos" => $this->Caja_model->getGastos($id),
+			"creditos" => $this->Caja_model->getCreditos($id),
 		);
 		$this->load->view("admin/caja/corte",$data);
 	}

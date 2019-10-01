@@ -41,7 +41,7 @@
                                     <?php foreach($compras as $compra):?>
                                         <tr>
                                             <td><?php echo $compra->id;?></td>
-                                            <td><?php echo $compra->fecha_compra;?></td>
+                                            <td><?php echo $compra->fecha;?></td>
                                             <td><?php echo getComprobante($compra->comprobante_id)->nombre;?></td>
                                             <td><?php echo $compra->serie." - ".$compra->numero;?></td>
                                             

@@ -27,6 +27,63 @@
 		<?php endforeach ?>
 		<p><strong>Monto total en Tarjeta: </strong><?php echo $totalTarjetas?></p>
 		<br>
+		<p><strong>DESCUENTOS:</strong></p>
+		<table width="70%" style="margin:auto;">
+			<tbody>
+				<?php if (!empty($descuentos)): ?>
+					<?php foreach ($descuentos as $d): ?>
+						<tr>
+							<td class="text-left"><?php echo "N° ".$d->num_documento; ?></td>
+							<td class="text-right"><?php echo $d->descuento ?></td>
+						</tr>
+					<?php endforeach ?>
+					
+				<?php else: ?>
+					<tr>
+						<td colspan="2">---------</td>
+					</tr>
+				<?php endif ?>
+			</tbody>
+		</table>
+		<br>
+		<p><strong>GASTOS:</strong></p>
+		<table width="70%" style="margin:auto;">
+			<tbody>
+				<?php if (!empty($gastos)): ?>
+					<?php foreach ($gastos as $g): ?>
+						<tr>
+							<td class="text-left"><?php echo $g->nombre; ?></td>
+							<td class="text-right"><?php echo $g->monto ?></td>
+						</tr>
+					<?php endforeach ?>
+					
+				<?php else: ?>
+					<tr>
+						<td colspan="2">---------</td>
+					</tr>
+				<?php endif ?>
+			</tbody>
+		</table>
+		<br>
+		<p><strong>CREDITOS:</strong></p>
+		<table width="70%" style="margin:auto;">
+			<tbody>
+				<?php if (!empty($creditos)): ?>
+					<?php foreach ($creditos as $c): ?>
+						<tr>
+							<td class="text-left"><?php echo "N° ".$c->num_documento; ?></td>
+							<td class="text-right"><?php echo $c->monto_credito ?></td>
+						</tr>
+					<?php endforeach ?>
+					
+				<?php else: ?>
+					<tr>
+						<td colspan="2">---------</td>
+					</tr>
+				<?php endif ?>
+			</tbody>
+		</table>
+		<br>
 		<p><strong>VENTAS AL CREDITO</strong></p>
 		<p><strong>Total: </strong><?php echo getMontos("monto_credito",$caja->id)?></p> <br>
 		<p><strong>Descuentos: </strong><?php echo getTotalDescuentos($caja->id);?></p>

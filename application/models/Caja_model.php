@@ -68,4 +68,24 @@ class Caja_model extends CI_Model {
 		$resultados = $this->db->get("pedidos");
 		return $resultados->num_rows();
 	}
+
+	public function getDescuentos($id){
+		$this->db->where("caja_id", $id);
+		$this->db->where("descuento >", "0");
+		$resultados = $this->db->get("ventas");
+		return $resultados->result();
+	}
+
+	public function getGastos($id){
+		$this->db->where("caja_id", $id);
+		$resultados = $this->db->get("gastos");
+		return $resultados->result();
+	}
+
+	public function getCreditos($id){
+		$this->db->where("caja_id", $id);
+		$this->db->where("monto_credito >", "0");
+		$resultados = $this->db->get("ventas");
+		return $resultados->result();
+	}
 }

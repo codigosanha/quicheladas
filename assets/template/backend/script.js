@@ -555,7 +555,7 @@ $(document).ready(function () {
         if($(this).prop('checked') == true){
             valueInput = dataCheck[0] + "*" + idProducto + "*" + tr_id;
             html = "<input type='hidden' class='e"+dataCheck[0]+tr_id+"' name='extras[]' value='"+valueInput+"' ><p style='margin:0px;' class='e"+dataCheck[0]+tr_id+"'><i>"+dataCheck[1]+"</i></p>";
-            $("#"+tr_id).children("td:eq(1)").append(html);
+            $("#"+tr_id).children("td:eq(0)").append(html);
         }else{
             $(".e"+dataCheck[0]+tr_id).remove();
         }
