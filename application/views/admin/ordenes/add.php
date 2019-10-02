@@ -123,7 +123,7 @@
                     <input type="text" name="precio" value="0.00" class="form-control">
                 </div>
                 <div class="col-md-4">
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary btn-block">
                         Guardar
                     </button>
                 </div>

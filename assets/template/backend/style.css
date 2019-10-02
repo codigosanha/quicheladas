@@ -89,6 +89,11 @@
           padding: 10px 12px;
         }
 
+        #extras-registrados div{
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
         @page { size: auto;  margin: 0mm;}
         @media (max-width: 480px) {
             .input-cantidad {

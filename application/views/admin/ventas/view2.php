@@ -69,7 +69,14 @@
 							$htmlExtras .= "<tr>";
 							$htmlExtras .= "<td></td>";
 							$htmlExtras .= "<td><i>".$e->nombre."</i></td>";
-							$htmlExtras .= "<td style='text-align: right;'>".number_format($e->precio * $detalle->cantidad, 2, '.', '')."</td>";
+
+							$importe = $e->precio * $detalle->cantidad;
+							if ($importe == 0) {
+								$htmlExtras .= "<td style='text-align: right;'></td>";
+							}else{
+								$htmlExtras .= "<td style='text-align: right;'>".number_format($importe, 2, '.', '')."</td>";
+							}
+							
 							$htmlExtras .= "</tr>";
 							$totalExtras = $totalExtras + $e->precio;
 						}

@@ -10,13 +10,21 @@ $(document).ready(function () {
             type: "POST",
             success: function(data){
                 if (data.status =="1") {
-                    html = '<div class="col-md-3">';
-                    html += '<button class="btn btn-success btn-block check-extra" value="'+data.extra+'">';
+                    dataExtra = data.extra.id +"*"+data.extra.nombre +"*"+data.extra.precio;
+                    html = '<div class="col-md-3 form-group">';
+                    html += '<button class="btn btn-success btn-block check-extra" value="'+dataExtra+'">';
                     html += data.extra.nombre+' <br> S/. '+data.extra.precio;
                     html += '</button>';
                     html += '</div>';
+                    $("#extras-registrados").append(html);
 
-                    $("#extras-registrados").html(html);
+                    tr_id = $("#tr-id").val();
+                    idProducto = $("#idProducto").val();
+                    valueInput = data.extra.id + "*" + idProducto + "*" + tr_id;
+                    html = "<input type='hidden' class='e"+data.extra.id+tr_id+"' name='extras[]' value='"+valueInput+"' ><p style='margin:0px;' class='e"+data.extra.id+tr_id+"'><i>"+data.extra.nombre+"</i></p>";
+                    $("#"+tr_id).children("td:eq(0)").append(html);
+                    sumaExtra();
+
                     alertify.success("La información del extra ha sido guardado y seleccionado al producto");
                 }else{
                     alertify.error("No se pudo guardar la información del extra");
@@ -583,12 +591,16 @@ $(document).ready(function () {
             html = "<input type='hidden' class='e"+dataCheck[0]+tr_id+"' name='extras[]' value='"+valueInput+"' ><p style='margin:0px;' class='e"+dataCheck[0]+tr_id+"'><i>"+dataCheck[1]+"</i></p>";
             $("#"+tr_id).children("td:eq(0)").append(html);
             $(this).removeClass("btn-warning").addClass("btn-success");
+            alertify.success("El extra fue agregado al producto");
         }else{
             $(".e"+dataCheck[0]+tr_id).remove();
             $(this).removeClass("btn-success").addClass("btn-warning");
+            alertify.error("El extra fue removido del producto");
         }
+        sumaExtra(tr_id);
+    })
 
-
+    function sumaExtra(tr_id){
         if ($("#"+tr_id+" input.totalE").length) {
             totalE = 0;
             $("#extras-registrados .btn-warning").each(function(){
@@ -606,8 +618,7 @@ $(document).ready(function () {
             $("#"+tr_id).children("td:eq(6)").find("p").text(nuevoImporte.toFixed(2));
             sumar();
         }
-        
-    })
+    }
     $(document).on("click", ".btn-view-extras", function(){
         idProducto = $(this).val();
         $("#idProducto").val(idProducto);
@@ -632,7 +643,7 @@ $(document).ready(function () {
                     } else {
                         checked = 'btn-warning';
                     }
-                    html = '<div class="col-md-3">';
+                    html += '<div class="col-md-3 form-group">';
                     html += '<button class="btn '+checked+' btn-block check-extra" value="'+data+'">';
                     html += value.nombre+' <br> S/. '+value.precio;
                     html += '</button>';
