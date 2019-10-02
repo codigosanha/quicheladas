@@ -672,4 +672,30 @@ class Ordenes extends CI_Controller {
 			echo "0";
 		}
 	}
+
+	public function saveExtra(){
+		$nombre = $this->input->post("nombre");
+		$precio = $this->input->post("precio");
+		$idProducto = $this->input->post("idProducto");
+
+		$data["nombre"] = $nombre;
+		$data["precio"] = $precio;
+		$data["producto_id"] = $idProducto;
+
+		$extra = $this->Ordenes_model->saveExtra($data);
+
+		if ($extra) {
+			$status = "1";
+			$data = $extra;
+		}else{
+			$status = "0";
+			$data = "";
+		}
+
+		echo json_encode(array(
+			'status' => $status,
+			'data' => $data 
+		));
+
+	}
 }

@@ -1,4 +1,29 @@
 $(document).ready(function () {
+    $("#saveExtra").submit(function(e){
+        e.preventDefault();
+        var url = $(this).attr("action");
+        var formData = $(this).serialize();
+        $.ajax({
+            url: url,
+            data: formData,
+            dataType: "json",
+            type: "POST",
+            success: function(data){
+                if (data.status =="1") {
+                    html = '<div class="col-md-3">';
+                    html += '<button class="btn btn-success btn-block check-extra" value="'+data.extra+'">';
+                    html += data.extra.nombre+' <br> S/. '+data.extra.precio;
+                    html += '</button>';
+                    html += '</div>';
+
+                    $("#extras-registrados").html(html);
+                    alertify.success("La información del extra ha sido guardado y seleccionado al producto");
+                }else{
+                    alertify.error("No se pudo guardar la información del extra");
+                }
+            }
+        });
+    });
     $(document).on("click",".btn-delete-gasto", function(){
         var gasto_id = $(this).val();
         $("#idGasto").val(gasto_id); 
@@ -547,22 +572,26 @@ $(document).ready(function () {
         });
 
     });
-    $(document).on("change",".check-extra", function(){
+    $(document).on("click",".check-extra", function(){
         infoCheck = $(this).val();
         dataCheck = infoCheck.split("*");
         tr_id = $("#tr-id").val();
         idProducto = $("#idProducto").val();
-        if($(this).prop('checked') == true){
+
+        if ($(this).hasClass("btn-warning")) {
             valueInput = dataCheck[0] + "*" + idProducto + "*" + tr_id;
             html = "<input type='hidden' class='e"+dataCheck[0]+tr_id+"' name='extras[]' value='"+valueInput+"' ><p style='margin:0px;' class='e"+dataCheck[0]+tr_id+"'><i>"+dataCheck[1]+"</i></p>";
             $("#"+tr_id).children("td:eq(0)").append(html);
+            $(this).removeClass("btn-warning").addClass("btn-success");
         }else{
             $(".e"+dataCheck[0]+tr_id).remove();
+            $(this).removeClass("btn-success").addClass("btn-warning");
         }
+
 
         if ($("#"+tr_id+" input.totalE").length) {
             totalE = 0;
-            $(".check-extra:checked").each(function(){
+            $("#extras-registrados .btn-warning").each(function(){
                 data = $(this).val();
                 info = data.split("*");
                 totalE = totalE + Number(info[2]);
@@ -599,19 +628,17 @@ $(document).ready(function () {
                     var checked = '';
 
                     if (extras.includes(value.id+"*"+idProducto+"*"+tr_id)) {
-                        checked = 'checked';
+                        checked = 'btn-success';
+                    } else {
+                        checked = 'btn-warning';
                     }
-                    html += "<tr>";
-                    html += "<td><input type='checkbox' value='"+data+"' class='check-extra' "+checked+"></td>";
-                    html += "<td>"+value.nombre+"</td>";
-                    html += "<td>"+value.precio+"</td>";
-                    /*html += "<td>";
-                    html += '<button type="button" class="btn btn-success" value="'+data+'">';
-                    html += '<span class="fa fa-check"></span>';
-                    html += '</button></td>'*/;
-                    html += "</tr>";
+                    html = '<div class="col-md-3">';
+                    html += '<button class="btn '+checked+' btn-block check-extra" value="'+data+'">';
+                    html += value.nombre+' <br> S/. '+value.precio;
+                    html += '</button>';
+                    html += '</div>';
                 });
-                $("#tbextras tbody").html(html);
+                $("#extras-registrados").html(html);
             }
         });
     });
