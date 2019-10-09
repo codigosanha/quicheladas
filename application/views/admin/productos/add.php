@@ -101,23 +101,50 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Productos a Asociar</label>
-                                <input type="text" id="productosA" class="form-control">
+                                <label for="">Categorias</label>
+                                <div class="input-group">
+                                    <select name="categoria_asociada" id="categoria_asociada" class="form-control">
+                                        <option value="">Seleccione</option>
+                                        <?php foreach($categorias as $categoria):?>
+                                            <option value="<?php echo $categoria->id."*".$categoria->nombre; ?>
+                                            "><?php echo $categoria->nombre;?></option>
+                                        <?php endforeach;?>
+                                    </select>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-success" type="button" id="btn-add-categoria">Agregar</button>
+                                    </span>
+                                </div><!-- /input-group -->
                             </div>
-                            <table class="table table-bordered" id="tbAsociados">
-                                <thead>
-                                    <tr>
-                                        <th>Codigo</th>
-                                        <th>Nombre</th>
-                                        <th style="width:20%;">Cantidad</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    
-                                </tbody>
-                            </table>
-
+                            <div class="form-group" style="border: 1px solid #f5f5f5;background-color: #f5f5f5; padding: 10px 20px;">
+                                <h3 class="text-center">Categorias Asociadas</h3>
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <span>Titulo</span>
+                                        <button type="button" class="btn btn-warning btn-sm pull-right" style="margin-top: -5px;">
+                                            <span class="fa fa-pencil"></span>
+                                        </button>
+                                    </div>
+                                    <div class="panel-body"></div>
+                                </div>
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <span>Titulo</span>
+                                        <button type="button" class="btn btn-warning btn-sm pull-right" style="margin-top: -5px;">
+                                            <span class="fa fa-pencil"></span>
+                                        </button>
+                                    </div>
+                                    <div class="panel-body"></div>
+                                </div>
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <span>Titulo</span>
+                                        <button type="button" class="btn btn-warning btn-sm pull-right" style="margin-top: -5px;">
+                                            <span class="fa fa-pencil"></span>
+                                        </button>
+                                    </div>
+                                    <div class="panel-body"></div>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <h4 class="page-header">
                                     Unidades de medidas
@@ -160,3 +187,42 @@
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+<div class="modal fade" id="modal-categoria">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Informacion de la Categoria</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+            <label for="">Categoria Asociada</label>
+            <input type="text" class="form-control" readonly="readonly" id="nombre-categoria-agregada">
+            <input type="hidden" id="categoria-agregada">
+        </div>
+        <div class="form-group">
+            <label for="">Cantidad de productos</label>
+            <input type="text" class="form-control" id="cantidad_categoria">
+        </div>
+        <div class="form-group">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

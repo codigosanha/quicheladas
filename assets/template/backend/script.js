@@ -1,4 +1,16 @@
 $(document).ready(function () {
+    $("#btn-add-categoria").on("click",function(){
+        var infoCategoria = $("#categoria_asociada").val();
+        if (infoCategoria=="") {
+            swal("Error","Seleccione una categoria", "error");
+        }else{
+            var dataCategoria = infoCategoria.split("*");
+            $("#nombre-categoria-agregada").val(dataCategoria[1]);
+            $("#categoria-agregada").val(dataCategoria[0]);
+            $("#modal-categoria").modal("show");
+        }
+        
+    });
     $("#saveExtra").submit(function(e){
         e.preventDefault();
         var url = $(this).attr("action");
