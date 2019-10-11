@@ -1,13 +1,40 @@
 $(document).ready(function () {
+    $(document).on("click",".btn-delete-panel", function(){
+        var panel = $(this).val();
+        $("#"+panel).remove();
+    })
+
     $("#btn-add-categoria").on("click",function(){
         var infoCategoria = $("#categoria_asociada").val();
         if (infoCategoria=="") {
             swal("Error","Seleccione una categoria", "error");
         }else{
             var dataCategoria = infoCategoria.split("*");
-            $("#nombre-categoria-agregada").val(dataCategoria[1]);
+            var panel = "pc-"+dataCategoria[0];
+            if ($("#"+panel).length > 0) {
+                swal("Error","La categoria ya fue asociada", "error");
+            }else{
+                html = '<div class="panel panel-primary" id="'+panel+'">';
+                html += '<div class="panel-heading">';
+                html += '<span>'+dataCategoria[1]+'</span>';
+                html += '<span class="pull-right">'
+                html += '<button type="button" class="btn btn-warning btn-sm" style="margin-top:-5px;">';
+                html += '<span class="fa fa-pencil"></span>';
+                html += '</button>';
+                html += '<button type="button" class="btn btn-danger btn-sm btn-delete-panel" style="margin-top:-5px;" value="'+panel+'">';
+                html += '<span class="fa fa-times"></span>';
+                html += '</button>';
+                html += '</span>' 
+                html += '</div>';
+                html += '<div class="panel-body"></div>';
+                html += '</div>';
+
+                $("#categorias-asociadas").append(html);
+            }
+            /*$("#nombre-categoria-agregada").val(dataCategoria[1]);
             $("#categoria-agregada").val(dataCategoria[0]);
             $("#modal-categoria").modal("show");
+            show_products_by_category(dataCategoria[0]);*/
         }
         
     });
@@ -2533,7 +2560,33 @@ function cargarListaPedidos(pageCurrent){
             
         }
     });
+    
 }
+
+function show_products_by_category(categoria_id){
+        $.ajax({
+            url: base_url + "mantenimiento/productos/getProductosByCategoria",
+            data: {categoria_id:categoria_id},
+            type:"POST",
+            dataType:"json",
+            success: function(resp){
+                $('#tbProductos').dataTable( {
+                    destroy: true,
+                    data : resp,
+                    columns: [
+                        {"data": "nombre"}, 
+                        {
+                            mRender: function (data, type, row) {
+                                var button = "<button type='button' class='btn btn-info btn-xs btn-info-evolucion' data-toggle='modal' data-target='#modal-default' value='"+JSON.stringify(row)+"'><span class='fa fa-check'></span></button>";
+                                return button;
+                            }
+                        },           
+                    ],
+                    order: [[ 0,"asc" ]]
+                });
+            }
+        });
+    }
 
 function showAjuste(id){
     $.ajax({

@@ -121,4 +121,12 @@ class Productos_model extends CI_Model {
 
 	}
 
+	public function getProductosByCategoria($categoria_id){
+		$this->db->where("categoria_id", $categoria_id);
+		$this->db->where("estado", 1);
+		$this->db->order_by("nombre");
+		$resultados = $this->db->get("productos");
+		return $resultados->result();
+	}
+
 }

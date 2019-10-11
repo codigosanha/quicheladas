@@ -451,4 +451,10 @@ class Productos extends CI_Controller {
 		}
 	}
 
+	public function getProductosByCategoria(){
+		$categoria_id = $this->input->post("categoria_id");
+		$productos = $this->Productos_model->getProductosByCategoria($categoria_id);
+		echo json_encode($productos);
+	}
+
 }

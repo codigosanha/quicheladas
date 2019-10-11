@@ -117,32 +117,8 @@
                             </div>
                             <div class="form-group" style="border: 1px solid #f5f5f5;background-color: #f5f5f5; padding: 10px 20px;">
                                 <h3 class="text-center">Categorias Asociadas</h3>
-                                <div class="panel panel-primary">
-                                    <div class="panel-heading">
-                                        <span>Titulo</span>
-                                        <button type="button" class="btn btn-warning btn-sm pull-right" style="margin-top: -5px;">
-                                            <span class="fa fa-pencil"></span>
-                                        </button>
-                                    </div>
-                                    <div class="panel-body"></div>
-                                </div>
-                                <div class="panel panel-primary">
-                                    <div class="panel-heading">
-                                        <span>Titulo</span>
-                                        <button type="button" class="btn btn-warning btn-sm pull-right" style="margin-top: -5px;">
-                                            <span class="fa fa-pencil"></span>
-                                        </button>
-                                    </div>
-                                    <div class="panel-body"></div>
-                                </div>
-                                <div class="panel panel-primary">
-                                    <div class="panel-heading">
-                                        <span>Titulo</span>
-                                        <button type="button" class="btn btn-warning btn-sm pull-right" style="margin-top: -5px;">
-                                            <span class="fa fa-pencil"></span>
-                                        </button>
-                                    </div>
-                                    <div class="panel-body"></div>
+                                <div id="categorias-asociadas">
+                                    
                                 </div>
                             </div>
                             <div class="form-group">
@@ -206,11 +182,12 @@
             <input type="text" class="form-control" id="cantidad_categoria">
         </div>
         <div class="form-group">
-            <table class="table table-bordered">
+            <label for="">Productos Asociar</label>
+            <table class="table table-bordered" id="tbProductos" width="100%">
                 <thead>
                     <tr>
                         <th>Producto</th>
-                        <th>&nbsp;</th>
+                        <th width="10px">&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
