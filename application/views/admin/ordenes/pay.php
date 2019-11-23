@@ -325,7 +325,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger pull-left btn-cerrar" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary btn-print"><span class="fa fa-print"> </span>Imprimir</button>
+        <a href="<?php echo base_url(); ?>movimientos/ventas/printVenta" class="btn btn-primary">Imprimir</a>
       </div>
     </div>
     <!-- /.modal-content -->

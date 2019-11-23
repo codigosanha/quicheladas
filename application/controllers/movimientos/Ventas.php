@@ -213,10 +213,194 @@ class Ventas extends CI_Controller {
 			);
 			$this->load->view("admin/ventas/view2",$data);
 
+			$this->session->set_userdata("venta", $idventa);
+
 		}else{
 			//redirect(base_url()."movimientos/ventas/add");
 			echo "0";
 		}
+	}
+
+	public function printVenta($idventa=false){
+
+		if (!$idventa) {
+			$idventa = $this->session->userdata("venta");
+		}
+		
+		$this->load->library("EscPos.php");
+		$connector = new Escpos\PrintConnectors\WindowsPrintConnector("POS58C");
+		try {
+			$venta = $this->Ventas_model->getVenta($idventa);
+			$detalles = $this->Ventas_model->getDetalle($idventa);
+			
+			/*$connector = new Escpos\PrintConnectors\NetworkPrintConnector("192.168.1.43", 9100);*/
+			/* Information for the receipt */
+			$items = array();
+			$extras_items = array();
+			foreach($detalles as $detalle){
+				
+				$htmlExtras = "";
+				$totalExtras = 0.00;
+				$extras = getPreciosExtras($venta->pedido_id,$detalle->producto_id,$detalle->codigo);
+
+				if (!empty($extras)) {
+					foreach ($extras as $e) {
+						$nombre = $e->nombre;
+
+						$importe = $e->precio * $detalle->cantidad;
+						if ($importe == 0) {
+							$importe = "";
+						}else{
+							$importe = number_format($importe, 2, '.', '');
+						}
+						
+						$htmlExtras .= new item("",$nombre,$importe);;
+						$totalExtras = $totalExtras + $e->precio;
+					}
+					$extras_items[] = $htmlExtras;
+				}else{
+					$extras_items[] = "";
+				}
+				
+				$items[] = new item($detalle->cantidad,$detalle->nombre,number_format($detalle->importe - ($totalExtras * $detalle->cantidad), 2, '.', ''));
+				
+			
+			}
+			
+			$printer = new Escpos\Printer($connector);
+			$printer -> setJustification(Escpos\Printer::JUSTIFY_CENTER);
+			
+			/* Name of shop */
+			$printer -> selectPrintMode();
+			$printer -> setEmphasis(true);
+			$printer -> text("Quicheladas\n");
+			$printer -> setEmphasis(false);
+			$printer -> selectPrintMode();
+			$printer -> text("3a. Calle 1-06 Zona 1, 2do. Nivel Farmacia\n");
+			$printer -> text("Batres Don Paco Santa Cruz del Quiche\n");
+			$printer -> feed();
+			$printer -> setEmphasis(true);
+			$printer -> text($venta->tipocomprobante."\n");
+			$printer -> setEmphasis(false);
+			$printer -> text($venta->serie ." - ".$venta->num_documento."\n");
+			$printer -> feed();
+		
+			$printer -> setJustification(Escpos\Printer::JUSTIFY_LEFT);
+			$pedido = getPedido($venta->pedido_id);
+
+			if ($venta->pedido_id != 0){
+				if ($pedido->tipo_consumo == 1){
+					$infoMesasArea = getMesasFromPedido($venta->pedido_id);
+					$printer -> setEmphasis(true);
+					$printer -> text("Area:");
+					$printer -> setEmphasis(false);
+					$printer -> text($infoMesasArea['area']."\n");
+
+					$printer -> setEmphasis(true);
+					$printer -> text("Mesa(s)");
+					$printer -> setEmphasis(false);
+					$printer -> text(substr($infoMesasArea['mesas'], 0,-1)."\n");
+				}
+				
+			}
+			if ($venta->pedido_id!=0){
+				$printer -> setEmphasis(true);
+				$printer -> text("El consumo es :");
+				$printer -> setEmphasis(false);
+				if ($pedido->tipo_consumo == 1) {
+					$printer -> text("En el Restaurant\n");
+				}else{
+					$printer -> text("Para Llevar\n");
+				}
+			}
+			$printer -> setEmphasis(true);
+			$printer -> text("Estado:");
+			$printer -> setEmphasis(false);
+		
+			if ($venta->estado == "1") {
+				$printer -> text("Pagado\n");
+            }else if($venta->estado == "2"){
+            	$printer -> text("Pendiente\n");
+            }else{
+            	$printer -> text("Anulado\n");
+            } 
+
+            $printer -> setEmphasis(true);
+			$printer -> text("Cliente:");
+			$printer -> setEmphasis(false);
+			$printer -> text($venta->nombre."\n");
+            
+			if ($venta->pedido_id!=0){
+				if ($pedido->tipo_consumo == 2){
+					$printer -> setEmphasis(true);
+					$printer -> text("Telefono:");
+					$printer -> setEmphasis(false);
+					$printer -> text($venta->telefono."\n");
+
+					$printer -> setEmphasis(true);
+					$printer -> text("Direccion:");
+					$printer -> setEmphasis(false);
+					$printer -> text($venta->direccion."\n");
+				}
+			}
+		
+			$printer -> setEmphasis(true);
+			$printer -> text("Fecha y Hora:");
+			$printer -> setEmphasis(false);
+			$printer -> text($venta->fecha." ".$venta->hora."\n");
+
+			$printer -> setEmphasis(true);
+			$printer -> text("Cajero:");
+			$printer -> setEmphasis(false);
+			$printer -> text($venta->usuario."\n");
+            
+			$printer->setEmphasis(true);
+			$printer->text($this->addSpaces('CANT.', 5) . $this->addSpaces('DESCRIPCION', 20) . $this->addSpaces('IMPORTE', 7,LEFT) . "\n");
+			/* Items */
+			$printer -> setEmphasis(false);
+			foreach ($items as $key => $item) {
+			    $printer -> text($item);
+			    $printer -> text($extras_items[$key]);
+			}
+			$printer -> setEmphasis(true);
+			$printer -> text($this->addSpaces('SUBTOTAL',20,LEFT).$this->addSpaces($venta->subtotal,12,LEFT)."\n");
+			$printer -> text($this->addSpaces('DESCUENTO',20,LEFT).$this->addSpaces($venta->descuento,12,LEFT)."\n");
+			$printer -> text($this->addSpaces('TOTAL',20,LEFT).$this->addSpaces($venta->total,12,LEFT)."\n");
+			$printer -> setEmphasis(false);
+			$printer -> feed();
+			$printer -> setJustification(Escpos\Printer::JUSTIFY_CENTER);
+			$printer -> text("Gracias por su preferencia\n");
+			$printer -> text("Si el servicio fue de tu agrado, agradeceremos una Propina\n");
+			$printer -> text("Recuerda visitarnos en:\n");
+			$printer -> text("www.quicheladas.com\n");
+			$printer -> text("Quicheladas y Ceviches\n");
+			
+			$printer -> feed();
+			$printer -> feed();
+			
+			/* Cut the receipt and open the cash drawer */
+			$printer -> cut();
+			$printer -> pulse();
+			$printer -> close();
+			/* A wrapper to do organise item names & prices into columns */
+			$this->session->set_flashdata("success", "Se imprimio la venta ".$venta->serie."-".$venta->num_documento);
+
+			redirect(base_url()."movimientos/ventas");
+		} catch (Exception $e) {
+			//echo "Couldn't print to this printer: " . $e -> getMessage() . "\n";
+			$this->session->set_flashdata("error",$e -> getMessage());
+
+			redirect(base_url()."movimientos/ventas");
+		}
+	}
+
+	protected function addSpaces($text,$length,$dir = RIGHT,$character =' '){
+		if ($dir == LEFT) {
+			return str_pad($text, $length, $character, STR_PAD_LEFT);
+		}else{
+			return str_pad($text, $length); 
+		}
+		
 	}
 
 	protected function generarCupon($total,$fecha){
@@ -668,4 +852,31 @@ class Ventas extends CI_Controller {
 
     }
 
+}
+
+
+class item
+{
+    private $quantity;
+    private $name;
+    private $amount;
+    public function __construct($quantity = '', $name = '', $amount = '')
+    {
+        $this -> quantity = $quantity;
+        $this -> name = $name;
+        $this -> amount = $amount;
+    }
+    
+    public function __toString()
+    {
+        $numberColsQuantity = 3;
+        $numberColsName = 22;
+        $numberColsAmount = 7;
+    
+        $quantity = str_pad($this -> quantity, $numberColsQuantity) ;
+        $name = str_pad($this -> name, $numberColsName) ;
+       
+        $amount = str_pad($this -> amount, $numberColsAmount, ' ', STR_PAD_LEFT);
+        return "$quantity$name$amount\n";
+    }
 }

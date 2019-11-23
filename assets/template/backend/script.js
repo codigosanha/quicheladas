@@ -2033,6 +2033,7 @@ $(document).ready(function () {
 
     $(document).on("click",".btn-view-venta",function(){
         valor_id = $(this).val();
+        $("#btn-print-venta").attr("href", base_url+ "movimientos/ventas/printVenta/"+valor_id);
         $.ajax({
             url: base_url + "movimientos/ventas/view",
             type:"POST",
