@@ -228,10 +228,11 @@ class Ventas extends CI_Controller {
 		}
 		
 		$this->load->library("EscPos.php");
-		$connector = new Escpos\PrintConnectors\WindowsPrintConnector("POS58C");
+		$connector = new Escpos\PrintConnectors\WindowsPrintConnector("POS-58C");
+
 		try {
 			$venta = $this->Ventas_model->getVenta($idventa);
-			$detalles = $this->Ventas_model->getDetalle($idventa);
+			$detalles = $this->Ventas_model->getDetalleVenta($idventa,$venta->pedido_id);
 			
 			/*$connector = new Escpos\PrintConnectors\NetworkPrintConnector("192.168.1.43", 9100);*/
 			/* Information for the receipt */
@@ -266,14 +267,17 @@ class Ventas extends CI_Controller {
 				
 			
 			}
-			
+			$logo = "img/quicheladas3.png";
+			$img_logo = Escpos\EscposImage::load($logo,false);
 			$printer = new Escpos\Printer($connector);
+			
 			$printer -> setJustification(Escpos\Printer::JUSTIFY_CENTER);
 			
 			/* Name of shop */
 			$printer -> selectPrintMode();
 			$printer -> setEmphasis(true);
 			$printer -> text("Quicheladas\n");
+			$printer->bitImage($img_logo);
 			$printer -> setEmphasis(false);
 			$printer -> selectPrintMode();
 			$printer -> text("3a. Calle 1-06 Zona 1, 2do. Nivel Farmacia\n");
