@@ -58,6 +58,34 @@ class Ventas_model extends CI_Model {
 		return $resultados->result();
 	}
 
+	public function getDetalleVenta($idVenta,$pedido_id){
+		$this->db->select("dt.*,p.nombre,p.stock,p.condicion");
+		$this->db->from("detalle_venta dt");
+		$this->db->join("productos p","dt.producto_id = p.id");
+		$this->db->where("dt.venta_id",$idVenta);
+		$query = $this->db->get();
+		$return = array();
+
+	    foreach ($query->result() as $detalle)
+	    {
+	        $return[$detalle->id] = $detalle;
+	        $return[$detalle->id]->precios_extras = $this->getPreciosExtras($pedido_id,$detalle->producto_id,$detalle->codigo); // Get the categories sub categories
+	    }
+
+	    return $return;
+	}
+
+	public function getPreciosExtras($pedido,$producto,$codigo){
+		$this->db->select("e.nombre, e.precio");
+		$this->db->from("orden_producto_extra ope");
+		$this->db->join('extras e',"ope.extra_id = e.id");
+		$this->db->where('ope.orden_id',$pedido);
+		$this->db->where('ope.producto_id',$producto);
+		$this->db->where('ope.codigo',$codigo);
+		$query = $this->db->get();
+		return $query->result();
+	}
+
 	public function getComprobantes(){
 		$resultados = $this->db->get("tipo_comprobante");
 		return $resultados->result();

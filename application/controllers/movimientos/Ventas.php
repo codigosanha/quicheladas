@@ -222,6 +222,30 @@ class Ventas extends CI_Controller {
 	}
 
 	public function printVenta($idventa=false){
+		if (!$idventa) {
+			$idventa = $this->session->userdata("venta");
+		}
+		$venta = $this->Ventas_model->getVenta($idventa);
+	
+		$detalles = $this->Ventas_model->getDetalleVenta($idventa,$venta->pedido_id);
+		$pedido = getPedido($venta->pedido_id);
+		$infoMesasArea = "";
+		if ($venta->pedido_id != 0){
+				if ($pedido->tipo_consumo == 1){
+					$infoMesasArea = getMesasFromPedido($venta->pedido_id);
+				}
+				
+			}
+		$venta = json_encode($venta);
+		$detalles = json_encode($detalles);
+		$pedido = json_encode($pedido);
+		$infoMesasArea = json_encode($infoMesasArea);
+		redirect("http://localhost/print_quicheladas/imprimir/?venta=$venta&detalles=$detalles&infoMesasArea=$infoMesasArea&pedido=$pedido");
+
+		//header("location:http://localhost/test/print");
+	}
+
+	public function printVenta2($idventa=false){
 
 		if (!$idventa) {
 			$idventa = $this->session->userdata("venta");
@@ -242,10 +266,10 @@ class Ventas extends CI_Controller {
 				
 				$htmlExtras = "";
 				$totalExtras = 0.00;
-				$extras = getPreciosExtras($venta->pedido_id,$detalle->producto_id,$detalle->codigo);
+				//$extras = getPreciosExtras($venta->pedido_id,$detalle->producto_id,$detalle->codigo);
 
-				if (!empty($extras)) {
-					foreach ($extras as $e) {
+				if (!empty($detalle->precios_extras)) {
+					foreach ($detalle->precios_extras as $e) {
 						$nombre = $e->nombre;
 
 						$importe = $e->precio * $detalle->cantidad;
