@@ -177,6 +177,7 @@ class Ordenes extends CI_Controller {
 
 				'subcatproductos' => $this->Ordenes_model->subcategorias($pedido_id,1) 
 			);
+			$this->session->set_userdata("idPedido", $pedido_id);
 			$this->load->view("admin/ordenes/view3",$dataP);
 		}else{
 			redirect(base_url()."movimientos/ordenes/add");
@@ -697,5 +698,156 @@ class Ordenes extends CI_Controller {
 			'extra' => $data 
 		));
 
+	}
+
+	public function printOrden1($idPedido=false){
+		if (!$idPedido) {
+			$idPedido = $this->session->userdata("venta");
+		}
+		$venta = $this->Ventas_model->getVenta($idPedido);
+
+
+	
+		$detalles = $this->Ventas_model->getDetalleVenta($idventa,$venta->pedido_id);
+		$pedido = getPedido($venta->pedido_id);
+		$infoMesasArea = "";
+		if ($venta->pedido_id != 0){
+				if ($pedido->tipo_consumo == 1){
+					$infoMesasArea = getMesasFromPedido($venta->pedido_id);
+				}
+				
+			}
+		$venta = json_encode($venta);
+		$detalles = json_encode($detalles);
+		$pedido = json_encode($pedido);
+		$infoMesasArea = json_encode($infoMesasArea);
+		redirect("http://localhost/print_quicheladas/imprimir/?venta=$venta&detalles=$detalles&infoMesasArea=$infoMesasArea&pedido=$pedido");
+
+		//header("location:http://localhost/test/print");
+	}
+
+	public function printOden($idPedido=false){
+
+		if (!$idPedido) {
+			$idPedido = $this->session->userdata("idPedido");
+		}
+		
+		$this->load->library("EscPos.php");
+		$connector = new Escpos\PrintConnectors\WindowsPrintConnector("POS-58C");
+
+		try {
+			$infoPedido = getPedido($pedido);
+			$mesas = $this->Ordenes_model->getPedidosMesas($idPedido);
+			$nummesas = "";
+		    foreach ($mesas as $mesa){
+		        $nummesas .= $mesa->numero.","; 
+		    } 
+
+			$subcatproductos = $this->Ordenes_model->subcategorias($idPedido,1);
+			
+			/*$connector = new Escpos\PrintConnectors\NetworkPrintConnector("192.168.1.43", 9100);*/
+			/* Information for the receipt */
+			$items = array();
+			$extras_items = array();
+			foreach($detalles as $detalle){
+				
+				$htmlExtras = "";
+				$totalExtras = 0.00;
+				//$extras = getPreciosExtras($venta->pedido_id,$detalle->producto_id,$detalle->codigo);
+
+				if (!empty($detalle->precios_extras)) {
+					foreach ($detalle->precios_extras as $e) {
+						$nombre = $e->nombre;
+
+						$importe = $e->precio * $detalle->cantidad;
+						if ($importe == 0) {
+							$importe = "";
+						}else{
+							$importe = number_format($importe, 2, '.', '');
+						}
+						
+						$htmlExtras .= new item("",$nombre,$importe);;
+						$totalExtras = $totalExtras + $e->precio;
+					}
+					$extras_items[] = $htmlExtras;
+				}else{
+					$extras_items[] = "";
+				}
+				
+				$items[] = new item($detalle->cantidad,$detalle->nombre,number_format($detalle->importe - ($totalExtras * $detalle->cantidad), 2, '.', ''));
+				
+			
+			}
+			$logo = "img/quicheladas3.png";
+			$img_logo = Escpos\EscposImage::load($logo,false);
+			$printer = new Escpos\Printer($connector);
+			
+			$printer -> setJustification(Escpos\Printer::JUSTIFY_CENTER);
+			
+			/* Name of shop */
+			$printer -> selectPrintMode();
+			$printer -> setEmphasis(true);
+			$printer -> text("Quicheladas\n");
+			$printer->bitImage($img_logo);
+			$printer -> setEmphasis(false);
+			$printer -> selectPrintMode();
+			$printer -> text("3a. Calle 1-06 Zona 1, 2do. Nivel Farmacia\n");
+			$printer -> text("Batres Don Paco Santa Cruz del Quiche\n");
+			$printer -> feed();
+			$printer -> setEmphasis(true);
+			$printer -> text("El consumo es para:");
+			$printer -> setEmphasis(false);
+			if ($infoPedido->tipo_consumo == '1') {
+				$printer -> text("Comer en el Restaurant");
+			}else{
+				$printer -> text("Llevar");
+			}
+			$printer -> feed();
+			$printer -> setEmphasis(true);
+			$printer -> text("Mesas:");
+			$printer -> setEmphasis(false);
+			$printer -> text(substr($nummesas, 0, -1));
+			$printer -> feed();
+		
+			$printer -> setJustification(Escpos\Printer::JUSTIFY_LEFT);
+		
+			$printer->setEmphasis(true);
+			$printer->text($this->addSpaces('CANT.', 5) . $this->addSpaces('DESCRIPCION', 20) . $this->addSpaces('IMPORTE', 7,LEFT) . "\n");
+			/* Items */
+			$printer -> setEmphasis(false);
+			foreach ($items as $key => $item) {
+			    $printer -> text($item);
+			    $printer -> text($extras_items[$key]);
+			}
+			$printer -> setEmphasis(true);
+			$printer -> text($this->addSpaces('SUBTOTAL',20,LEFT).$this->addSpaces($venta->subtotal,12,LEFT)."\n");
+			$printer -> text($this->addSpaces('DESCUENTO',20,LEFT).$this->addSpaces($venta->descuento,12,LEFT)."\n");
+			$printer -> text($this->addSpaces('TOTAL',20,LEFT).$this->addSpaces($venta->total,12,LEFT)."\n");
+			$printer -> setEmphasis(false);
+			$printer -> feed();
+			$printer -> setJustification(Escpos\Printer::JUSTIFY_CENTER);
+			$printer -> text("Gracias por su preferencia\n");
+			$printer -> text("Si el servicio fue de tu agrado, agradeceremos una Propina\n");
+			$printer -> text("Recuerda visitarnos en:\n");
+			$printer -> text("www.quicheladas.com\n");
+			$printer -> text("Quicheladas y Ceviches\n");
+			
+			$printer -> feed();
+			$printer -> feed();
+			
+			/* Cut the receipt and open the cash drawer */
+			$printer -> cut();
+			$printer -> pulse();
+			$printer -> close();
+			/* A wrapper to do organise item names & prices into columns */
+			$this->session->set_flashdata("success", "Se imprimio la venta ".$venta->serie."-".$venta->num_documento);
+
+			redirect(base_url()."movimientos/ventas");
+		} catch (Exception $e) {
+			//echo "Couldn't print to this printer: " . $e -> getMessage() . "\n";
+			$this->session->set_flashdata("error",$e -> getMessage());
+
+			redirect(base_url()."movimientos/ventas");
+		}
 	}
 }
