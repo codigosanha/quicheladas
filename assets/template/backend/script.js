@@ -1136,6 +1136,7 @@ $(document).ready(function () {
             data: {idpedido:idpedido},
             success:function(resp){
                 $("#modal-venta .modal-body").html(resp);
+                $("#btn-print-orden").attr("href",base_url + "movimientos/ordenes/printOrden/"+idpedido);
             }
         });
     });

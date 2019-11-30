@@ -212,9 +212,31 @@ class Ordenes_model extends CI_Model {
 			$this->db->where("pp.updated", $modificado);
 		}
 		$this->db->order_by("pp.estado");
+		$query = $this->db->get();
 
-		$resultados = $this->db->get();
-		return $resultados->result();
+		$return = array();
+
+	    foreach ($query->result() as $producto)
+	    {
+	        $return[$producto->id] = $producto;
+	        $return[$producto->id]->extras = $this->getPreciosExtras($producto->pedido_id,$producto->producto_id,$producto->codigo); // Get the categories sub categories
+	    }
+
+	    return $return;
+	}
+
+	public function getPreciosExtras($pedido, $producto, $codigo)
+	{
+	   
+		$this->db->select("e.nombre, e.precio");
+		$this->db->from("orden_producto_extra ope");
+		$this->db->join('extras e',"ope.extra_id = e.id");
+		$this->db->where('ope.orden_id',$pedido);
+		$this->db->where('ope.producto_id',$producto);
+		$this->db->where('ope.codigo',$codigo);
+		$query = $this->db->get();
+		return $query->result();
+	 
 	}
 
 	public function setUpdated($idpedido, $data){

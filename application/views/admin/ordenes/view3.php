@@ -14,7 +14,9 @@
         3a. Calle 1-06 Zona 1, 2do. Nivel Farmacia Batres Don Paco
         Santa Cruz del Quiche
     </div>
-    <?php $infoPedido = getPedido($pedido);?>
+    <?php $infoPedido = getPedido($pedido);
+   
+    ?>
     <div class="form-group text-center">
         <p><b>El consumo es para: </b><?php echo $infoPedido->tipo_consumo == '1' ? 'Comer en el Restaurant':'Llevar'?></p> <br>
         <?php if ($infoPedido->tipo_consumo == 1): ?>

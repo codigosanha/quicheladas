@@ -236,11 +236,13 @@ class Ventas extends CI_Controller {
 				}
 				
 			}
+
+		$ticket = "venta";
 		$venta = json_encode($venta);
 		$detalles = json_encode($detalles);
 		$pedido = json_encode($pedido);
 		$infoMesasArea = json_encode($infoMesasArea);
-		redirect("http://localhost/print_quicheladas/imprimir/?venta=$venta&detalles=$detalles&infoMesasArea=$infoMesasArea&pedido=$pedido");
+		redirect("http://localhost/print_quicheladas/imprimir/?venta=$venta&detalles=$detalles&infoMesasArea=$infoMesasArea&pedido=$pedido&&ticket=$ticket");
 
 		//header("location:http://localhost/test/print");
 	}
@@ -279,7 +281,7 @@ class Ventas extends CI_Controller {
 							$importe = number_format($importe, 2, '.', '');
 						}
 						
-						$htmlExtras .= new item("",$nombre,$importe);;
+						$htmlExtras .= new item("",$nombre,$importe);
 						$totalExtras = $totalExtras + $e->precio;
 					}
 					$extras_items[] = $htmlExtras;

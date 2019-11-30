@@ -700,90 +700,105 @@ class Ordenes extends CI_Controller {
 
 	}
 
-	public function printOrden1($idPedido=false){
+	public function printOrden($idPedido=false){
+		
 		if (!$idPedido) {
-			$idPedido = $this->session->userdata("venta");
+			$idPedido = $this->session->userdata("idPedido");
 		}
-		$venta = $this->Ventas_model->getVenta($idPedido);
 
+		$infoPedido = getPedido($idPedido);
+		$mesas = $this->Ordenes_model->getPedidosMesas($idPedido);
+		$nummesas = "";
+	    foreach ($mesas as $mesa){
+	        $nummesas .= $mesa->numero.","; 
+	    } 
 
-	
-		$detalles = $this->Ventas_model->getDetalleVenta($idventa,$venta->pedido_id);
-		$pedido = getPedido($venta->pedido_id);
-		$infoMesasArea = "";
-		if ($venta->pedido_id != 0){
-				if ($pedido->tipo_consumo == 1){
-					$infoMesasArea = getMesasFromPedido($venta->pedido_id);
-				}
-				
-			}
-		$venta = json_encode($venta);
-		$detalles = json_encode($detalles);
-		$pedido = json_encode($pedido);
-		$infoMesasArea = json_encode($infoMesasArea);
-		redirect("http://localhost/print_quicheladas/imprimir/?venta=$venta&detalles=$detalles&infoMesasArea=$infoMesasArea&pedido=$pedido");
+		$subcatproductos = $this->Ordenes_model->subcategorias($idPedido,1);
+
+		$infoPedido = json_encode($infoPedido);
+		
+		$subcatproductos = json_encode($subcatproductos);
+
+		$ticket = "orden";
+
+		redirect("http://localhost/print_quicheladas/imprimir/?infoPedido=$infoPedido&nummesas=$nummesas&subcatproductos=$subcatproductos&&ticket=$ticket");
 
 		//header("location:http://localhost/test/print");
 	}
 
-	public function printOden($idPedido=false){
+	public function printOden1($idPedido=false){
 
 		if (!$idPedido) {
 			$idPedido = $this->session->userdata("idPedido");
 		}
-		
+
+		$infoPedido = getPedido($idPedido);
+		$mesas = $this->Ordenes_model->getPedidosMesas($idPedido);
+		$nummesas = "";
+	    foreach ($mesas as $mesa){
+	        $nummesas .= $mesa->numero.","; 
+	    } 
+
+		$subcatproductos = $this->Ordenes_model->subcategorias($idPedido,1);
+
+		$dataPrint = array();
+		$total = 0;
+
+		foreach($subcatproductos as $sp){
+			$data['nombre'] = $sp->nombre;
+            $dataItem = [];
+            foreach ($sp->subs as $p){
+                $cantidad = $p->cantidad - $p->pagados;
+
+                $item = new item($p->nombre,$cantidad,number_format($p->precio, 2, '.', ''),number_format(($cantidad * $p->precio), 2, '.', ''));
+
+                $total = $total + ($cantidad * $p->precio);
+                
+                $htmlExtras = "";
+                $totalExtras = 0.00;
+                //$extras = getPreciosExtras($p->pedido_id,$p->producto_id,$p->codigo);
+
+                if (!empty($p->extras)) {
+                    foreach ($p->extras as $e) {
+                        $nombre = $e->nombre;
+                        
+                        if ($e->precio == "0.00") {
+                            $precio = "";
+                        }else{
+                            $precio = $e->precio;
+                        }
+                        
+                        $importe = $e->precio * $cantidad;
+                        if ($importe == 0) {
+                            $importe ='';
+                        }else {
+                            $importe = number_format($importe, 2, '.', '');
+                        }
+                        $htmlExtras .= new item($nombre,$cantidad,$precio,$importe);
+                        $totalExtras = $totalExtras + ($e->precio * $cantidad);
+                    }
+                }
+
+                $dataItem[] = [$item,$htmlExtras];
+
+                
+
+                  
+                $total = $total + $totalExtras;
+               
+            }
+            $data['item'] = $dataItem;
+            $dataPrint[] = $data;
+        }
+
 		$this->load->library("EscPos.php");
-		$connector = new Escpos\PrintConnectors\WindowsPrintConnector("POS-58C");
+		$connector = new Escpos\PrintConnectors\WindowsPrintConnector("POS58C");
 
 		try {
-			$infoPedido = getPedido($pedido);
-			$mesas = $this->Ordenes_model->getPedidosMesas($idPedido);
-			$nummesas = "";
-		    foreach ($mesas as $mesa){
-		        $nummesas .= $mesa->numero.","; 
-		    } 
-
-			$subcatproductos = $this->Ordenes_model->subcategorias($idPedido,1);
-			
-			/*$connector = new Escpos\PrintConnectors\NetworkPrintConnector("192.168.1.43", 9100);*/
-			/* Information for the receipt */
-			$items = array();
-			$extras_items = array();
-			foreach($detalles as $detalle){
-				
-				$htmlExtras = "";
-				$totalExtras = 0.00;
-				//$extras = getPreciosExtras($venta->pedido_id,$detalle->producto_id,$detalle->codigo);
-
-				if (!empty($detalle->precios_extras)) {
-					foreach ($detalle->precios_extras as $e) {
-						$nombre = $e->nombre;
-
-						$importe = $e->precio * $detalle->cantidad;
-						if ($importe == 0) {
-							$importe = "";
-						}else{
-							$importe = number_format($importe, 2, '.', '');
-						}
-						
-						$htmlExtras .= new item("",$nombre,$importe);;
-						$totalExtras = $totalExtras + $e->precio;
-					}
-					$extras_items[] = $htmlExtras;
-				}else{
-					$extras_items[] = "";
-				}
-				
-				$items[] = new item($detalle->cantidad,$detalle->nombre,number_format($detalle->importe - ($totalExtras * $detalle->cantidad), 2, '.', ''));
-				
-			
-			}
 			$logo = "img/quicheladas3.png";
 			$img_logo = Escpos\EscposImage::load($logo,false);
 			$printer = new Escpos\Printer($connector);
-			
 			$printer -> setJustification(Escpos\Printer::JUSTIFY_CENTER);
-			
 			/* Name of shop */
 			$printer -> selectPrintMode();
 			$printer -> setEmphasis(true);
@@ -810,19 +825,25 @@ class Ordenes extends CI_Controller {
 			$printer -> feed();
 		
 			$printer -> setJustification(Escpos\Printer::JUSTIFY_LEFT);
-		
 			$printer->setEmphasis(true);
-			$printer->text($this->addSpaces('CANT.', 5) . $this->addSpaces('DESCRIPCION', 20) . $this->addSpaces('IMPORTE', 7,LEFT) . "\n");
+			$printer->text($this->addSpaces('PRODUCTO', 14) . $this->addSpaces('CANT.', 3) . $this->addSpaces('PRECIO', 6,LEFT) . $this->addSpaces('IMPORTE', 7,LEFT) . "\n");
 			/* Items */
 			$printer -> setEmphasis(false);
-			foreach ($items as $key => $item) {
-			    $printer -> text($item);
+			foreach ($dataPrint as $key => $value) {
+				$printer -> setJustification(Escpos\Printer::JUSTIFY_CENTER);
+				$printer -> setEmphasis(true);
+			    $printer -> text($value['nombre']."\n");
+			    $printer -> setEmphasis(false);
+			    $printer -> setJustification(Escpos\Printer::JUSTIFY_LEFT);
+			    foreach ($value['item'] as $key2 => $value2) {
+					$printer -> text($value2[0]);
+					$printer -> text($value2[1]);
+				}
 			    $printer -> text($extras_items[$key]);
 			}
 			$printer -> setEmphasis(true);
-			$printer -> text($this->addSpaces('SUBTOTAL',20,LEFT).$this->addSpaces($venta->subtotal,12,LEFT)."\n");
-			$printer -> text($this->addSpaces('DESCUENTO',20,LEFT).$this->addSpaces($venta->descuento,12,LEFT)."\n");
-			$printer -> text($this->addSpaces('TOTAL',20,LEFT).$this->addSpaces($venta->total,12,LEFT)."\n");
+		
+			$printer -> text($this->addSpaces('TOTAL',18,LEFT).$this->addSpaces(number_format($total, 2, '.', ''),12,LEFT)."\n");
 			$printer -> setEmphasis(false);
 			$printer -> feed();
 			$printer -> setJustification(Escpos\Printer::JUSTIFY_CENTER);
@@ -840,14 +861,54 @@ class Ordenes extends CI_Controller {
 			$printer -> pulse();
 			$printer -> close();
 			/* A wrapper to do organise item names & prices into columns */
-			$this->session->set_flashdata("success", "Se imprimio la venta ".$venta->serie."-".$venta->num_documento);
+			$this->session->set_flashdata("success", "Se imprimio el pedido ".$idPedido);
 
-			redirect(base_url()."movimientos/ventas");
+			redirect(base_url()."movimientos/ordenes");
 		} catch (Exception $e) {
 			//echo "Couldn't print to this printer: " . $e -> getMessage() . "\n";
 			$this->session->set_flashdata("error",$e -> getMessage());
 
-			redirect(base_url()."movimientos/ventas");
+			redirect(base_url()."movimientos/ordenes");
 		}
 	}
+
+		protected function addSpaces($text,$length,$dir = RIGHT,$character =' '){
+		if ($dir == LEFT) {
+			return str_pad($text, $length, $character, STR_PAD_LEFT);
+		}else{
+			return str_pad($text, $length); 
+		}
+		
+	}
+}
+
+
+class item
+{
+    private $quantity;
+    private $name;
+    private $amount;
+    private $price;
+    public function __construct($name = '',$quantity = '',$price='' , $amount = '')
+    {
+    	$this -> price = $price;
+        $this -> quantity = $quantity;
+        $this -> name = $name;
+        $this -> amount = $amount;
+    }
+    
+    public function __toString()
+    {
+        $numberColsQuantity = 3;
+        $numberColsName = 18;
+        $numberColsAmount = 5;
+    	$numberColsPrice = 6;
+
+    	$price = str_pad($this -> price, $numberColsPrice) ;
+        $quantity = str_pad($this -> quantity, $numberColsQuantity) ;
+        $name = str_pad($this -> name, $numberColsName) ;
+       
+        $amount = str_pad($this -> amount, $numberColsAmount, ' ', STR_PAD_LEFT);
+        return "$name$quantity$price$amount\n";
+    }
 }
