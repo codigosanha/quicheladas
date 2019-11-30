@@ -339,6 +339,8 @@ class Ordenes extends CI_Controller {
 			$this->saveExtrasProductoOrden($extras,$idPedido);
 		}
 
+		$this->session->set_userdata("idPedido", $idPedido);
+
 		$dataP  = array(
 			'mesas' => $this->Ordenes_model->getPedidosMesas($idPedido),
 			'pedido' => $idPedido,
@@ -704,6 +706,9 @@ class Ordenes extends CI_Controller {
 		
 		if (!$idPedido) {
 			$idPedido = $this->session->userdata("idPedido");
+			$subcatproductos = $this->Ordenes_model->subcategorias($idPedido,1);
+		}else{
+			$subcatproductos = $this->Ordenes_model->subcategorias($idPedido);
 		}
 
 		$infoPedido = getPedido($idPedido);
@@ -713,7 +718,7 @@ class Ordenes extends CI_Controller {
 	        $nummesas .= $mesa->numero.","; 
 	    } 
 
-		$subcatproductos = $this->Ordenes_model->subcategorias($idPedido,1);
+		
 
 		$infoPedido = json_encode($infoPedido);
 		
