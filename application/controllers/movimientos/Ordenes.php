@@ -380,18 +380,51 @@ class Ordenes extends CI_Controller {
 
 
 	public function pay($id){
-		$data  = array(
-			'orden' => $this->Ordenes_model->getPedido($id),
-			'productos' => $this->Ordenes_model->getPedidosProductos($id),
-			"clientes" => $this->Clientes_model->getSoloClientes(),
-			"tipocomprobantes" => $this->Ventas_model->getComprobantes(),
-			"comprobantePredeterminado" => $this->Ordenes_model->comprobantePredeterminado(),
-			"tarjetas" => $this->Tarjetas_model->getTarjetas(),
-		);
-		$this->load->view("layouts/header");
-		$this->load->view("layouts/aside");
-		$this->load->view("admin/ordenes/pay",$data);
-		$this->load->view("layouts/footer");
+		$orden = $this->Ordenes_model->getPedido($id);
+		if ($orden->estado) {
+			$data  = array(
+				'orden' => $orden,
+				'productos' => $this->Ordenes_model->getPedidosProductos($id),
+				"clientes" => $this->Clientes_model->getSoloClientes(),
+				"tipocomprobantes" => $this->Ventas_model->getComprobantes(),
+				"comprobantePredeterminado" => $this->Ordenes_model->comprobantePredeterminado(),
+				"tarjetas" => $this->Tarjetas_model->getTarjetas(),
+			);
+			$this->load->view("layouts/header");
+			$this->load->view("layouts/aside");
+			$this->load->view("admin/ordenes/pay",$data);
+			$this->load->view("layouts/footer");
+		}else{
+			redirect(base_url()."movimientos/ordenes");
+		}
+		
+	}
+
+	public function printVenta($idventa=false){
+		if (!$idventa) {
+			$idventa = $this->session->userdata("venta");
+		}
+		$venta = $this->Ventas_model->getVenta($idventa);
+	
+		$detalles = $this->Ventas_model->getDetalleVenta($idventa,$venta->pedido_id);
+		$pedido = getPedido($venta->pedido_id);
+		$infoMesasArea = "";
+		if ($venta->pedido_id != 0){
+				if ($pedido->tipo_consumo == 1){
+					$infoMesasArea = getMesasFromPedido($venta->pedido_id);
+				}
+				
+			}
+
+		$ticket = "venta";
+		$from = "ordenes";
+		$venta = json_encode($venta);
+		$detalles = json_encode($detalles);
+		$pedido = json_encode($pedido);
+		$infoMesasArea = json_encode($infoMesasArea);
+		redirect("http://localhost/print_quicheladas/imprimir/?venta=$venta&detalles=$detalles&infoMesasArea=$infoMesasArea&pedido=$pedido&&ticket=$ticket&from=$from");
+
+		//header("location:http://localhost/test/print");
 	}
 
 	public function view(){

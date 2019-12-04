@@ -238,11 +238,12 @@ class Ventas extends CI_Controller {
 			}
 
 		$ticket = "venta";
+		$from = "ventas";
 		$venta = json_encode($venta);
 		$detalles = json_encode($detalles);
 		$pedido = json_encode($pedido);
 		$infoMesasArea = json_encode($infoMesasArea);
-		redirect("http://localhost/print_quicheladas/imprimir/?venta=$venta&detalles=$detalles&infoMesasArea=$infoMesasArea&pedido=$pedido&&ticket=$ticket");
+		redirect("http://localhost/print_quicheladas/imprimir/?venta=$venta&detalles=$detalles&infoMesasArea=$infoMesasArea&pedido=$pedido&&ticket=$ticket&from=$from");
 
 		//header("location:http://localhost/test/print");
 	}
@@ -554,6 +555,7 @@ class Ventas extends CI_Controller {
 				"detalles" =>$this->Ventas_model->getDetalle($idventa)
 			);
 			$this->load->view("admin/ventas/view2",$data);
+			$this->session->set_userdata("venta", $idventa);
 
 		}else{
 			//redirect(base_url()."movimientos/ventas/add");
