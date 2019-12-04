@@ -71,7 +71,7 @@ class Caja_model extends CI_Model {
 
 	public function getDescuentos($id){
 		$this->db->where("caja_id", $id);
-		$this->db->where("descuento >", "0");
+		$this->db->where("descuento >", "0.00");
 		$resultados = $this->db->get("ventas");
 		return $resultados->result();
 	}
