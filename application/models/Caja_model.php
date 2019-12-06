@@ -88,4 +88,31 @@ class Caja_model extends CI_Model {
 		$resultados = $this->db->get("ventas");
 		return $resultados->result();
 	}
+
+	public function getTarjetas($caja_id){
+		$resultados = $this->db->get("tarjetas");
+		$return = array();
+
+	    foreach ($resultados->result() as $tarjeta)
+	    {
+	        $return[$tarjeta->id] = $tarjeta;
+	        $return[$tarjeta->id]->totalTarjeta = $this->getTotalTarjeta($caja_id,$tarjeta->id); // Get the categories sub categories
+	    }
+
+	    return $return;
+	}
+
+	public function getTotalTarjeta($idCaja,$idTarjeta)
+		{
+			$this->db->select('SUM(monto_tarjeta) as total');
+			$this->db->from('ventas');
+			$this->db->where('caja_id',$idCaja);
+			$this->db->where('tarjeta_id',$idTarjeta);
+			$this->db->group_by('caja_id');
+			$query = $this->db->get();
+			if ($query->num_rows() > 0 ) {
+				return number_format($query->row()->total, 2, '.', '');
+			}
+			return '0.00';
+		}
 }

@@ -75,7 +75,7 @@ class Apertura_cierre extends CI_Controller {
 		);
 
 		if ($this->Caja_model->update($idCaja,$data)) {
-
+			$this->session->set_userdata("idCaja",$idCaja);
 			$this->session->set_flashdata("cierre",$idCaja);
 			redirect(base_url()."caja/apertura_cierre");
 		}
@@ -134,5 +134,34 @@ class Apertura_cierre extends CI_Controller {
 		);
 		$this->Categorias_model->update($id,$data);
 		echo "mantenimiento/categorias";
+	}
+
+
+	public function printCaja($idCaja = false){
+		if (!$idCaja) {
+			$idCaja = $this->session->userdata("idCaja");
+		}
+		$caja = $this->Caja_model->getCaja($idCaja);
+		$cajero_nombre = getUsuario($caja->usuario_id)->nombres;
+		$tarjetas = $this->Caja_model->getTarjetas($idCaja);
+		$descuentos = $this->Caja_model->getDescuentos($idCaja);
+		$gastos = $this->Caja_model->getGastos($idCaja);
+		$creditos = $this->Caja_model->getCreditos($idCaja);
+		$total_creditos = getMontos("monto_credito",$idCaja);
+		$total_descuentos = getTotalDescuentos($idCaja);
+		$total_efectivo = getMontos('monto_efectivo',$idCaja);
+		$total_ventas = getMontoVentas($idCaja);
+		$total_gastos = getGastos($idCaja);
+		$numero_ventas = getNumeroVentas($idCaja);
+
+
+		$ticket = "caja";
+		$from = "caja";
+		$caja = json_encode($caja);
+		$tarjetas = json_encode($tarjetas);
+		$gastos = json_encode($gastos);
+		$descuentos = json_encode($descuentos);
+		$creditos = json_encode($creditos);
+		redirect("http://localhost/print_quicheladas/imprimir/?caja=$caja&cajero_nombre=$cajero_nombre&tarjetas=$tarjetas&descuentos=$descuentos&gastos=$gastos&creditos=$creditos&total_creditos=$total_creditos&total_descuentos=$total_descuentos&total_efectivo=$total_efectivo&total_ventas=$total_ventas&total_gastos=$total_gastos&numero_ventas=$numero_ventas&ticket=$ticket&from=$caja");
 	}
 }

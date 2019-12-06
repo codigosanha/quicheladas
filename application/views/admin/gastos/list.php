@@ -41,7 +41,7 @@
                                         <th>Nombre  de Gasto</th>
                                         <th>Monto</th>
                                         <th>Observaciones</th>
-                                        <th>Opciones</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -55,11 +55,7 @@
                                                 <td><?php echo $gasto->nombre;?></td>
                                                 <td><?php echo $gasto->monto;?></td>
                                                 <td><?php echo $gasto->observaciones;?></td>
-                                                <td>
-                                                    <button type="button" class="btn btn-danger btn-sm btn-delete-gasto" data-toggle="modal" data-target="#modal-default" value="<?php echo $gasto->id ?>">
-                                                        Eliminar
-                                                    </button>
-                                                </td>
+                                                
                                             </tr>
                                             <?php $i++; ?>
                                         <?php endforeach;?>

@@ -8,6 +8,8 @@ class Tarjetas_model extends CI_Model {
 		return $resultados->result();
 	}
 
+	
+
 	public function save($data){
 		return $this->db->insert("tarjetas",$data);
 	}

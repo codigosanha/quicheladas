@@ -52,7 +52,7 @@ $(document).ready(function () {
                     dataExtra = data.extra.id +"*"+data.extra.nombre +"*"+data.extra.precio;
                     html = '<div class="col-md-3 form-group">';
                     html += '<button class="btn btn-success btn-block check-extra" value="'+dataExtra+'">';
-                    html += data.extra.nombre+' <br> S/. '+data.extra.precio;
+                    html += data.extra.nombre+' <br> Q. '+data.extra.precio;
                     html += '</button>';
                     html += '</div>';
                     $("#extras-registrados").append(html);
@@ -223,6 +223,7 @@ $(document).ready(function () {
             url: base_url + "caja/apertura_cierre/viewCorte/" + idCaja,
             type: "POST",
             success: function(resp){
+                $("#btn-print-caja").attr("href", base_url + "caja/apertura_cierre/printCaja/"+idCaja);
                 $("#modal-corte .modal-body").html(resp);
             }
         });
@@ -684,7 +685,7 @@ $(document).ready(function () {
                     }
                     html += '<div class="col-md-3 form-group">';
                     html += '<button class="btn '+checked+' btn-block check-extra" value="'+data+'">';
-                    html += value.nombre+' <br> S/. '+value.precio;
+                    html += value.nombre+' <br> Q. '+value.precio;
                     html += '</button>';
                     html += '</div>';
                 });
@@ -1875,6 +1876,11 @@ $(document).ready(function () {
         "language": traductorDataTables,
     });
     $('.example1').DataTable({
+        "language": traductorDataTables,
+    });
+    $('#tbCaja').DataTable({
+        "pageLength": 25,
+        "order": [[ 0,"desc" ]],
         "language": traductorDataTables,
     });
 

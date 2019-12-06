@@ -48,9 +48,10 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="table-responsive">
-                        <table id="example1" class="table table-bordered table-hover">
+                        <table id="tbCaja" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
+                                    <th>Opciones</th>
                                     <th>Usuario </th>
                                     <th>Fecha y Hora de Apertura de Caja</th>    
                                     <th>Fecha y Hora de Cierre de Caja</th>  
@@ -63,13 +64,30 @@
                                     <th>Crédito(Ventas al Crédito sin ninguna garantía)</th>
                                     <th>Efectivo en Caja  </th>  
                                     <th>Observaciones  </th> 
-                                    <th>Opciones</th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php if(!empty($cajas)):?>
                                     <?php foreach($cajas as $caja):?>
                                         <tr>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <?php if ($caja->estado == 0): ?>
+                                                        <button type="button" class="btn btn-primary btn-view-corte-caja" data-toggle="modal" data-target="#modal-corte" value="<?php echo $caja->id;?>">
+                                                            <span class="fa fa-search"></span>
+                                                        </button>
+                                                    <?php endif ?>
+                                                    <?php if ($this->session->userdata("rol")==1 || $this->session->userdata("id") == $caja->usuario_id): ?>
+                                                        <?php if ($caja->estado == 1): ?>
+                                                            <button type="button" class="btn btn-danger btn-flat btn-cerrar-caja" value="<?php echo $caja->id;?>">
+                                                                <i class="fa fa-times"></i>
+                                                                Cerrar Caja
+                                                            </button>
+                                                        <?php endif ?>
+                                                    <?php endif ?>
+                                                </div>
+                                            </td>
                                             <td><?php echo getUsuario($caja->usuario_id)->username;?></td>
                                             <td><?php echo $caja->fecha_apertura;?></td>
                                             <td><?php echo $caja->fecha_cierre;?></td>
@@ -88,23 +106,7 @@
                                             <?php $efectivo = $caja->monto_apertura + $monto_efectivo - $gastos?>
                                             <td><?php echo number_format($efectivo, 2, '.', '');?></td>
                                             <td><?php echo $caja->observacion;?></td>
-                                            <td>
-                                                <div class="btn-group">
-                                                    <?php if ($caja->estado == 0): ?>
-                                                        <button type="button" class="btn btn-primary btn-view-corte-caja" data-toggle="modal" data-target="#modal-corte" value="<?php echo $caja->id;?>">
-                                                            <span class="fa fa-search"></span>
-                                                        </button>
-                                                    <?php endif ?>
-                                                    <?php if ($this->session->userdata("rol")==1 || $this->session->userdata("id") == $caja->usuario_id): ?>
-                                                        <?php if ($caja->estado == 1): ?>
-                                                            <button type="button" class="btn btn-danger btn-flat btn-cerrar-caja" value="<?php echo $caja->id;?>">
-                                                                <i class="fa fa-times"></i>
-                                                                Cerrar Caja
-                                                            </button>
-                                                        <?php endif ?>
-                                                    <?php endif ?>
-                                                </div>
-                                            </td>
+                                            
                                         </tr>
                                     <?php endforeach;?>
                                 <?php endif;?>
@@ -194,7 +196,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger btn-cerrar-modal-vd pull-left" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary btn-print"><span class="fa fa-print"> </span>Imprimir</button>
+        <a href="<?php echo base_url(); ?>caja/apertura_cierre/printCaja" class="btn btn-primary" id="btn-print-caja"><span class="fa fa-print"> </span>Imprimir</a>
       </div>
       
     </div>
