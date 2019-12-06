@@ -131,8 +131,8 @@ $(document).ready(function () {
             });
         }
     });
-    if ( $("#listado-pedidos").length ) {
-        cargarPedidos();
+    if ( $("#nuevosPedidos").length ) {
+        cargarPedidosNuevos();
     }
     
     if ( $("#listado-ordenes").length ) {
@@ -643,19 +643,19 @@ $(document).ready(function () {
     function sumaExtra(tr_id){
         if ($("#"+tr_id+" input.totalE").length) {
             totalE = 0;
-            $("#extras-registrados .btn-warning").each(function(){
+            $("#extras-registrados .btn-success").each(function(){
                 data = $(this).val();
                 info = data.split("*");
                 totalE = totalE + Number(info[2]);
             });
             $("#"+tr_id+" input.totalE").val(totalE);
-            precio = Number($("#"+tr_id).children("td:eq(2)").text());
+            precio = Number($("#"+tr_id).children("td:eq(1)").text());
             
-            cantidad =  Number($("#"+tr_id).children("td:eq(4)").find("input").val());
-            descuento =  Number($("#"+tr_id).children("td:eq(5)").find("input").val());
+            cantidad =  Number($("#"+tr_id).children("td:eq(3)").find("input").val());
+            descuento =  Number($("#"+tr_id).children("td:eq(4)").find("input").val());
             nuevoImporte = (cantidad * precio) + (cantidad * totalE) - descuento;
-            $("#"+tr_id).children("td:eq(6)").find("input").val(nuevoImporte.toFixed(2));
-            $("#"+tr_id).children("td:eq(6)").find("p").text(nuevoImporte.toFixed(2));
+            $("#"+tr_id).children("td:eq(5)").find("input").val(nuevoImporte.toFixed(2));
+            $("#"+tr_id).children("td:eq(5)").find("p").text(nuevoImporte.toFixed(2));
             sumar();
         }
     }
@@ -1260,7 +1260,7 @@ $(document).ready(function () {
                 max = infoBtn[4];
             }
             html = "<tr id='"+id+"'>";
-            html += "<td><img src='"+base_url+"assets/imagenes_productos/"+infoBtn[8]+"' class='img-responsive' style='width:50px;'></td>"
+ 
             html += "<td><input type='hidden' name='productos[]' value='"+infoBtn[0]+"'><input type='hidden' class='totalE' value='0'>"+infoBtn[2]+"</td>";
             html += "<td><input type='hidden' name='precios[]' value='"+infoBtn[3]+"'>"+infoBtn[3]+"</td>";
             html += "<td><input type='hidden' name='codigos[]' value='"+id+"'>"+infoBtn[4]+"</td>";
@@ -1415,7 +1415,7 @@ $(document).ready(function () {
     $(document).on("click", ".btn-mas", function(){
         infoDesc = $(this).val();
         dataDesc = infoDesc.split("*");
-        precio = Number($(this).closest("tr").find("td:eq(2)").text());
+        precio = Number($(this).closest("tr").find("td:eq(1)").text());
         input = $(this).closest(".input-group").find("input");
         valorAct = Number(input.val());
         aumento = Number(valorAct + 1);
@@ -1423,13 +1423,13 @@ $(document).ready(function () {
         if (valorMax=="") {
             input.val(aumento);
             if (formulario == "venta_directa") {
-                totalE = $(this).closest("tr").children("td:eq(1)").find("input.totalE").val();
+                totalE = $(this).closest("tr").children("td:eq(0)").find("input.totalE").val();
 
                 descuento = obtenerDescuento(aumento,dataDesc[0],dataDesc[1]);
                 importe = (aumento * precio)+(totalE * aumento) - descuento;
-                $(this).closest("tr").find("td:eq(5)").children("input").val(descuento);
-                $(this).closest("tr").find("td:eq(6)").children("p").text(importe.toFixed(2));
-                $(this).closest("tr").find("td:eq(6)").children("input").val(importe.toFixed(2));
+                $(this).closest("tr").find("td:eq(4)").children("input").val(descuento);
+                $(this).closest("tr").find("td:eq(5)").children("p").text(importe.toFixed(2));
+                $(this).closest("tr").find("td:eq(5)").children("input").val(importe.toFixed(2));
                 sumar();
             }
         }else{
@@ -1444,12 +1444,12 @@ $(document).ready(function () {
             }else{
                 input.val(aumento);
                 if (formulario == "venta_directa") {
-                    totalE = $(this).closest("tr").children("td:eq(1)").find("input.totalE").val();
+                    totalE = $(this).closest("tr").children("td:eq(0)").find("input.totalE").val();
                     descuento = obtenerDescuento(aumento,dataDesc[0],dataDesc[1]);
                     importe = (aumento * precio) + (totalE * aumento) - descuento;
-                    $(this).closest("tr").find("td:eq(5)").children("input").val(descuento);
-                    $(this).closest("tr").find("td:eq(6)").children("p").text(importe.toFixed(2));
-                    $(this).closest("tr").find("td:eq(6)").children("input").val(importe.toFixed(2));
+                    $(this).closest("tr").find("td:eq(4)").children("input").val(descuento);
+                    $(this).closest("tr").find("td:eq(5)").children("p").text(importe.toFixed(2));
+                    $(this).closest("tr").find("td:eq(5)").children("input").val(importe.toFixed(2));
                     sumar();
                 }
             }
@@ -2185,7 +2185,7 @@ function sumar(){
         });
     }else{
         $("#tb-venta-directa tbody tr").each(function(){
-            subtotal = subtotal + Number($(this).find("td:eq(6)").text());
+            subtotal = subtotal + Number($(this).find("td:eq(5)").text());
         });
     }
     
@@ -2491,13 +2491,33 @@ function obtenerDescuento(cantidadPagar,cantidadDesc,montoDesc){
 
 }
 
-function cargarPedidos(){
+function cargarPedidosNuevos(){
     $.ajax({
-        url: base_url + "pedidos/cocina/getPedidos",
+        url: base_url + "pedidos/cocina/getPedidosNuevos",
         type:"POST",
-        success: function(resp){
-            $("#cocina").html(resp);
-            setTimeout(cargarPedidos, 10000);
+        dataType: "json",
+        success: function(data){
+            //$("#cocina").html(resp);
+            html = "";
+            $.each(data, function(key, value){
+                html += "<tr>"
+                html += "<td>"+value.id+"</td>"
+                var num_mesas = "";
+                var consumo = "Para llevar";
+                if (value.tipo_consumo == 1) {
+                    consumo = "Comer en el Restaurante"
+                    $.each(value.mesas, function(key2, value2){
+                        num_mesas +=  value2.numero +",";
+                    });
+                }
+                html += "<td>"+num_mesas+"</td>";
+                html += "<td>"+consumo+"</td>";
+                html += "<td><button type'button' class='btn btn-primary btn-sm'><span class='fa fa-search'></span></button> <button type'button' class='btn btn-success btn-sm'>Pasar a Preparación</button></td>";
+                html += "</tr>"
+
+            });
+            $("#nuevosPedidos table > tbody").html(html);
+            setTimeout(cargarPedidosNuevos, 10000);
         }
     });
 }

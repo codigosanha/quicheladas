@@ -3,9 +3,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Cocina_model extends CI_Model {
 
-	public function getOrdenes($subcategoria){
+	public function getOrdenes($subcategoria,$preparado){//preparado = 0 ->nuevo // preparado = 1 ->preparacion
 		$this->db->where("fecha", date("Y-m-d"));
 		$this->db->where("estado","1");
+		$this->db->where("preparado", $preparado);
 		$this->db->order_by("id","DESC");
 		$resultados = $this->db->get("pedidos");
 

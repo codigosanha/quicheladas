@@ -17,7 +17,7 @@ class Cocina extends CI_Controller {
 		$subcategoria = $this->Subcategorias_model->getIdSubcategoria('comida');
 		$data  = array(
 			'permisos' => $this->permisos,
-			'pedidos' => $this->Cocina_model->getOrdenes($subcategoria),
+			'pedidos' => $this->Cocina_model->getOrdenes($subcategoria,"0"),
 		);
 		$this->load->view("layouts/header");
 		$this->load->view("layouts/aside");
@@ -26,13 +26,15 @@ class Cocina extends CI_Controller {
 
 	}
 
-	public function getPedidos(){
+	public function getPedidosNuevos(){
 		$subcategoria = $this->Subcategorias_model->getIdSubcategoria('comida');
-		$data  = array(
+		/*$data  = array(
 			'permisos' => $this->permisos,
-			'pedidos' => $this->Cocina_model->getOrdenes($subcategoria),
-		);
-		$this->load->view("admin/cocina/pedidos",$data);
+			'pedidos' => $this->Cocina_model->getOrdenes($subcategoria,"0"),
+		);*/
+		$pedidos = $this->Cocina_model->getOrdenes($subcategoria,"0");
+
+		echo json_encode($pedidos);
 	}
 
 	public function add(){
