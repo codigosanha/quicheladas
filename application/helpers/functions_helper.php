@@ -400,5 +400,25 @@ if(!function_exists('getTotalAbonosProveedores'))
 	}
 }
 
+if(!function_exists('getProductosA'))
+{
+	function getProductosA($idProducto)
+	{
+	    //asignamos a $ci el super objeto de codeigniter
+		//$ci será como $this
+		$ci =& get_instance();
+
+		$ci->db->select("p.codigo,p.nombre,pa.*");
+		$ci->db->from("productos_asociados pa");
+		$ci->db->join("productos p", "pa.producto_asociado = p.id");
+		$ci->db->where("pa.producto_id",$id);
+		$resultado = $ci->db->get();
+		return $resultado->result();
+	 
+	}
+}
+
+
+
 
 //end application/helpers/ayuda_helper.php

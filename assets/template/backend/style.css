@@ -57,6 +57,9 @@
         #modal-venta .modal-dialog, #modal-corte .modal-dialog, #modal-ajuste .modal-dialog{
             width: 310px !important;
         }
+        #modal-pedido .modal-dialog{
+            width: 1024px !important;
+        }
         .contenido, .content-cupon{
             width: 280px;
         }

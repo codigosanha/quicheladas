@@ -2141,6 +2141,22 @@ $(document).ready(function () {
             doctype: '<!doctype html>'
         });
     });
+
+    $(document).on("click",".btn-view-pedido", function(){
+        var idPedido = $(this).val();
+
+        $.ajax({
+            url: base_url + "pedidos/cocina/getInfoPedido",
+            type: "POST",
+            
+            data:{
+                idPedido: idPedido
+            },
+            success: function(resp){
+                $("#modal-pedido .modal-body").html(resp);
+            }
+        });
+    })
 });
 
 function showCorte(caja_abierta){
@@ -2512,7 +2528,7 @@ function cargarPedidosNuevos(){
                 }
                 html += "<td>"+num_mesas+"</td>";
                 html += "<td>"+consumo+"</td>";
-                html += "<td><button type'button' class='btn btn-primary btn-sm'><span class='fa fa-search'></span></button> <button type'button' class='btn btn-success btn-sm'>Pasar a Preparación</button></td>";
+                html += "<td><button type'button' class='btn btn-primary btn-sm btn-view-pedido' value='"+value.id+"' data-toggle='modal' data-target='#modal-pedido'><span class='fa fa-search'></span></button> <button type'button' class='btn btn-success btn-sm btn-pasar-preparacion' value='"+value.id+"'>Pasar a Preparación</button></td>";
                 html += "</tr>"
 
             });

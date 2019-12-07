@@ -4,23 +4,39 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Cocina_model extends CI_Model {
 
 	public function getOrdenes($subcategoria,$preparado){//preparado = 0 ->nuevo // preparado = 1 ->preparacion
-		$this->db->where("fecha", date("Y-m-d"));
+		/*$this->db->where("fecha", date("Y-m-d"));
 		$this->db->where("estado","1");
 		$this->db->where("preparado", $preparado);
 		$this->db->order_by("id","DESC");
 		$resultados = $this->db->get("pedidos");
-
-
 		$return = array();
-
 	    foreach ($resultados->result() as $pedido)
 	    {
 	        $return[$pedido->id] = $pedido;
 
 	        $return[$pedido->id]->productos = $this->getPedidoProductos($pedido->id,$subcategoria);
-	        $return[$pedido->id]->mesas = $this->getPedidosMesas($pedido->id); // Get the categories sub categories
+	        $return[$pedido->id]->mesas = $this->getPedidosMesas($pedido->id);
 	    }
+	    return $return;*/
 
+		$this->db->select("pe.*");
+		$this->db->from("pedidos_productos pp");
+		$this->db->join("pedidos pe","pp.pedido_id = pe.id");
+		$this->db->join("productos pro","pp.producto_id = pro.id");
+		$this->db->where("pe.estado","1");
+		$this->db->where("pe.fecha", date("Y-m-d"));
+		$this->db->where("pe.preparado", $preparado);
+		$this->db->where("pro.subcategoria",$subcategoria);
+		$this->db->order_by("pe.id","DESC");
+		$this->db->group_by("pe.id");
+		$resultados = $this->db->get();
+		$return = array();
+		foreach ($resultados->result() as $pedido)
+	    {
+	        $return[$pedido->id] = $pedido;
+
+	        $return[$pedido->id]->mesas = $this->getPedidosMesas($pedido->id);
+	    }
 	    return $return;
 	}
 

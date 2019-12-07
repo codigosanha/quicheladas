@@ -9,6 +9,7 @@ class Cocina extends CI_Controller {
 		$this->permisos = $this->backend_lib->control();
 		$this->load->model("Cocina_model");
 		$this->load->model("Subcategorias_model");
+		$this->load->model("Ordenes_model");
 		$this->load->helper("functions");
 	}
 
@@ -131,5 +132,14 @@ class Cocina extends CI_Controller {
 		);
 		$this->Insumos_model->update($id,$data);
 		echo "produccion/insumos";
+	}
+
+	public function getInfoPedido(){
+		$subcategoria = $this->Subcategorias_model->getIdSubcategoria('comida');
+		$idPedido = $this->input->post("idPedido");
+		$data["pedido"] = $this->Ordenes_model->getPedido($idPedido);
+		$data["pedido_productos"] = $this->Cocina_model->getPedidoProductos($idPedido,$subcategoria);
+		$data["pedido_mesas"] = $this->Ordenes_model->getPedidosMesas($idPedido);
+		$this->load->view("admin/cocina/info_pedido",$data);
 	}
 }
