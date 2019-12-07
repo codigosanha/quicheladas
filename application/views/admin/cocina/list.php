@@ -46,7 +46,7 @@
                     <div class="col-md-6">
                         <div class="panel panel-warning">
                             <div class="panel-heading">PEDIDOS EN PREPARACIÓN</div>
-                            <div class="panel-body">
+                            <div class="panel-body" id="pedidosPreparacion">
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -87,6 +87,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cerrar</button>
+        <button type='button' class='btn btn-warning btn-pasar-preparacion'><i class='fa fa-long-arrow-right'></i>  a Preparación</button>
+        <button type='button' class='btn btn-success btn-pasar-entrega'><i class='fa fa-long-arrow-right'></i> a Entrega</button>
       </div>
     </div>
     <!-- /.modal-content -->

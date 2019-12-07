@@ -133,6 +133,7 @@ $(document).ready(function () {
     });
     if ( $("#nuevosPedidos").length ) {
         cargarPedidosNuevos();
+        cargarPedidosPreparacion();
     }
     
     if ( $("#listado-ordenes").length ) {
@@ -2143,20 +2144,68 @@ $(document).ready(function () {
     });
 
     $(document).on("click",".btn-view-pedido", function(){
-        var idPedido = $(this).val();
-
+        var infoPedido = $(this).val();
+        var dataPedido = infoPedido.split("*");
+        $(".modal-footer .btn-pasar-preparacion").val(dataPedido[0]);
+        $(".modal-footer .btn-pasar-entrega").val(dataPedido[0]);
+        if (dataPedido[1] == 1) {
+            $(".modal-footer .btn-pasar-preparacion").hide();
+            $(".modal-footer .btn-pasar-entrega").show();
+        }else{
+            $(".modal-footer .btn-pasar-preparacion").show();
+            $(".modal-footer .btn-pasar-entrega").hide();
+        }
         $.ajax({
             url: base_url + "pedidos/cocina/getInfoPedido",
             type: "POST",
             
             data:{
-                idPedido: idPedido
+                idPedido: dataPedido[0]
             },
             success: function(resp){
                 $("#modal-pedido .modal-body").html(resp);
             }
         });
     })
+
+    $(document).on("click", ".btn-pasar-preparacion", function(){
+        var idPedido = $(this).val();
+        $.ajax({
+            url: base_url + "pedidos/cocina/updatePedido",
+            type: "POST",
+            data:{idPedido: idPedido, preparado: 1},
+            success: function(resp){
+                if (resp==1) {
+                    $("#pen"+idPedido).remove();
+                    swal("Bien","El pedido paso a Preparación","success");
+                    cargarPedidosPreparacion();
+                    $("#modal-pedido").modal("hide");
+                }else{
+                    swal("Error","No se pudo pasar a preparación el pedido indicado...inténtalo nuevamente","error");
+                }
+            }
+        });
+
+    });
+    $(document).on("click", ".btn-pasar-entrega", function(){
+        var idPedido = $(this).val();
+        $.ajax({
+            url: base_url + "pedidos/cocina/updatePedido",
+            type: "POST",
+            data:{idPedido: idPedido, preparado: 2},
+            success: function(resp){
+                if (resp==1) {
+                    $("#pep"+idPedido).remove();
+                    swal("Bien","El pedido paso a Entrega","success");
+                    $("#modal-pedido").modal("hide");
+                  
+                }else{
+                    swal("Error","No se pudo pasar a entrega el pedido indicado...inténtalo nuevamente","error");
+                }
+            }
+        });
+
+    });
 });
 
 function showCorte(caja_abierta){
@@ -2509,14 +2558,17 @@ function obtenerDescuento(cantidadPagar,cantidadDesc,montoDesc){
 
 function cargarPedidosNuevos(){
     $.ajax({
-        url: base_url + "pedidos/cocina/getPedidosNuevos",
+        url: base_url + "pedidos/cocina/getPedidos",
         type:"POST",
+        data:{
+            preparado: 0
+        },
         dataType: "json",
         success: function(data){
             //$("#cocina").html(resp);
             html = "";
             $.each(data, function(key, value){
-                html += "<tr>"
+                html += "<tr id='pen"+value.id+"'>"
                 html += "<td>"+value.id+"</td>"
                 var num_mesas = "";
                 var consumo = "Para llevar";
@@ -2528,12 +2580,48 @@ function cargarPedidosNuevos(){
                 }
                 html += "<td>"+num_mesas+"</td>";
                 html += "<td>"+consumo+"</td>";
-                html += "<td><button type'button' class='btn btn-primary btn-sm btn-view-pedido' value='"+value.id+"' data-toggle='modal' data-target='#modal-pedido'><span class='fa fa-search'></span></button> <button type'button' class='btn btn-success btn-sm btn-pasar-preparacion' value='"+value.id+"'>Pasar a Preparación</button></td>";
+                infoPedido = value.id+'*'+value.preparado
+                html += "<td><button type='button' class='btn btn-primary btn-sm btn-view-pedido' value='"+infoPedido+"' data-toggle='modal' data-target='#modal-pedido'><span class='fa fa-search'></span></button> <button type='button' class='btn btn-warning btn-sm btn-pasar-preparacion' value='"+value.id+"'><i class='fa fa-long-arrow-right'></i>  a Preparación</button></td>";
                 html += "</tr>"
 
             });
             $("#nuevosPedidos table > tbody").html(html);
             setTimeout(cargarPedidosNuevos, 10000);
+        }
+    });
+}
+
+function cargarPedidosPreparacion(){
+    $.ajax({
+        url: base_url + "pedidos/cocina/getPedidos",
+        type:"POST",
+        data:{
+            preparado : 1
+        },
+        dataType: "json",
+        success: function(data){
+            //$("#cocina").html(resp);
+            html = "";
+            $.each(data, function(key, value){
+                html += "<tr id='pep"+value.id+"'>"
+                html += "<td>"+value.id+"</td>"
+                var num_mesas = "";
+                var consumo = "Para llevar";
+                if (value.tipo_consumo == 1) {
+                    consumo = "Comer en el Restaurante"
+                    $.each(value.mesas, function(key2, value2){
+                        num_mesas +=  value2.numero +",";
+                    });
+                }
+                html += "<td>"+num_mesas+"</td>";
+                html += "<td>"+consumo+"</td>";
+                infoPedido = value.id+'*'+value.preparado
+                html += "<td><button type='button' class='btn btn-primary btn-sm btn-view-pedido' value='"+infoPedido+"' data-toggle='modal' data-target='#modal-pedido'><span class='fa fa-search'></span></button> <button type='button' class='btn btn-success btn-sm btn-pasar-entrega' value='"+value.id+"'><i class='fa fa-long-arrow-right'></i> a Entrega</button></td>";
+                html += "</tr>"
+
+            });
+            $("#pedidosPreparacion table > tbody").html(html);
+            setTimeout(cargarPedidosPreparacion, 10000);
         }
     });
 }
@@ -2579,6 +2667,7 @@ function cargarListaPedidos(pageCurrent){
                     }
                     html += "<td>"+estado+"</td>";
                     html += "<td>"+value.tipo_consumo+"</td>";  
+                    infoPedido = value.id+'*'+value.preparado
                     var permisos = JSON.parse($("#permisos").val());       
                     var btnView = '<button type="button" class="btn btn-primary btn-info-pedido btn-sm" data-toggle="modal" data-target="#modal-venta" value="'+value.id+'"><span class="fa fa-search"></span></button>';
                     var btnEdit = '';

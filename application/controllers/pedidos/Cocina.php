@@ -27,13 +27,14 @@ class Cocina extends CI_Controller {
 
 	}
 
-	public function getPedidosNuevos(){
+	public function getPedidos(){
 		$subcategoria = $this->Subcategorias_model->getIdSubcategoria('comida');
+		$preparado = $this->input->post("preparado");
 		/*$data  = array(
 			'permisos' => $this->permisos,
 			'pedidos' => $this->Cocina_model->getOrdenes($subcategoria,"0"),
 		);*/
-		$pedidos = $this->Cocina_model->getOrdenes($subcategoria,"0");
+		$pedidos = $this->Cocina_model->getOrdenes($subcategoria,$preparado);
 
 		echo json_encode($pedidos);
 	}
@@ -68,17 +69,18 @@ class Cocina extends CI_Controller {
 	
 		
 	}
-	public function ProcesarPreparacion($idPedido){
+	public function updatePedido(){
+		$idPedido = $this->input->post("idPedido");
+		$preparado = $this->input->post("preparado");
+		
 		$data = array(
-			'preparado' => 1
+			'preparado' => $preparado
 		);
 
 		if ($this->Cocina_model->updatePedido($idPedido,$data)) {
-			$this->session->set_flashdata("success","Se marco el pedido como preparando");
-			redirect(base_url()."pedidos/cocina");
+			echo "1";
 		}else{
-			$this->session->set_flashdata("error","No se pudo actualizar la informacion del pedido");
-			redirect(base_url()."pedidos/cocina");
+			echo "0";
 		}
 	}
 
@@ -142,4 +144,6 @@ class Cocina extends CI_Controller {
 		$data["pedido_mesas"] = $this->Ordenes_model->getPedidosMesas($idPedido);
 		$this->load->view("admin/cocina/info_pedido",$data);
 	}
+
+
 }

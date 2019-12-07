@@ -52,7 +52,7 @@ class Cocina_model extends CI_Model {
 
 
 	public function getPedidoProductos($pedido_id,$subcategoria){
-		$this->db->select("p.nombre, pp.cantidad");
+		$this->db->select("p.nombre, pp.cantidad,pp.pedido_id,pp.codigo,pp.producto_id");
 		$this->db->from("pedidos_productos pp");
 		$this->db->join("productos p", "pp.producto_id = p.id");
 	    $this->db->where('p.subcategoria', $subcategoria);

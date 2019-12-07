@@ -402,7 +402,7 @@ if(!function_exists('getTotalAbonosProveedores'))
 
 if(!function_exists('getProductosA'))
 {
-	function getProductosA($idProducto)
+	function getProductosA($id)
 	{
 	    //asignamos a $ci el super objeto de codeigniter
 		//$ci será como $this
