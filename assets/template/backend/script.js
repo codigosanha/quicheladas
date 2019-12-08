@@ -495,6 +495,8 @@ $(document).ready(function () {
 
                 $("#monto_tarjeta").removeAttr("required");
                 $("#monto_efectivo").removeAttr("required");
+                $("#monto_efectivo").removeAttr("disabled");
+                $("#monto_efectivo").val(null);
                 break;
             case '2' :
                 $("#content-monto-efectivo").hide();
@@ -502,13 +504,17 @@ $(document).ready(function () {
                 $("#content-monto-tarjeta").hide();
                 $("#monto_tarjeta").removeAttr("required");
                 $("#monto_efectivo").removeAttr("required");
+                $("#monto_efectivo").removeAttr("disabled");
+                $("#monto_efectivo").val(null);
                 break;
             case '3' :
-                $("#content-monto-efectivo").hide();
+                $("#monto_efectivo").val(null);
+                $("#content-monto-efectivo").show();
                 $("#content-tarjeta").show();
                 $("#content-monto-tarjeta").show();
                 $("#monto_tarjeta").attr("required","required");
                 $("#monto_efectivo").removeAttr("required");
+                $("#monto_efectivo").attr("disabled","disabled");
                 break;
             default:
                 $("#content-monto-efectivo").show();
@@ -516,8 +522,17 @@ $(document).ready(function () {
                 $("#content-monto-tarjeta").hide();
                 $("#monto_tarjeta").removeAttr("required");
                 $("#monto_efectivo").removeAttr("required");
+                $("#monto_efectivo").removeAttr("disabled");
+                $("#monto_efectivo").val(null);
                 break;
         }
+    });
+
+    $("#monto_tarjeta").on("keyup",function(){
+        monto_tarjeta = $(this).val();
+        total = $("#total").val();
+        $("#monto_efectivo").val((total - monto_tarjeta).toFixed(2));
+
     });
 
     $(document).on("click",".btn-edit-medida", function(){
