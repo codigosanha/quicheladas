@@ -145,6 +145,46 @@
                                     
                                 </tbody>
                             </table>
+                            <hr>
+                            <div class="form-group">
+                                <label for="">Categorias</label>
+                                <div class="input-group">
+                                    <select name="categoria_asociada" id="categoria_asociada" class="form-control">
+                                        <option value="">Seleccione</option>
+                                        <?php foreach($categorias as $categoria):?>
+                                            <option value="<?php echo $categoria->id."*".$categoria->nombre; ?>
+                                            "><?php echo $categoria->nombre;?></option>
+                                        <?php endforeach;?>
+                                    </select>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-success" type="button" id="btn-add-categoria">Agregar</button>
+                                    </span>
+                                </div><!-- /input-group -->
+                            </div>
+                            <div class="form-group" style="border: 1px solid #f5f5f5;background-color: #f5f5f5; padding: 10px 20px;">
+                                <h3 class="text-center">Categorias Asociadas</h3>
+                                <table class="table table-bordered" id="categorias_asociadas">
+                                    <thead>
+                                        <tr>
+                                            <th>Categoria</th>
+                                            <th style="width: 100px;">Cantidad</th>
+                                            <th style="width: 10px;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php if (!empty($categorias_asociadas)): ?>
+                                            <?php foreach ($categorias_asociadas as $ca): ?>
+                                                <tr>
+                                                <td><input type='hidden' name='categorias[]' value='<?php echo $ca->categoria_id ?>'><?php echo $ca->nombre ?></td>
+                                                <td><input type='number' class='form-control input-sm' name='cant_categorias[]' value="<?php echo $ca->cantidad ?>"></td>
+                                                <td><button type='button' class='btn btn-danger btn-xs btn-remove-categoria'><span class='fa fa-times'></span></button></td>
+                                                </tr>
+                                            <?php endforeach ?>
+                                        <?php endif ?>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </form>

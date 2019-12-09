@@ -10,33 +10,21 @@ $(document).ready(function () {
             swal("Error","Seleccione una categoria", "error");
         }else{
             var dataCategoria = infoCategoria.split("*");
-            var panel = "pc-"+dataCategoria[0];
-            if ($("#"+panel).length > 0) {
-                swal("Error","La categoria ya fue asociada", "error");
-            }else{
-                html = '<div class="panel panel-primary" id="'+panel+'">';
-                html += '<div class="panel-heading">';
-                html += '<span>'+dataCategoria[1]+'</span>';
-                html += '<span class="pull-right">'
-                html += '<button type="button" class="btn btn-warning btn-sm" style="margin-top:-5px;">';
-                html += '<span class="fa fa-pencil"></span>';
-                html += '</button>';
-                html += '<button type="button" class="btn btn-danger btn-sm btn-delete-panel" style="margin-top:-5px;" value="'+panel+'">';
-                html += '<span class="fa fa-times"></span>';
-                html += '</button>';
-                html += '</span>' 
-                html += '</div>';
-                html += '<div class="panel-body"></div>';
-                html += '</div>';
-
-                $("#categorias-asociadas").append(html);
-            }
+            html = "<tr>";
+            html += "<td><input type='hidden' name='categorias[]' value='"+dataCategoria[0]+"'>"+dataCategoria[1]+"</td>";
+            html += "<td><input type='number' class='form-control input-sm' name='cant_categorias[]'></td>";
+            html += "<td><button type='button' class='btn btn-danger btn-xs btn-remove-categoria'><span class='fa fa-times'></span></button></td>"
+            html += "</tr>"
+            $("#categorias_asociadas tbody").append(html);
             /*$("#nombre-categoria-agregada").val(dataCategoria[1]);
             $("#categoria-agregada").val(dataCategoria[0]);
             $("#modal-categoria").modal("show");
             show_products_by_category(dataCategoria[0]);*/
         }
         
+    });
+    $(document).on("click", ".btn-remove-categoria", function(){
+        $(this).closest("tr").remove();
     });
     $("#saveExtra").submit(function(e){
         e.preventDefault();

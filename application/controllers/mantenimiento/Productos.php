@@ -64,6 +64,9 @@ class Productos extends CI_Controller {
 		$nombres = $this->input->post("nombres");
 		$cantidades = $this->input->post("cantidades");
 
+		$categorias = $this->input->post("categorias");
+		$cant_categorias = $this->input->post("cant_categorias");
+
 		$this->form_validation->set_rules("codigo","Codigo","required|is_unique[productos.codigo]");
 		$this->form_validation->set_rules("nombre","Nombre","required");
 		$this->form_validation->set_rules("precio","Precio","required");
@@ -103,6 +106,7 @@ class Productos extends CI_Controller {
 				'imagen' => $imagen,
 				'cantidad_descuento' => $cantidad_descuento,
 				'monto_descuento' => $monto_descuento,
+				'categorias_asociadas' => count($categorias)
 			);
 			$producto_id = $this->Productos_model->save($data);
 			if ($producto_id != false) {
@@ -120,6 +124,9 @@ class Productos extends CI_Controller {
 				}
 
 				$this->saveMedidas($nombres,$cantidades,$producto_id);
+				if (!empty($categorias)) {
+					$this->saveCategoriasAsociadas($producto_id,$categorias, $cant_categorias);
+				}
 				redirect(base_url()."mantenimiento/productos");
 			}
 			else{
@@ -134,6 +141,15 @@ class Productos extends CI_Controller {
 		
 	}
 
+	protected function saveCategoriasAsociadas($producto_id,$categorias, $cant_categorias){
+		for ($i=0; $i < count($categorias); $i++) { 
+			$data["producto_id"] = $producto_id;
+			$data["categoria_id"] = $categorias[$i];
+			$data["cantidad"] = $cant_categorias[$i];
+			$this->Productos_model->saveCategoriasAsociadas($data);
+		}
+	}
+
 	protected function saveMedidas($nombres, $cantidades, $producto_id){
 		for ($i=0; $i < count($nombres); $i++) { 
 			
@@ -145,7 +161,8 @@ class Productos extends CI_Controller {
 			"producto" => $this->Productos_model->getProducto($id),
 			"productosAsociados" => $this->Productos_model->getProductosA($id),
 			"categorias" => $this->Categorias_model->getCategorias(),
-			"subcategorias" => $this->Subcategorias_model->getSubcategorias()
+			"subcategorias" => $this->Subcategorias_model->getSubcategorias(),
+			'categorias_asociadas' => $this->Productos_model->getCategoriasAsociaadas($id)
 		);
 		$this->load->view("layouts/header");
 		$this->load->view("layouts/aside");
@@ -171,6 +188,9 @@ class Productos extends CI_Controller {
 		//productos Asociados
 		$idproductosA = $this->input->post("idproductosA");
 		$cantidadA = $this->input->post("cantidadA");
+
+		$categorias = $this->input->post("categorias");
+		$cant_categorias = $this->input->post("cant_categorias");
 
 		$productoActual = $this->Productos_model->getProducto($idproducto);
 
@@ -233,6 +253,11 @@ class Productos extends CI_Controller {
 
 						$this->Productos_model->saveAsociados($dataA);
 					}
+				}
+
+				if (!empty($categorias)) {
+					$this->Productos_model->deleteCategoriasAsociadas($idproducto);
+					$this->saveCategoriasAsociadas($idproducto,$categorias, $cant_categorias);
 				}
 				redirect(base_url()."mantenimiento/productos");
 			}

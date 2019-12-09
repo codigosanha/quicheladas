@@ -12,6 +12,20 @@ class Productos_model extends CI_Model {
 		return $resultados->result();
 	}
 
+	public function getCategoriasAsociaadas($producto_id){
+		$this->db->select("ca.*, c.nombre");
+		$this->db->from("categorias_asociadas ca");
+		$this->db->join("categorias c", "ca.categoria_id = c.id");
+		$this->db->where("ca.producto_id", $producto_id);
+		$resultados =  $this->db->get();
+		return $resultados->result();
+	}
+
+	public function deleteCategoriasAsociadas($idproducto){
+		$this->db->where("producto_id",$idproducto);
+		return $this->db->delete("categorias_asociadas");
+	}
+
 	public function deleteExtra($idextra){
 		$this->db->where("id",$idextra);
 		return $this->db->delete("extras");
@@ -84,6 +98,10 @@ class Productos_model extends CI_Model {
 	public function saveAsociados($data){
 		return $this->db->insert("productos_asociados",$data);
 			
+	}
+
+	public function saveCategoriasAsociadas($data){
+		return $this->db->insert("categorias_asociadas", $data);
 	}
 
 	public function update($id,$data){

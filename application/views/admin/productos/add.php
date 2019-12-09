@@ -117,9 +117,16 @@
                             </div>
                             <div class="form-group" style="border: 1px solid #f5f5f5;background-color: #f5f5f5; padding: 10px 20px;">
                                 <h3 class="text-center">Categorias Asociadas</h3>
-                                <div id="categorias-asociadas">
-                                    
-                                </div>
+                                <table class="table table-bordered" id="categorias_asociadas">
+                                    <thead>
+                                        <tr>
+                                            <th>Categoria</th>
+                                            <th style="width: 100px;">Cantidad</th>
+                                            <th style="width: 10px;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
                             </div>
                             <div class="form-group">
                                 <h4 class="page-header">
