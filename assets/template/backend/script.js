@@ -1316,7 +1316,7 @@ $(document).ready(function () {
                     else{
                         stock = "N/A";
                     }
-                    data = value.id + "*"+ value.codigo+ "*"+ value.nombre+ "*"+ value.precio+ "*"+ stock +"*"+value.cantidad_extras+"*"+value.cantidad_descuento+"*"+value.monto_descuento+"*"+value.imagen;
+                    data = value.id + "*"+ value.codigo+ "*"+ value.nombre+ "*"+ value.precio+ "*"+ stock +"*"+value.cantidad_extras+"*"+value.cantidad_descuento+"*"+value.monto_descuento+"*"+value.categorias_asociadas;
 
                     html+='<a href="javascript: void(0)" data-href="'+data+'" class="list-group-item '+classImg+'">'+value.nombre+'</a>';
                 });
