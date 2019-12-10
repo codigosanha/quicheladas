@@ -16,10 +16,6 @@ $(document).ready(function () {
             html += "<td><button type='button' class='btn btn-danger btn-xs btn-remove-categoria'><span class='fa fa-times'></span></button></td>"
             html += "</tr>"
             $("#categorias_asociadas tbody").append(html);
-            /*$("#nombre-categoria-agregada").val(dataCategoria[1]);
-            $("#categoria-agregada").val(dataCategoria[0]);
-            $("#modal-categoria").modal("show");
-            show_products_by_category(dataCategoria[0]);*/
         }
         
     });
@@ -1245,6 +1241,9 @@ $(document).ready(function () {
             html +='<td><button class="btn btn-danger btn-delprod btn-sm" type="button" value="'+infoBtn[0]+'"><span class="fa fa-times"></span></button>';
             if (infoBtn[5] > 0) {
                 html +='<button class="btn btn-primary btn-sm btn-view-extras" type="button" value="'+infoBtn[0]+'" data-toggle="modal" data-target="#modal-extras">E</button>';
+            }
+            if (infoBtn[8] > 0) {
+                html +='<button class="btn btn-info btn-sm btn-view-combo" type="button" value="'+infoBtn[0]+'" data-toggle="modal" data-target="#modal-combo">C</button>';
             }
             html += "</td>";
             html += "</tr>";

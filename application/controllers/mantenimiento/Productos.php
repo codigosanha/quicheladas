@@ -237,6 +237,7 @@ class Productos extends CI_Controller {
 				'imagen' => $imagen,
 				'cantidad_descuento' => $cantidad_descuento,
 				'monto_descuento' => $monto_descuento,
+				'categorias_asociadas' => count($categorias)
 			);
 			if ($this->Productos_model->update($idproducto,$data)) {
 
