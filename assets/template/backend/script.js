@@ -1220,6 +1220,7 @@ $(document).ready(function () {
     $(document).on("click", ".product-selected", function(){
         valorBtn = $(this).attr('data-href');
         infoBtn = valorBtn.split("*");
+
         var id = new Date().getUTCMilliseconds();
             if (infoBtn[4] == "N/A") {
                 max = "";
@@ -1244,6 +1245,7 @@ $(document).ready(function () {
             }
             if (infoBtn[8] > 0) {
                 html +='<button class="btn btn-info btn-sm btn-view-combo" type="button" value="'+infoBtn[0]+'" data-toggle="modal" data-target="#modal-combo">C</button>';
+                showCategoriasAsociadas(id,infoBtn[0]);//id de tr, id de producto
             }
             html += "</td>";
             html += "</tr>";
@@ -2779,3 +2781,27 @@ function graficoTorta(datos){
     }]
 });
 }
+
+function showCategoriasAsociadas(tr_id,producto_id){
+    $.ajax({
+        url: base_url + "movimientos/ordenes/getCategoriasAsociadas",
+        type: "POST",
+        data:{
+            producto_id: producto_id
+        },
+        dataType: "json",
+        success: function(data){
+            html = "";
+            $.each(data, function(key, value){
+                input = "<input type='hidden' class='cat"+value.categoria_id+"' val='0'>";
+                input += "<input type='hidden' id='cat"+value.categoria_id+"' val='"+value.cantidad+"'>";
+
+                html += input;
+            });
+
+            $("#"+tr_id+ " td:eq(0)").append(html);
+        }
+    });
+}
+
+

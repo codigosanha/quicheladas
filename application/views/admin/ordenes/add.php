@@ -156,28 +156,9 @@
       </div>
       <div class="modal-body">
         
-        <h4 class="text-center">Nuevo Extra</h4>
-        <form action="<?php echo base_url(); ?>movimientos/ordenes/saveExtra" class="form-horizontal" method="POST" id="saveExtra">
-            <input type="hidden" id="tr-id">
-            <input type="hidden" id="idProducto" name="idProducto">
-            <div class="row">
-                <div class="col-md-4">
-                    <input type="text" name="nombre" placeholder="Nuevo Extra" class="form-control">
-                </div>
-                <div class="col-md-4">
-                    <input type="text" name="precio" value="0.00" class="form-control">
-                </div>
-                <div class="col-md-4">
-                    <button type="submit" class="btn btn-primary btn-block">
-                        Guardar
-                    </button>
-                </div>
-            </div>
-        </form>
-        <h4 class="text-center">Extras Registrados</h4>
-        <div class="row" id="extras-registrados">
-
+            
         </div>
+       
         
       </div>
       <div class="modal-footer">

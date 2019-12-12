@@ -918,6 +918,12 @@ class Ordenes extends CI_Controller {
 		}
 		
 	}
+
+	public function getCategoriasAsociadas(){
+    	$producto_id = $this->input->post("producto_id");
+    	$categorias = $this->Productos_model->getCategoriasAsociaadas($producto_id);
+    	echo json_encode($categorias);
+    }
 }
 
 
@@ -949,4 +955,5 @@ class item
         $amount = str_pad($this -> amount, $numberColsAmount, ' ', STR_PAD_LEFT);
         return "$name$quantity$price$amount\n";
     }
+
 }
