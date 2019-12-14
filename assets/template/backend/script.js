@@ -1254,6 +1254,56 @@ $(document).ready(function () {
         
     });
 
+    $(document).on("click",".btn-view-combo", function(){
+        var producto_id = $(this).val();
+        var tr_id = $(this).closest("tr").attr("id");
+        $("#tr_producto").val(tr_id);
+        $.ajax({
+            url: base_url + "movimientos/ordenes/getCategoriasProductos",
+            type: "POST",
+            data: {
+                producto_id: producto_id
+            },
+            success: function(resp){
+                //console.log(resp);
+                $("#modal-combo .modal-body").html(resp);
+            }
+        });
+    });
+
+    $(document).on("click", ".btn-product-category" , function(){
+        var producto_id = $(this).val();
+        var category = $(this).closest(".tab-pane").find("input").val();//cat5 = categoria 5
+        //alert(producto_id + " - " +category);
+        var tr_producto = $("#tr_producto").val();
+        $("#modal-combo").modal("hide");
+        swal({
+          title: "Ingrese Cantidad",
+          type: "input",
+          showCancelButton: true,
+          closeOnConfirm: false,
+          inputPlaceholder: "Cantidad del producto"
+        }, function (inputValue) {
+          if (inputValue === false) $("#modal-combo").modal("show");
+          if (inputValue === "") {
+            swal.showInputError("Es necesario ingresar una cantidad");
+            return false
+          }
+            
+          swal.close();
+            var total_permitido = Number($("#"+tr_producto).children("td:eq(0)").find("#"+category).val());
+            var total_agregado = Number($("#"+tr_producto).children("td:eq(0)").find("."+category).val());
+            nuevo_total = total_agregado + Number(inputValue);
+            if (total_permitido >= nuevo_total) {
+                $("#"+tr_producto).children("td:eq(0)").find("."+category).val(nuevo_total);
+            }else{
+                alertify.error("no se puedo sobrepasar lo permitido");
+            }
+          
+          $("#modal-combo").modal("show");
+        });
+    });
+
     $(document).on("click", ".product-selected-vd", function(){
         valorBtn = $(this).attr('data-href');
         infoBtn = valorBtn.split("*");
@@ -2793,8 +2843,8 @@ function showCategoriasAsociadas(tr_id,producto_id){
         success: function(data){
             html = "";
             $.each(data, function(key, value){
-                input = "<input type='hidden' class='cat"+value.categoria_id+"' val='0'>";
-                input += "<input type='hidden' id='cat"+value.categoria_id+"' val='"+value.cantidad+"'>";
+                input = "<input type='hidden' class='cat"+value.categoria_id+"' value='0'>";
+                input += "<input type='hidden' id='cat"+value.categoria_id+"' value='"+value.cantidad+"'>";
 
                 html += input;
             });

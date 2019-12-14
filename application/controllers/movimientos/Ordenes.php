@@ -924,6 +924,20 @@ class Ordenes extends CI_Controller {
     	$categorias = $this->Productos_model->getCategoriasAsociaadas($producto_id);
     	echo json_encode($categorias);
     }
+
+    public function getCategoriasProductos(){
+    	$producto_id = $this->input->post("producto_id");
+    	$categorias = $this->Productos_model->getCategoriasAsociaadas($producto_id);
+    	$arrayCategoriasProductos = [];
+    	foreach ($categorias as $categoria) {
+    		$arrayCategoriasProductos[$categoria->id] = $categoria;
+    		$arrayCategoriasProductos[$categoria->id]->productos = $this->Productos_model->getProductosByCategoria($categoria->categoria_id);
+    	}
+
+    	$data["categorias"] = $arrayCategoriasProductos;
+    	//echo json_encode($arrayCategoriasProductos);
+    	$this->load->view("admin/ordenes/view_categorias",$data);
+    }
 }
 
 

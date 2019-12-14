@@ -153,6 +153,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title"></h4>
+        <input type="hidden" id="tr_producto">
       </div>
       <div class="modal-body">
         
@@ -160,7 +161,7 @@
         </div>
        
         
-      </div>
+   
       <div class="modal-footer">
         <button id="btn-cmodal" type="button" class="btn btn-danger pull-left " data-dismiss="modal">Cerrar</button>
       </div>
