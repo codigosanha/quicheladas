@@ -17,7 +17,7 @@
               
             <?php foreach ($c->productos as $producto): ?>
                 <div class="col-md-6 form-group">
-                    <button type="button" class="btn btn-primary btn-product-category btn-block" value="<?php echo $producto->id ?>"><?php echo $producto->nombre ?></button>
+                    <button type="button" class="btn btn-primary btn-product-category btn-block" value='<?php echo json_encode($producto); ?>'><?php echo $producto->nombre; ?></button>
                 </div>
             <?php endforeach ?>
                   
