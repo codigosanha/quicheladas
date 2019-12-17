@@ -154,6 +154,7 @@
           <span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title"></h4>
         <input type="hidden" id="tr_producto">
+        <input type="hidden" id="id_producto">
       </div>
       <div class="modal-body">
         

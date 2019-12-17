@@ -248,6 +248,10 @@ class Ordenes_model extends CI_Model {
 		return $this->db->insert("orden_producto_extra", $data);
 	}
 
+	public function saveOferta($data){
+		return $this->db->insert("ofertas", $data);
+	}
+
 	public function saveExtra($data){
 		if ($this->db->insert("extras",$data)) {
 			$insert_id = $this->db->insert_id();

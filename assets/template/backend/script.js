@@ -1258,6 +1258,7 @@ $(document).ready(function () {
         var producto_id = $(this).val();
         var tr_id = $(this).closest("tr").attr("id");
         $("#tr_producto").val(tr_id);
+        $("#id_producto").val(producto_id);
         $.ajax({
             url: base_url + "movimientos/ordenes/getCategoriasProductos",
             type: "POST",
@@ -1277,6 +1278,7 @@ $(document).ready(function () {
         var category = $(this).closest(".tab-pane").find("input").val();//cat5 = categoria 5
         //alert(producto_id + " - " +category);
         var tr_producto = $("#tr_producto").val();
+        var id_producto = $("#id_producto").val();
         $("#modal-combo").modal("hide");
         swal({
           title: "Ingrese Cantidad",
@@ -1298,7 +1300,7 @@ $(document).ready(function () {
             if (total_permitido >= nuevo_total) {
                 $("#"+tr_producto).children("td:eq(0)").find("."+category).val(nuevo_total);
 
-                html = "<input type='hidden' class='p"+producto.id+tr_producto+"' name='productosC[]' value='"+producto.id+"'>";
+                html = "<input type='hidden' class='p"+producto.id+tr_producto+"' name='productosC[]' value='"+producto.id+"*"+id_producto+"*"+tr_producto+"'>";
                 html += "<input type='hidden' class='c"+producto.id+tr_producto+"' name='cantidadesC[]' value='"+inputValue+"'>";
                 html += "<p style='margin:0px;' class='pc"+producto.id+tr_producto+"'><i>"+producto.nombre+" - "+inputValue+"</i> <button class='btn btn-danger btn-xs btn-delete-pc' value='"+producto.id+tr_producto+"-"+producto.categoria_id+"'><span class='fa fa-times'></span></button></p>";
                 $("#"+tr_producto).children("td:eq(0)").append(html);

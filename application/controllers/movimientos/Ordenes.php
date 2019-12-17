@@ -115,6 +115,8 @@ class Ordenes extends CI_Controller {
 		$cantidades = $this->input->post("cantidades");
 		$extras = $this->input->post("extras");
 		$tipo_consumo = $this->input->post("tipo_consumo");
+		$productosC = $this->input->post("productosC");
+		$cantidadesC = $this->input->post("cantidadesC");
 
 		$dataPedido = array(
 			"fecha" => date("Y-m-d"),
@@ -169,6 +171,10 @@ class Ordenes extends CI_Controller {
 			if (!empty($extras)) {
 				$this->saveExtrasProductoOrden($extras,$pedido_id);
 			}
+			if (!empty($productosC)) {
+				$this->saveOfertas($productosC,$cantidadesC,$pedido_id);
+			}
+
 			
 
 			$dataP  = array(
@@ -210,6 +216,28 @@ class Ordenes extends CI_Controller {
 				'codigo' => $infoExtra[2]
 			);
 			$this->Ordenes_model->saveExtrasProductoOrden($data);
+		}
+	}
+
+	protected function saveOfertas($productosC,$cantidadesC,$idOrden){
+		for ($i=0; $i < count($productosC); $i++) { 
+			$pc = $productosC[$i];
+			$infoPc = explode("*", $pc);
+			$data = array(
+				'orden_id' => $idOrden,
+				'producto_original' => $infoPc[1],
+				'producto_complemento' => $infoPc[0],
+				'codigo' => $infoPc[2],
+				'cantidad' => $cantidadesC[$i]
+			);
+			$this->Ordenes_model->saveOferta($data);
+
+			$infoproducto= $this->Productos_model->getProducto($infoPc[0]);
+			if ($infoproducto->condicion) {
+				$dataProducto["stock"] = $infoproducto->stock - $cantidadesC[$i];
+				$this->Productos_model->update($infoproducto->id, $dataProducto);
+			}
+			
 		}
 	}
 
