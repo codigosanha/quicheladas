@@ -84,7 +84,24 @@
 
                             echo $htmlExtras;
                             $total = $total + $totalExtras;
+                            $htmlOfertas = "";
+                            $ofertas = getOfertas($p->pedido_id,$p->producto_id,$p->codigo);
+                            if (!empty($ofertas)) {
+                                foreach ($ofertas as $oferta) {
+                                    $htmlOfertas .= "<tr>";
+                                    $htmlOfertas .= "<td><i>".$oferta->nombre."</i></td>";
+                                    $htmlOfertas .= "<td>".$oferta->cantidad."</td>";
+                                    $htmlOfertas .= "<td></td>";
+                                    $htmlOfertas .= "<td></td>";
+                                    
+                                    $htmlOfertas .= "</tr>";
+                                }
+                            }
+                            echo $htmlOfertas;
+
                         ?>
+
+
                     <?php endforeach ?>
                 
                 <?php endforeach;?>

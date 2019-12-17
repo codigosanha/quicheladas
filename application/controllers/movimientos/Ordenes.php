@@ -223,6 +223,8 @@ class Ordenes extends CI_Controller {
 		for ($i=0; $i < count($productosC); $i++) { 
 			$pc = $productosC[$i];
 			$infoPc = explode("*", $pc);
+
+			$detalle = $this->Ordenes_model->getCantidadProductoOrden($infoPc[1],$idOrden, $infoPc[2]);
 			$data = array(
 				'orden_id' => $idOrden,
 				'producto_original' => $infoPc[1],
@@ -234,7 +236,7 @@ class Ordenes extends CI_Controller {
 
 			$infoproducto= $this->Productos_model->getProducto($infoPc[0]);
 			if ($infoproducto->condicion) {
-				$dataProducto["stock"] = $infoproducto->stock - $cantidadesC[$i];
+				$dataProducto["stock"] = $infoproducto->stock - ($detalle->cantidad * $cantidadesC[$i]);
 				$this->Productos_model->update($infoproducto->id, $dataProducto);
 			}
 			
@@ -293,6 +295,10 @@ class Ordenes extends CI_Controller {
 		//$nuevamesa = $this->input->post("nuevamesa");
 		$extras = $this->input->post("extras");
 		$codigos = $this->input->post("codigos");
+
+		$productosC = $this->input->post("productosC");
+		$cantidadesC = $this->input->post("cantidadesC");
+
 
 
 		if (!empty($mesas)) {
@@ -366,6 +372,12 @@ class Ordenes extends CI_Controller {
 		if (!empty($extras)) {
 			$this->saveExtrasProductoOrden($extras,$idPedido);
 		}
+
+		if (!empty($productosC)) {
+			$this->saveOfertas($productosC,$cantidadesC,$idPedido);
+		}
+
+
 
 		$this->session->set_userdata("idPedido", $idPedido);
 
@@ -596,6 +608,15 @@ class Ordenes extends CI_Controller {
 						);
 						$this->Productos_model->update($productoActual->id,$data);
 					}
+				}
+			}
+
+			$ofertas = getOfertas($idorden,$infoproducto->id,$infoPedidoProd->codigo);
+			if (!empty($ofertas)) {
+				foreach ($ofertas as $oferta) {
+					$producto_complemento = $this->Productos_model->getProducto($oferta->id);
+					$dataProductoComplemento["stock"] = $producto_complemento->stock + ($cantidad * $oferta->cantidad);
+					$this->Productos_model->update($producto_complemento->id,$dataProductoComplemento);
 				}
 			}
 

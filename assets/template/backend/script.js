@@ -1359,6 +1359,11 @@ $(document).ready(function () {
                 html +='<button class="btn btn-warning btn-sm btn-view-extras" type="button" value="'+infoBtn[0]+'" data-toggle="modal" data-target="#modal-extras">E</button>';
 
             }
+
+            if (infoBtn[8] > 0) {
+                html +='<button class="btn btn-info btn-sm btn-view-combo" type="button" value="'+infoBtn[0]+'" data-toggle="modal" data-target="#modal-combo">C</button>';
+                showCategoriasAsociadas(id,infoBtn[0]);//id de tr, id de producto
+            }
             html += "</div></td>";
             html += "</tr>";
             $("#tb-venta-directa tbody").append(html);

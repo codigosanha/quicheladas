@@ -261,4 +261,14 @@ class Ordenes_model extends CI_Model {
 		return false;
 	}
 
+
+	public function getCantidadProductoOrden($producto_id, $orden_id, $codigo){
+		$this->db->where("producto_id",$producto_id);
+		$this->db->where("pedido_id",$orden_id);
+		$this->db->where("codigo",$codigo);
+
+		$resultados = $this->db->get("pedidos_productos");
+		return $resultados->row();
+	}
+
 }

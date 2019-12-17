@@ -548,6 +548,8 @@ class Ventas extends CI_Controller {
 			if (!empty($extras)) {
 				$this->saveExtrasProductoOrden($extras,0);
 			}
+
+			
 	
 			
 			$data = array(

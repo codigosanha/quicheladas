@@ -61,6 +61,27 @@ if(!function_exists('getPreciosExtras'))
 	}
 }
 
+if(!function_exists('getOfertas'))
+{
+	function getOfertas($pedido, $producto, $codigo)
+	{
+	    //asignamos a $ci el super objeto de codeigniter
+		//$ci será como $this
+		$ci =& get_instance();
+
+
+		$ci->db->select("p.id,p.nombre, o.cantidad");
+		$ci->db->from("ofertas o");
+		$ci->db->join('productos p',"o.producto_complemento = p.id");
+		$ci->db->where('o.orden_id',$pedido);
+		$ci->db->where('o.producto_original',$producto);
+		$ci->db->where('o.codigo',$codigo);
+		$query = $ci->db->get();
+		return $query->result();
+	 
+	}
+}
+
 if(!function_exists('getVenta'))
 {
 	function getVenta($idVenta)
