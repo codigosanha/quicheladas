@@ -4,6 +4,44 @@ $(document).ready(function () {
         $("#"+panel).remove();
     })
 
+
+    $( "#lista-productos" ).sortable({
+      stop: function() {
+            var selectedData = new Array();
+
+              
+
+            $('#lista-productos>a').each(function() {
+
+                selectedData.push($(this).attr("href"));
+
+            });
+
+            updateOrder(selectedData);
+
+        }
+
+    });
+
+
+    function updateOrder(data) {
+
+        $.ajax({
+
+            url: base_url + "movimientos/ordenes/orderProductos,
+
+            type:'post',
+
+            data:{position:data},
+
+            success:function(result){
+                alert("se ordeno los productos");
+             }
+
+        })
+
+    }
+
     $("#btn-add-categoria").on("click",function(){
         var infoCategoria = $("#categoria_asociada").val();
         if (infoCategoria=="") {
@@ -1217,7 +1255,8 @@ $(document).ready(function () {
         comprobar();
     })
 
-    $(document).on("click", ".product-selected", function(){
+    $(document).on("click", ".product-selected", function(e){
+        e.preventDefault();
         valorBtn = $(this).attr('data-href');
         infoBtn = valorBtn.split("*");
 
@@ -1327,7 +1366,8 @@ $(document).ready(function () {
 
     });
 
-    $(document).on("click", ".product-selected-vd", function(){
+    $(document).on("click", ".product-selected-vd", function(e){
+        e.preventDefault();
         valorBtn = $(this).attr('data-href');
         infoBtn = valorBtn.split("*");
         var id = new Date().getUTCMilliseconds();
@@ -1397,7 +1437,7 @@ $(document).ready(function () {
                     }
                     data = value.id + "*"+ value.codigo+ "*"+ value.nombre+ "*"+ value.precio+ "*"+ stock +"*"+value.cantidad_extras+"*"+value.cantidad_descuento+"*"+value.monto_descuento+"*"+value.categorias_asociadas;
 
-                    html+='<a href="javascript: void(0)" data-href="'+data+'" class="list-group-item '+classImg+'">'+value.nombre+'</a>';
+                    html+='<a href="'+value.id+'" data-href="'+data+'" class="list-group-item '+classImg+'">'+value.nombre+'</a>';
                 });
 
                 $("#lista-productos").html(html);

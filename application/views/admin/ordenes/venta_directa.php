@@ -126,7 +126,7 @@
                         <h4 class="page-header">Categorias</h4>
                         <?php if (!empty($categorias)): ?>
                             <?php foreach ($categorias as $categoria): ?>
-                                <button type="button" class="btn btn-success btn-flat btn-categoria btn-block" value="<?php echo $categoria->id;?>"><?php echo $categoria->nombre;?></button>
+                                <button type="button" class="btn btn-success btn-flat btn-categoria btn-block" value="<?php echo $categoria->id;?>" style="    white-space: inherit;"><?php echo $categoria->nombre;?></button>
                             <?php endforeach ?>
                         <?php endif ?>
                         

@@ -70,6 +70,7 @@ class Ventas_model extends CI_Model {
 	    {
 	        $return[$detalle->id] = $detalle;
 	        $return[$detalle->id]->precios_extras = $this->getPreciosExtras($pedido_id,$detalle->producto_id,$detalle->codigo); // Get the categories sub categories
+	        $return[$detalle->id]->ofertas = $this->getOfertas($pedido_id,$detalle->producto_id,$detalle->codigo); // Get the categories sub categories
 	    }
 
 	    return $return;
@@ -84,6 +85,20 @@ class Ventas_model extends CI_Model {
 		$this->db->where('ope.codigo',$codigo);
 		$query = $this->db->get();
 		return $query->result();
+	}
+
+	public function getOfertas($pedido, $producto, $codigo)
+	{
+
+		$this->db->select("p.id,p.nombre, o.cantidad");
+		$this->db->from("ofertas o");
+		$this->db->join('productos p',"o.producto_complemento = p.id");
+		$this->db->where('o.orden_id',$pedido);
+		$this->db->where('o.producto_original',$producto);
+		$this->db->where('o.codigo',$codigo);
+		$query = $this->db->get();
+		return $query->result();
+	 
 	}
 
 	public function getComprobantes(){
