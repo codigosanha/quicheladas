@@ -290,4 +290,13 @@ class Ventas_model extends CI_Model {
 		$resultados = $this->db->get();
 		return $resultados->result();
 	}
+
+	public function getCantidadProductoVenta($producto_id, $venta_id, $codigo){
+		$this->db->where("producto_id",$producto_id);
+		$this->db->where("venta_id",$venta_id);
+		$this->db->where("codigo",$codigo);
+
+		$resultados = $this->db->get("detalle_venta");
+		return $resultados->row();
+	}
 }

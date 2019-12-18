@@ -220,6 +220,7 @@ class Ordenes_model extends CI_Model {
 	    {
 	        $return[$producto->id] = $producto;
 	        $return[$producto->id]->extras = $this->getPreciosExtras($producto->pedido_id,$producto->producto_id,$producto->codigo); // Get the categories sub categories
+	        $return[$producto->id]->ofertas = $this->getOfertas($producto->pedido_id,$producto->producto_id,$producto->codigo);
 	    }
 
 	    return $return;
@@ -227,7 +228,6 @@ class Ordenes_model extends CI_Model {
 
 	public function getPreciosExtras($pedido, $producto, $codigo)
 	{
-	   
 		$this->db->select("e.nombre, e.precio");
 		$this->db->from("orden_producto_extra ope");
 		$this->db->join('extras e',"ope.extra_id = e.id");
@@ -236,7 +236,18 @@ class Ordenes_model extends CI_Model {
 		$this->db->where('ope.codigo',$codigo);
 		$query = $this->db->get();
 		return $query->result();
-	 
+	}
+
+	public function getOfertas($pedido, $producto, $codigo)
+	{
+		$this->db->select("p.id,p.nombre, o.cantidad");
+		$this->db->from("ofertas o");
+		$this->db->join('productos p',"o.producto_complemento = p.id");
+		$this->db->where('o.orden_id',$pedido);
+		$this->db->where('o.producto_original',$producto);
+		$this->db->where('o.codigo',$codigo);
+		$query = $this->db->get();
+		return $query->result();
 	}
 
 	public function setUpdated($idpedido, $data){

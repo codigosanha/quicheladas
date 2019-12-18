@@ -79,8 +79,26 @@
 							
 							$htmlExtras .= "</tr>";
 							$totalExtras = $totalExtras + $e->precio;
+
+							
 						}
 					}
+
+					$htmlOfertas = "";
+                    $ofertas = getOfertas($venta->pedido_id,$detalle->producto_id,$detalle->codigo);
+                    if (!empty($ofertas)) {
+                        foreach ($ofertas as $oferta) {
+                            $htmlOfertas .= "<tr>";
+                            $htmlOfertas .= "<td>".$oferta->cantidad."</td>";
+                            $htmlOfertas .= "<td><i>".$oferta->nombre."</i></td>";
+                            
+                            $htmlOfertas .= "<td></td>";
+                            $htmlOfertas .= "<td></td>";
+                            
+                            $htmlOfertas .= "</tr>";
+                        }
+                    }
+                    
 				?>
 				<tr>
 					<td><?php echo $detalle->cantidad;?></td>
@@ -88,6 +106,7 @@
 					<td style="text-align: right;"><?php echo number_format($detalle->importe - ($totalExtras * $detalle->cantidad), 2, '.', '');?></td>
 				</tr>
 				<?php echo $htmlExtras;?>
+				<?php echo $htmlOfertas; ?>
 				<?php endforeach;?>
 			</tbody>
 			<tfoot>
