@@ -12,6 +12,16 @@ class Productos_model extends CI_Model {
 		return $resultados->result();
 	}
 
+	public function updateOrder($data = array()){
+  	    $i=1;
+  		foreach ($data as $key => $value) {
+		    $sql = "UPDATE productos SET orden=".$i." WHERE id=".$value;
+		     //echo $sql.'<br>';
+			$query = $this->db->query($sql);
+			$i++;
+		}
+	}
+
 	public function getCategoriasAsociaadas($producto_id){
 		$this->db->select("ca.*, c.nombre");
 		$this->db->from("categorias_asociadas ca");

@@ -50,6 +50,13 @@ class Ordenes extends CI_Controller {
 		$this->load->view("layouts/footer");
 
 	}
+	public function orderProductos(){
+
+		$position = $this->input->post('position');
+		$this->Productos_model->updateOrder($position);
+		
+
+	}
 
 	public function getExtras($idproducto){
 		if (!$this->input->is_ajax_request()) {

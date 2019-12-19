@@ -8,15 +8,9 @@ $(document).ready(function () {
     $( "#lista-productos" ).sortable({
       stop: function() {
             var selectedData = new Array();
-
-              
-
             $('#lista-productos>a').each(function() {
-
                 selectedData.push($(this).attr("href"));
-
             });
-
             updateOrder(selectedData);
 
         }
@@ -25,21 +19,15 @@ $(document).ready(function () {
 
 
     function updateOrder(data) {
-
+        console.log(data);
         $.ajax({
-
-            url: base_url + "movimientos/ordenes/orderProductos,
-
+            url: base_url + "movimientos/ordenes/orderProductos",
             type:'post',
-
             data:{position:data},
-
             success:function(result){
-                alert("se ordeno los productos");
+                //console.log("se ordeno los productos");
              }
-
         })
-
     }
 
     $("#btn-add-categoria").on("click",function(){

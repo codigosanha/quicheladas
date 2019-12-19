@@ -82,7 +82,8 @@ class Ordenes_model extends CI_Model {
 		$this->db->where("categoria_id",$categoria);
 		$this->db->where("stock >", "0");
 		$this->db->where("estado","1");
-		$this->db->order_by("nombre");
+		//$this->db->order_by("nombre");
+		$this->db->order_by('orden','ASC');
 		$resultados = $this->db->get("productos");
 		return $resultados->result();
 	}
