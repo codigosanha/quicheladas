@@ -1464,7 +1464,7 @@ $(document).ready(function () {
     $(document).on("click", ".btn-menos", function(){
         infoDesc = $(this).val();
         dataDesc = infoDesc.split("*");
-        precio = Number($(this).closest("tr").find("td:eq(2)").text());
+        precio = Number($(this).closest("tr").find("td:eq(1)").text());
         formulario = $("#formulario").val();
         input = $(this).closest(".input-group").find("input");
         valorAct = Number(input.val());
@@ -1480,13 +1480,13 @@ $(document).ready(function () {
         }else{
             input.val(resto);
             if (formulario == "venta_directa") {
-                totalE = $(this).closest("tr").children("td:eq(1)").find("input.totalE").val();
+                totalE = $(this).closest("tr").children("td:eq(0)").find("input.totalE").val();
                 descuento = obtenerDescuento(resto,dataDesc[0],dataDesc[1]);
                 importe = (resto * precio) + (resto * totalE) - descuento;
-                $(this).closest("tr").find("td:eq(5)").children("input").val(descuento);
+                $(this).closest("tr").find("td:eq(4)").children("input").val(descuento);
 
-                $(this).closest("tr").find("td:eq(6)").children("p").text(importe.toFixed(2));
-                $(this).closest("tr").find("td:eq(6)").children("input").val(importe.toFixed(2));
+                $(this).closest("tr").find("td:eq(5)").children("p").text(importe.toFixed(2));
+                $(this).closest("tr").find("td:eq(5)").children("input").val(importe.toFixed(2));
                 sumar();
             }
         }
