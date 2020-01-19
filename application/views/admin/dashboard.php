@@ -251,7 +251,7 @@
                                         <tr>
                                             
                                             <td><?php echo $i;?></td>
-                                            <td><?php echo getCliente($c->cliente_id)->nombre;?></td>
+                                            <td><?php echo $c->nombre?></td>
                                             <td><?php echo $c->total;?></td>
                                             <?php $i++;?>
                                         </tr>

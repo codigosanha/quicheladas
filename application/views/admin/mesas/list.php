@@ -32,7 +32,7 @@
                 <hr>
                 <div class="row">
                     <div class="col-md-9">
-                        <table class="table table-bordered table-hover">
+                        <table id="example1" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     

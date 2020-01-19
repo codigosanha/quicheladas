@@ -14,7 +14,7 @@
         <div class="box box-solid">
             <div class="box-body">
                 <div class="row">
-                    <input type="hidden" id="modulo" value="subcategorias">
+                    <input type="hidden" id="modulo" value="mantenimiento/subcategorias">
                     <div class="col-md-12">
                         <?php if($permisos->insert == 1):?>
                         <a href="<?php echo base_url();?>mantenimiento/subcategorias/add" class="btn btn-primary btn-flat"><span class="fa fa-plus"></span> Agregar Subcategoria</a>

@@ -1828,7 +1828,7 @@ $(document).ready(function () {
         $("#modal-default .modal-body").html(html);
     });
 
-    $(".btn-view").on("click", function(){
+    $(document).on("click", ".btn-view", function(){
         modulo = $("#modulo").val();
         var id = $(this).val();
         $.ajax({

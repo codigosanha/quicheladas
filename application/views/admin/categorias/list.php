@@ -13,7 +13,7 @@
         <!-- Default box -->
         <div class="box box-solid">
             <div class="box-body">
-                <input type="hidden" id="modulo" value="categorias">
+                <input type="hidden" id="modulo" value="mantenimiento/categorias">
                 <div class="row">
                     <div class="col-md-12">
                         <?php if($permisos->insert == 1):?>

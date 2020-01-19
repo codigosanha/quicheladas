@@ -34,15 +34,9 @@
                                 <label for="tipocliente">Tipo de Cliente</label>
                                 <select name="tipocliente" id="tipocliente" class="form-control">
                                     <option value="">Seleccione...</option>
-                                    <?php if(form_error("tipocliente")!=false || set_value("tipocliente") != false): ?>
-                                        <?php foreach ($tipoclientes as $tipocliente) :?>
-                                            <option value="<?php echo $tipocliente->id;?>" <?php echo set_select("tipocliente",$tipocliente->id);?>><?php echo $tipocliente->nombre ?></option>
-                                        <?php endforeach;?>
-                                    <?php else: ?>
-                                        <?php foreach ($tipoclientes as $tipocliente) :?>
-                                            <option value="<?php echo $tipocliente->id;?>" <?php echo $tipocliente->id == $cliente->tipo_cliente_id ? 'selected':'';?>><?php echo $tipocliente->nombre ?></option>
-                                        <?php endforeach;?>
-                                    <?php endif;?>
+                                    <?php foreach ($tipoclientes as $tipocliente) :?>
+                                        <option value="<?php echo $tipocliente->id;?>" <?php echo set_select("tipocliente",$tipocliente->id);?>><?php echo $tipocliente->nombre ?></option>
+                                    <?php endforeach;?>
                                 </select>
                                 <?php echo form_error("tipocliente","<span class='help-block'>","</span>");?>
                             </div>
@@ -50,31 +44,25 @@
                                 <label for="tipodocumento">Tipo de Documento</label>
                                 <select name="tipodocumento" id="tipodocumento" class="form-control" >
                                     <option value="">Seleccione...</option>
-                                    <?php if(form_error("tipodocumento")!=false || set_value("tipodocumento") != false): ?>
-                                        <?php foreach ($tipodocumentos as $tipodocumento) :?>
-                                            <option value="<?php echo $tipodocumento->id;?>" <?php echo set_select("tipodocumento",$tipodocumento->id);?>><?php echo $tipodocumento->nombre ?></option>
-                                        <?php endforeach;?>
-                                    <?php else: ?>
-                                        <?php foreach ($tipodocumentos as $tipodocumento) :?>
-                                            <option value="<?php echo $tipodocumento->id;?>" <?php echo $tipodocumento->id == $cliente->tipo_documento_id ? 'selected':'';?>><?php echo $tipodocumento->nombre ?></option>
-                                        <?php endforeach;?>
-                                    <?php endif;?>
+                                    <?php foreach ($tipodocumentos as $tipodocumento) :?>
+                                        <option value="<?php echo $tipodocumento->id;?>" <?php echo set_select("tipodocumento",$tipodocumento->id);?>><?php echo $tipodocumento->nombre ?></option>
+                                    <?php endforeach;?>
                                 </select>
                                 <?php echo form_error("tipodocumento","<span class='help-block'>","</span>");?>
                             </div>
                             <div class="form-group <?php echo form_error("numero") != false ? 'has-error':'';?>">
-                                <label for="numero">numero del Documento:</label>
-                                <input type="text" class="form-control" id="numero" name="numero" value="<?php echo form_error("numero") !=false ? set_value("numero") : $cliente->numero_documento;?>">
+                                <label for="numero">No. del Documento:</label>
+                                <input type="text" class="form-control" id="numero" name="numero" value="<?php echo set_value("numero");?>">
                                 <?php echo form_error("numero","<span class='help-block'>","</span>");?>
                             </div>
                             
                             <div class="form-group">
                                 <label for="telefono">Telefono:</label>
-                                <input type="text" class="form-control" id="telefono" name="telefono" value="<?php echo $cliente->telefono;?>">
+                                <input type="text" class="form-control" id="telefono" name="telefono">
                             </div>
                             <div class="form-group">
                                 <label for="direccion">Direccion:</label>
-                                <input type="text" class="form-control" id="direccion" name="direccion" value="<?php echo $cliente->direccion;?>">
+                                <input type="text" class="form-control" id="direccion" name="direccion">
                             </div>
                             
                             <div class="form-group">

@@ -297,11 +297,12 @@ class Ventas_model extends CI_Model {
 	}
 
 	public function getMejoresClientes(){
-		$this->db->select("cliente_id,SUM(total) as total");
-		$this->db->from("ventas");
+		$this->db->select("v.cliente_id,SUM(v.total) as total, c.nombre");
+		$this->db->from("ventas v");
+		$this->db->join("clientes c", "v.cliente_id = c.id");
 		$this->db->order_by("total", "desc"); 
 		$this->db->limit(10);
-		$this->db->group_by("cliente_id");
+		$this->db->group_by("v.cliente_id");
 		$resultados = $this->db->get();
 		return $resultados->result();
 	}
