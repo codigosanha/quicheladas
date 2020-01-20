@@ -22,6 +22,7 @@ class Ordenes extends CI_Controller {
 		$this->load->model("Cupones_model");
 		$this->load->model("Backend_model");
 		$this->load->helper("functions");
+		
 	}
 
 	public function index()
@@ -669,8 +670,12 @@ class Ordenes extends CI_Controller {
 	}
 
 	protected function sendEmailDeleteProducto($orden,$producto,$cantidad,$observaciones){
+		$filename = './img/quicheladas.png';
+		$this->load->library('email');
+		$this->email->set_mailtype("html");
+	  	$this->email->attach($filename, "inline");
 
-		$this->load->library('pdfgenerator');
+		/*$this->load->library('pdfgenerator');
 		$data = array(
 			'orden' => $orden, 
 			'cantidad' => $cantidad,
@@ -679,7 +684,56 @@ class Ordenes extends CI_Controller {
 		);
 	    $html = $this->load->view('admin/correos/pdf_delete_producto', $data, true);
 	    $filename = 'report_'.time();
-	    $path_to_pdf_file = $this->pdfgenerator->generate($html, $filename, false, 'A4', 'portrait');
+	    $path_to_pdf_file = $this->pdfgenerator->generate($html, $filename, false, 'A4', 'portrait');*/
+
+	    $html_email = '<style>
+			.contenido{
+				width: 310px;
+			}
+			.texto-centrado{
+				text-align: center;
+			}
+		</style>
+		<div class="contenido">
+			<div class="texto-centrado">
+				<label for="">Quicheladas</label><br>
+				<p>
+				<img src="cid:quicheladas.png" border="0">
+				
+				</p>
+				3a. Calle 1-06 Zona 1, 2do. Nivel Farmacia Batres Don Paco
+				Santa Cruz del Quiche
+				<p></p>
+
+				<h4>ELIMINACION DE PRODUCTO</h4>
+
+				<p><b>N° de Orden:</b><br> '.$orden.'</p> 
+				<p><b>Fecha y Hora:</b><br>'.date("d/m/Y H:i a").'</p>';
+				$usuario = getUsuario($this->session->userdata("id"));
+				$html_email .= '<p><b>Usuario:</b><br> '.$usuario->nombres." ".$usuario->apellidos.'</p>
+
+			</div>
+			<table width="100%" cellpadding="0" cellspacing="0" border="1">
+				
+				<thead>
+					<tr>
+						<th>PRODUCTO</th>
+						<th>CANTIDAD</th>
+					</tr>
+				</thead>
+				<tbody>
+					
+					<tr>
+						<td>'.getProducto($producto)->nombre.'</td>
+						<td>'.$cantidad.'</td>
+					</tr>
+					
+				</tbody>
+			</table>
+			<p class="texto-centrado">
+				<b>Observaciones</b><br>'.$observaciones.'
+			</p>
+		</div>';
 
 	    $correos = $this->Correos_model->getCorreos();
 	    $sendCorreos   = array();
@@ -688,17 +742,20 @@ class Ordenes extends CI_Controller {
 	    }
 
 	    $configuracion = $this->Backend_model->getConfiguracion();
-	   	$this->load->library('email');
+
 
 		$this->email->from($configuracion->correo_remitente, APP_NAME);
 		$this->email->to($sendCorreos); 
 
 		$this->email->subject('Eliminacion de Productos');
-		$this->email->message('Mediante el PDF adjuntado se notifica la eliminacion de un producto en una orden.');   
+		$this->email->message($html_email); 
 
-		$this->email->attach($path_to_pdf_file,'application/pdf', "Eliminacion de Producto " . date("m-d H-i-s") . ".pdf", false);
+
+
+		//$this->email->attach($path_to_pdf_file,'application/pdf', "Eliminacion de Producto " . date("m-d H-i-s") . ".pdf", false);
 
 		//$this->email->send();
+		
 		return $this->email->send();
 	}
 
