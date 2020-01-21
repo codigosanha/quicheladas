@@ -1043,8 +1043,10 @@ $(document).ready(function () {
     });
 
     $(document).on("submit","#form-clave", function(e){
+
         e.preventDefault();
         data = $(this).serialize();
+        $("body").prepend("<div class='loader'></div>");
         $.ajax({
             url :  base_url + "movimientos/ordenes/checkClave",
             type:"POST",
@@ -1055,6 +1057,7 @@ $(document).ready(function () {
                 }else if(resp ==2){
                     window.location.href = base_url + "movimientos/ordenes";
                 }else{
+                    $(".loader").remove();
                     alertify.error("La clave de permiso ingresada no es valida");
                 }
             }

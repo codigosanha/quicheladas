@@ -18,7 +18,7 @@ class Welcome extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
-	public function index()
+	public function index2()
 	{
 		$controllers = array();
 	    $this->load->helper('file');
@@ -44,5 +44,15 @@ class Welcome extends CI_Controller {
 		{
 			echo "No found";
 		}
+	}
+
+	public function index(){
+		$data['uno'] = 1;
+		$data['dos'] = 1;
+		print_r($data);
+
+		$data['uno'] = 11;
+		print_r($data);
+
 	}
 }

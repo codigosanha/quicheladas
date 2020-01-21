@@ -670,27 +670,30 @@ class Ordenes extends CI_Controller {
 	}
 
 	protected function sendEmailDeleteProducto($orden,$producto,$cantidad,$observaciones){
-		
+
 		$this->load->library('email');
-		$config['mailtype'] = 'html';
-    	$this->email->initialize($config);
-	  	
-		$data = array(
-			'orden' => $orden, 
-			'cantidad' => $cantidad,
-			'idprod' => $producto,
-			'observaciones' => $observaciones
-		);
-		/*$this->load->library('pdfgenerator');
-		$data = array(
-			'orden' => $orden, 
-			'cantidad' => $cantidad,
-			'idprod' => $producto,
-			'observaciones' => $observaciones
-		);
-	    $html = $this->load->view('admin/correos/pdf_delete_producto', $data, true);
-	    $filename = 'report_'.time();
-	    $path_to_pdf_file = $this->pdfgenerator->generate($html, $filename, false, 'A4', 'portrait');*/
+		$uniqid = uniqid();
+		
+		$data['orden'] = $orden; 
+		$data['cantidad'] = $cantidad;
+		$data['idprod'] = $producto;
+		$data['observaciones'] = $observaciones;
+		$data['link_pdf'] = false;
+		$data['uniqid'] = $uniqid;
+		
+		$folder = './assets/pdfs';
+		if (!is_dir('assets/pdfs')) {
+		    mkdir($folder, 0777, TRUE);
+
+		}
+		$this->load->library('pdfgenerator');
+
+        $html = $this->load->view('admin/correos/pdf_delete_producto', $data, true);
+        $filename = $uniqid.".pdf";
+        
+
+        file_put_contents($folder.'/'.$filename, $this->pdfgenerator->generate($html, $filename, false, 'A4', 'portrait'));
+        $data['link_pdf'] = true;
 
 	    $html = $this->load->view('admin/correos/pdf_delete_producto', $data, true);
 
@@ -701,24 +704,22 @@ class Ordenes extends CI_Controller {
 	    }
 
 	    $configuracion = $this->Backend_model->getConfiguracion();
-
 	    $attched_file= $_SERVER["DOCUMENT_ROOT"]."/img/quicheladas.png";
 		$this->email->attach($attched_file);
+
 		$this->email->from($configuracion->correo_remitente, APP_NAME);
 		$this->email->to($sendCorreos); 
-
 
 		$this->email->subject('Eliminacion de Productos');
 		$this->email->message($html); 
 
+		$this->email->set_newline("\r\n");
+    	$this->email->set_mailtype("html");
 
-
-		//$this->email->attach($path_to_pdf_file,'application/pdf', "Eliminacion de Producto " . date("m-d H-i-s") . ".pdf", false);
-
-		//$this->email->send();
-		
 		return $this->email->send();
 	}
+
+
 
 	protected function sendEmailDeleteOrden($orden,$detalles,$observaciones){
 
