@@ -670,11 +670,17 @@ class Ordenes extends CI_Controller {
 	}
 
 	protected function sendEmailDeleteProducto($orden,$producto,$cantidad,$observaciones){
-		$filename = './img/quicheladas.png';
+		
 		$this->load->library('email');
-		$this->email->set_mailtype("html");
-	  	$this->email->attach($filename, "inline");
-
+		$config['mailtype'] = 'html';
+    	$this->email->initialize($config);
+	  	
+		$data = array(
+			'orden' => $orden, 
+			'cantidad' => $cantidad,
+			'idprod' => $producto,
+			'observaciones' => $observaciones
+		);
 		/*$this->load->library('pdfgenerator');
 		$data = array(
 			'orden' => $orden, 
@@ -686,54 +692,7 @@ class Ordenes extends CI_Controller {
 	    $filename = 'report_'.time();
 	    $path_to_pdf_file = $this->pdfgenerator->generate($html, $filename, false, 'A4', 'portrait');*/
 
-	    $html_email = '<style>
-			.contenido{
-				width: 310px;
-			}
-			.texto-centrado{
-				text-align: center;
-			}
-		</style>
-		<div class="contenido">
-			<div class="texto-centrado">
-				<label for="">Quicheladas</label><br>
-				<p>
-				<img src="cid:quicheladas.png" border="0">
-				
-				</p>
-				3a. Calle 1-06 Zona 1, 2do. Nivel Farmacia Batres Don Paco
-				Santa Cruz del Quiche
-				<p></p>
-
-				<h4>ELIMINACION DE PRODUCTO</h4>
-
-				<p><b>N° de Orden:</b><br> '.$orden.'</p> 
-				<p><b>Fecha y Hora:</b><br>'.date("d/m/Y H:i a").'</p>';
-				$usuario = getUsuario($this->session->userdata("id"));
-				$html_email .= '<p><b>Usuario:</b><br> '.$usuario->nombres." ".$usuario->apellidos.'</p>
-
-			</div>
-			<table width="100%" cellpadding="0" cellspacing="0" border="1">
-				
-				<thead>
-					<tr>
-						<th>PRODUCTO</th>
-						<th>CANTIDAD</th>
-					</tr>
-				</thead>
-				<tbody>
-					
-					<tr>
-						<td>'.getProducto($producto)->nombre.'</td>
-						<td>'.$cantidad.'</td>
-					</tr>
-					
-				</tbody>
-			</table>
-			<p class="texto-centrado">
-				<b>Observaciones</b><br>'.$observaciones.'
-			</p>
-		</div>';
+	    $html = $this->load->view('admin/correos/pdf_delete_producto', $data, true);
 
 	    $correos = $this->Correos_model->getCorreos();
 	    $sendCorreos   = array();
@@ -743,12 +702,14 @@ class Ordenes extends CI_Controller {
 
 	    $configuracion = $this->Backend_model->getConfiguracion();
 
-
+	    $attched_file= $_SERVER["DOCUMENT_ROOT"]."/img/quicheladas.png";
+		$this->email->attach($attched_file);
 		$this->email->from($configuracion->correo_remitente, APP_NAME);
 		$this->email->to($sendCorreos); 
 
+
 		$this->email->subject('Eliminacion de Productos');
-		$this->email->message($html_email); 
+		$this->email->message($html); 
 
 
 

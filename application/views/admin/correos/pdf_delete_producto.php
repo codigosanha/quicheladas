@@ -9,9 +9,10 @@
 </style>
 <div class="contenido">
 	<div class="texto-centrado">
+		<h1>desde pdf</h1>
 		<label for="">Quicheladas</label><br>
 		<p>
-		    <img src="./img/quicheladas.png" height="64" width="64"> 
+		    <img src="<?php echo APPPATH;    ?>img/quicheladas.png" height="64" width="64"> 
 		</p>
 		3a. Calle 1-06 Zona 1, 2do. Nivel Farmacia Batres Don Paco
 		Santa Cruz del Quiche
