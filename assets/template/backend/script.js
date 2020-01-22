@@ -1119,6 +1119,7 @@ $(document).ready(function () {
                     swal.showInputError("Es necesario que indique las observaciones");
                     return false
                 }
+                $("body").prepend("<div class='loader'></div>");
                 $.ajax({
                     url: url,
                     type: "POST",

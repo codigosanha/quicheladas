@@ -719,20 +719,28 @@ class Ordenes extends CI_Controller {
 		return $this->email->send();
 	}
 
-
-
 	protected function sendEmailDeleteOrden($orden,$detalles,$observaciones){
 
 		$this->load->library('pdfgenerator');
-		$data = array(
-			'orden' => $orden, 
-			'detalles' => $detalles,
-			'observaciones' => $observaciones
-		);
-	    $html = $this->load->view('admin/correos/pdf_delete_orden', $data, true);
-	    $filename = 'report_'.time();
-	    $path_to_pdf_file = $this->pdfgenerator->generate($html, $filename, false, 'A4', 'portrait');
+		$uniqid = uniqid();
+		$data['orden'] = $orden; 
+		$data['detalles'] = $detalles;
+		$data['observaciones'] = $observaciones;
+		$data['uniqid'] = $uniqid;
+		$data['link_pdf'] = false;
 
+		$folder = './assets/pdfs';
+		if (!is_dir('assets/pdfs')) {
+		    mkdir($folder, 0777, TRUE);
+		}
+		
+	    $html = $this->load->view('admin/correos/pdf_delete_orden', $data, true);
+	    $filename = $uniqid.".pdf";
+	    file_put_contents($folder.'/'.$filename, $this->pdfgenerator->generate($html, $filename, false, 'A4', 'portrait'));
+
+        $data['link_pdf'] = true;
+
+        $html = $this->load->view('admin/correos/pdf_delete_orden', $data, true);
 	    $correos = $this->Correos_model->getCorreos();
 	    $sendCorreos   = array();
 	    foreach ($correos as $c) {
@@ -746,9 +754,10 @@ class Ordenes extends CI_Controller {
 		$this->email->to($sendCorreos); 
 
 		$this->email->subject('Eliminacion de Orden');
-		$this->email->message('Mediante el PDF adjuntado se notifica la eliminacion de una orden.');   
+		$this->email->message($html); 
 
-		$this->email->attach($path_to_pdf_file,'application/pdf', "Eliminacion de Orden " . date("m-d H-i-s") . ".pdf", false);
+		$this->email->set_newline("\r\n");
+    	$this->email->set_mailtype("html");
 
 		//$this->email->send();
 		return $this->email->send();
